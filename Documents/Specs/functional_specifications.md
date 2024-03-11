@@ -111,27 +111,28 @@ Then, there is the "plants' status" page, which displays the status and informat
 
 <div align="center">
  <img src="./Images/Plants1.png" width="200px">
-
+ <br>
  <img src="./Images/Plants2.png" width="200px">
- 
+ <br>
  <img src="./Images/Plants3.png" width="200px">
-
+ <br>
  <img src="./Images/Plants4.png" width="200px">
-
+ <br>
  <img src="./Images/Plants5.png" width="200px">
 </div>
 
 The third page is the lexica, which allows users to learn about plants and the diseases related to each plant. It shows users images of the disease and how to prevent/cure a disease.
 
 <div align="center">
+
  <img src="./Images/Lexica1.png" width="200px">
-
+ <br>
  <img src="./Images/Lexica2.png" width="200px">
- 
+ <br>
  <img src="./Images/Lexica3.png" width="200px">
-
+ <br>
  <img src="./Images/Lexica4.png" width="200px">
-
+ <br>
  <img src="./Images/Lexica5.png" width="200px">
 </div>
 
