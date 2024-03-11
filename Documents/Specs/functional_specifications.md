@@ -39,40 +39,112 @@ This Project is OLAF, which stands for OnLine Automated Farm. As the name sugges
 
 #### 2.1 Project scopes
 
-| **In scope**  |
-|---|
-|The plant pot collects data (temperature/soil humidity) in real time.|
-|The plant pot react to the data to benefit the plant|
-|The plant pot takes images of the plant's leaves|
-|The plant pot detects infections from the image|
-|The plant pot send data and alerts of infections to the user's app|
-|The app gets and display the data sent by the plant pot|
-|The app help the user to prevent infections and cure plants|
-|The app can take images and detect infections|
-|The app will possess at least 2 languages: english and french|
+| **In scope**                                                                                    |
+| ----------------------------------------------------------------------------------------------- |
+| The plant pot collects data (temperature/soil humidity) in real time.                           |
+| The plant pot react to the data to benefit the plant                                            |
+| The plant pot takes images of the plant's leaves                                                |
+| The plant pot detects infections from the image                                                 |
+| The plant pot send data and alerts of infections to the user's app                              |
+| The app gets and display the data sent by the plant pot                                         |
+| The app help the user to prevent infections and cure plants                                     |
+| The app can take images and detect infections                                                   |
+| The app will possess at least 2 languages: english and french                                   |
+| The app will possess at least 2 themes, a normal one and one for color-blindness                |
+| A website to be able to modify and maintain the app without going through the server-side setup |
 
-| **Out of Scope**|
-|---|
-|The regulation of the plants temperature as it requires heating or cool down the plants, thus required a structure around it or additional hardware|
-|The collection of fruits/vegetable, as it would require a robotic arm|
+| **Out of Scope**                                                                                                                                    |
+| --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The regulation of the plants temperature as it requires heating or cool down the plants, thus required a structure around it or additional hardware |
+| The collection of fruits/vegetable, as it would require a robotic arm                                                                               |
 
-| **Nice to have**|
-|---|
-|A solar panel to allow the pot to be place outside and to operate indepentantly|
-|A moving camera, as it would increase the probability to detect an infection if a plant is infected|
-|The app is translated in other languages|
+| **Nice to have**                                                                                    |
+| --------------------------------------------------------------------------------------------------- |
+| A solar panel to allow the pot to be place outside and to operate indepentantly                     |
+| A moving camera, as it would increase the probability to detect an infection if a plant is infected |
+| The app is translated in other languages                                                            |
 
-#### 2.2 Project organisation
+#### 2.2 Users
 
-I, Aurélien Fernandez am the sole owner of this project.
+#### 2.3 Design
 
-#### 2.3 Users
+##### 2.3.1 Colors
+
+The app will possess a theme with the colors being mainly based on green-like colors: (in hexadecimal):
+- Main color: #395B29,
+- Secondary color: #629B47,
+- Background color: #CEFFB7,
+- Text color: white #FFFFFF,
+
+The icons are all outlined icons. The icons used for navigation are only in white. The icon for the "disease finder" present on the home page uses the main color. Finally, the icons representing diseases are in white and yellow.
+
+ ##### 2.3.2 User path
+
+ The whole design can be found at this link: [mockup](https://www.figma.com/file/DoUbOuhffl67LVhORlBwRm/OLAF?type=design&node-id=0%3A1&mode=design&t=WksEdMbG9RSFOoLp-1).
+
+ The first page is the connection page, it will appear only the first time or after the user has disconnected his account.
+
+<center>
+ <img src="./Images/Connection.png" width="200px">
+</center>
+
+Next, the users will be on the home page, they will be able to navigate thanks to the navigation bar that will always be present at the bottom of the pages.
+
+The home page displays the names and images of all plants. the name can be modified by the user but the images are set when specifying the plant species when connecting a new planter. 
+
+The Home page also possesses a small icon at the bottom right which is the "disease finder", it requires the user's agreement to use their camera. Finally, by taking a picture of a vegetable's leaves, it will find out if there is an infection or not.
+
+<center>
+ <img src="./Images/Home1.png" width="200px">
+</center>
+
+Additionally, if one or multiple plants are infected, the home page will display it.
+<center>
+ <img src="./Images/Home2.png" width="200px">
+
+ <img src="./Images/Home3.png" width="200px">
+ 
+ <img src="./Images/Home4.png" width="200px">
+</center>
+
+Then, there is the "plants' status" page, which displays the status and information of a plant linked to the account. Users can
+
+<center>
+ <img src="./Images/Plants1.png" width="200px">
+
+ <img src="./Images/Plants2.png" width="200px">
+ 
+ <img src="./Images/Plants3.png" width="200px">
+
+ <img src="./Images/Plants4.png" width="200px">
+
+ <img src="./Images/Plants5.png" width="200px">
+</center>
+
+The third page is the lexica, which allows users to learn about plants and the diseases related to each plant. It shows users images of the disease and how to prevent/cure a disease.
+
+<center>
+ <img src="./Images/Lexica1.png" width="200px">
+
+ <img src="./Images/Lexica2.png" width="200px">
+ 
+ <img src="./Images/Lexica3.png" width="200px">
+
+ <img src="./Images/Lexica4.png" width="200px">
+
+ <img src="./Images/Lexica5.png" width="200px">
+</center>
+
+Finally, there is the settings page, with multiple settings such as account management, language, the color themes for blindness and other pages about confidentiality, terms of use and licenses.
+<center>
+ <img src="./Images/Settings.png" width="200px">
+</center>
 
 ### 3. Project plan
 
 #### 3.1 Resources/Financial Plan
 
-As the only representative of this project, I do not have limitations regardless of the cost of the project. However, I aim for a cost-effective solution.
+As the only representative of this project, I do not have any limitations regardless of the cost of the project. However, I aim for a cost-effective solution.
 
 **Resources allocation:**
 
@@ -81,19 +153,19 @@ As the only representative of this project, I do not have limitations regardless
 
 #### 3.2 Assumptions and constraints
 
-|Assumptions|
-|---|
-|The phone of the users are able to download and run mobile apps|
-|Users are able and will react in case of a plant infection|
-|The number of hours on the project is almost of 5 hours per week in average|
-|The images analysed by the AI are only images of plants which leaves can be analysed by the AI|
+| Assumptions                                                                                    |
+| ---------------------------------------------------------------------------------------------- |
+| The phone of the users are able to download and run mobile apps                                |
+| Users are able and will react in case of a plant infection                                     |
+| The number of hours on the project is almost of 5 hours per week in average                    |
+| The images analysed by the AI are only images of plants which leaves can be analysed by the AI |
 
-|Constraints|
-|---|
-|The users must be able to download the app, at least on android phones|
-|The energy consumption of the pot must not be too high, as it must benefit the user|
-|The app must be responsive for all kind of mobile phone's sizes|
-|The AI used to detect infections must have a success rate over 98% to achieve a satisfactory rate|
-|In case of crash from the servers the mobile app may not be updated|
+| Constraints                                                                                       |
+| ------------------------------------------------------------------------------------------------- |
+| The users must be able to download the app, at least on android phones                            |
+| The energy consumption of the pot must not be too high, as it must benefit the user               |
+| The app must be responsive for all kind of mobile phone's sizes                                   |
+| The AI used to detect infections must have a success rate over 98% to achieve a satisfactory rate |
+| In case of crash from the servers the mobile app may not be updated                               |
 
 ### Glossary
