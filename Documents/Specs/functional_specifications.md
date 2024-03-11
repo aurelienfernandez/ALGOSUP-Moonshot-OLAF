@@ -6,7 +6,7 @@
 
 Aurélien Fernandez  
 Created the: 27/02/2023  
-Last update: 25/02/2024
+Last update: 11/01/2024
 
 </div> 
 
@@ -101,9 +101,9 @@ The Home page also possesses a small icon at the bottom right which is the "dise
 Additionally, if one or multiple plants are infected, the home page will display it.
 <div align="center">
  <img src="./Images/Home2.png" width="200px">
-
+ <br>
  <img src="./Images/Home3.png" width="200px">
- 
+ <br>
  <img src="./Images/Home4.png" width="200px">
 </div>
 
