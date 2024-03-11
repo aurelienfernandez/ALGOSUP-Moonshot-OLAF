@@ -1,4 +1,4 @@
-<div align="center"> 
+<div  align="center"> 
 
 # Functional Specifications
 
@@ -84,9 +84,9 @@ The icons are all outlined icons. The icons used for navigation are only in whit
 
  The first page is the connection page, it will appear only the first time or after the user has disconnected his account.
 
-<center>
+<div align="center">
  <img src="./Images/Connection.png" width="200px">
-</center>
+</div>
 
 Next, the users will be on the home page, they will be able to navigate thanks to the navigation bar that will always be present at the bottom of the pages.
 
@@ -94,22 +94,22 @@ The home page displays the names and images of all plants. the name can be modif
 
 The Home page also possesses a small icon at the bottom right which is the "disease finder", it requires the user's agreement to use their camera. Finally, by taking a picture of a vegetable's leaves, it will find out if there is an infection or not.
 
-<center>
+<div align="center">
  <img src="./Images/Home1.png" width="200px">
-</center>
+</div>
 
 Additionally, if one or multiple plants are infected, the home page will display it.
-<center>
+<div align="center">
  <img src="./Images/Home2.png" width="200px">
 
  <img src="./Images/Home3.png" width="200px">
  
  <img src="./Images/Home4.png" width="200px">
-</center>
+</div>
 
 Then, there is the "plants' status" page, which displays the status and information of a plant linked to the account. Users can
 
-<center>
+<div align="center">
  <img src="./Images/Plants1.png" width="200px">
 
  <img src="./Images/Plants2.png" width="200px">
@@ -119,11 +119,11 @@ Then, there is the "plants' status" page, which displays the status and informat
  <img src="./Images/Plants4.png" width="200px">
 
  <img src="./Images/Plants5.png" width="200px">
-</center>
+</div>
 
 The third page is the lexica, which allows users to learn about plants and the diseases related to each plant. It shows users images of the disease and how to prevent/cure a disease.
 
-<center>
+<div align="center">
  <img src="./Images/Lexica1.png" width="200px">
 
  <img src="./Images/Lexica2.png" width="200px">
@@ -133,12 +133,12 @@ The third page is the lexica, which allows users to learn about plants and the d
  <img src="./Images/Lexica4.png" width="200px">
 
  <img src="./Images/Lexica5.png" width="200px">
-</center>
+</div>
 
 Finally, there is the settings page, with multiple settings such as account management, language, the color themes for blindness and other pages about confidentiality, terms of use and licenses.
-<center>
+<div align="center">
  <img src="./Images/Settings.png" width="200px">
-</center>
+</div>
 
 ### 3. Project plan
 
