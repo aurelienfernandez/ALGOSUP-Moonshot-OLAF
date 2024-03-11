@@ -1,4 +1,4 @@
-<center> 
+<div align="center"> 
 
 # Functional Specifications
 
@@ -8,7 +8,7 @@ Aurélien Fernandez
 Created the: 27/02/2023  
 Last update: 25/02/2024
 
-</center>
+</div> 
 
 <hr>
 <details>
