@@ -119,7 +119,7 @@ Then, there is the "plants' status" page, which displays the status and informat
  <img src="./Images/Plants4.png" width="300px">
  <br>
  <img src="./Images/Plants5.png" width="300px">
- 
+ <br>
  <img src="./Images/Plants6.png" width="300px">
 </div>
 
