@@ -6,7 +6,7 @@
 
 Aurélien Fernandez  
 Created the: 27/02/2023  
-Last update: 11/01/2024
+Last update: 12/03/2024
 
 </div> 
 
@@ -107,7 +107,7 @@ Additionally, if one or multiple plants are infected, the home page will display
  <img src="./Images/Home4.png" width="300px">
 </div>
 
-Then, there is the "plants' status" page, which displays the status and information of a plant linked to the account. Users can
+Then, there is the "plants' status" page, which displays the status and information of a plant linked to the account. Users can see the data collected by the planter's sensors, it includes the ambient temperature, the soil and air humidity and the plant's current state, if it is infected or not.
 
 <div align="center">
  <img src="./Images/Plants1.png" width="300px">
@@ -119,6 +119,8 @@ Then, there is the "plants' status" page, which displays the status and informat
  <img src="./Images/Plants4.png" width="300px">
  <br>
  <img src="./Images/Plants5.png" width="300px">
+ 
+ <img src="./Images/Plants6.png" width="300px">
 </div>
 
 The third page is the lexica, which allows users to learn about plants and the diseases related to each plant. It shows users images of the disease and how to prevent/cure a disease.
