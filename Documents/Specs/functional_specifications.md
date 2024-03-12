@@ -107,7 +107,7 @@ Additionally, if one or multiple plants are infected, the home page will display
  <img src="./Images/Home4.png" width="300px">
 </div>
 
-Then, there is the "plants' status" page, which displays the status and information of a plant linked to the account. Users can see the data collected by the planter's sensors, it includes the ambient temperature, the soil and air humidity and the plant's current state, if it is infected or not.
+Then, there is the "plants' status" page, which displays the status and information of a plant linked to the account. Users can see the data collected by the planter's sensors, including the ambient temperature, the soil and air humidity and the plant's current state, if it is infected or not.
 
 <div align="center">
  <img src="./Images/Plants1.png" width="300px">
