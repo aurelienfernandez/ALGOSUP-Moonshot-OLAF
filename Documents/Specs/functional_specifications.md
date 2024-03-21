@@ -6,7 +6,7 @@
 
 Aurélien Fernandez  
 Created the: 27/02/2023  
-Last update: 19/03/2024
+Last update: 21/03/2024
 
 </div> 
 
@@ -20,6 +20,7 @@ Last update: 19/03/2024
     - [1.2 Project definition](#12-project-definition)
       - [1.2.1 Project scopes](#121-project-scopes)
       - [1.2.2 Personas](#122-personas)
+      - [1.2.3 Use case analysis](#123-use-case-analysis)
       - [1.3 Design](#13-design)
         - [1.3.1 Colors](#131-colors)
         - [1.3.2 User path](#132-user-path)
@@ -29,8 +30,9 @@ Last update: 19/03/2024
       - [2.2 Milestones](#22-milestones)
       - [2.3 Resources/Financial Plan](#23-resourcesfinancial-plan)
       - [2.4 Assumptions and constraints](#24-assumptions-and-constraints)
-    - [3. Functional requirements](#3-functional-requirements)
-    - [3. Non-functional requirements](#3-non-functional-requirements)
+      - [2.5 Functional requirements](#25-functional-requirements)
+      - [2.6 Non-functional requirements](#26-non-functional-requirements)
+    - [2.7 Dependencies](#27-dependencies)
     - [Glossary](#glossary)
 
 </details>
@@ -48,6 +50,9 @@ This Project is OLAF, which stands for OnLine Automated Farm. As the name sugges
 
 | **In scope**                                                                                    |
 | ----------------------------------------------------------------------------------------------- |
+| The possibility to add a plant pot to an account                                                |
+| The possibility to remove a plant pot to an account                                             |
+| The possibility to edit a plant pot to an account                                               |
 | The plant pot collects data (temperature/soil humidity) in real time.                           |
 | The plant pot reacts to the data to benefit the plant                                           |
 | The plant pot takes images of the plant's leaves                                                |
@@ -67,7 +72,7 @@ This Project is OLAF, which stands for OnLine Automated Farm. As the name sugges
 
 | **Nice to have**                                                                                    |
 | --------------------------------------------------------------------------------------------------- |
-| A solar panel to allow the pot to be place outside and to operate indepentantly                     |
+| A solar panel to allow the pot to be placed outside and operate indepentantly                       |
 | A moving camera, as it would increase the probability to detect an infection if a plant is infected |
 | The app is translated in other languages                                                            |
 
@@ -76,6 +81,17 @@ This Project is OLAF, which stands for OnLine Automated Farm. As the name sugges
  <img src="./Images/Alexandra_Davies.png">  
  <img src="./Images/John_Tatle.png">  
  <img src="./Images/Mia_Jackson.png">  
+ 
+#### 1.2.3 Use case analysis
+
+| Use case ID | Name                              | Description                                                                          | Pre-Conditions                                                                     | Flow of events                                                                                                                                                                                             | Post-Conditions                                                                                          | Exit Criteria                          |
+| ----------- | --------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| 1           | Search infection with app         | The mobile app is using the user's camera to search an infection on an healthy plant | The user allowed camera's access to the mobile app and is connected to an account  | The user opens the app and takes a picture of a leaf with it                                                                                                                                               | A text box appears to declare if a disease has been found and if it is the case which one                | The "return" button is pressed         |
+| 2           | Add a plant pot to the account    | The user wants to add a plant pot to their account                                   | The user is connected, physically possess a plant pot  and allowed camera's access | The user opens the app and click on the add button in the home page which opens the camera. Finally the user scans the plant pot's QR code                                                                 | A text box appears to identify which plant is supposed to be planted in it and the name of the pot       | The "ok' button is pressed             |
+| 3           | Remove a plant pot to the account | The user wants to remove a plant pot to their account                                | The user is connected and physically possess a plant pot                           | The user opens the app and opens the "plant status" page, then the user presses the "remove" button. Finally a text box appear to ask the user if they are sure of their choice and the user presses "yes" | The plant pot is removed from the account                                                                | The user is sent back to the home page |
+| 4           | Learn about a plant               | The user wants to learn about a plant                                                | The user is connected to an account                                                | The user opens the app and opens the "lexica" page, then the user searches for which plant they wish to learn about                                                                                        | A text box appears explaining what is the plant, in which environment is should live and other advices   | The "return" button is pressed         |
+| 4           | Learn about a disease             | The user wants to learn about a disease                                              | The user is connected to an account                                                | The user opens the app and opens the "lexica" page, then the user searches for which disease they wish to learn about                                                                                      | A text box appears explaining what is the disease, in which environment is should live and other advices | The "return" button is pressed         |
+                                                           
 
 #### 1.3 Design
 
@@ -120,7 +136,7 @@ Additionally, if one or multiple plants are infected, the home page will display
  <img src="./Images/Home4.png" width="300px">
 </div>
 
-Then, there is the "plants' status" page, which displays the status and information of a plant linked to the account. Users can see the data collected by the planter's sensors, including the ambient temperature, the soil and air humidity and the plant's current state, if it is infected or not.
+Then, there is the "plant's status" page, which displays the status and information of a plant linked to the account. Users can see the data collected by the planter's sensors, including the ambient temperature, the soil and air humidity and the plant's current state, if it is infected or not.
 
 <div align="center">
  <img src="./Images/Plants1.png" width="300px">
@@ -222,11 +238,12 @@ As the only representative of this project, I do not have any limitations regard
 | The AI used to detect infections must have a success rate over 98% to achieve a satisfactory rate |
 | In case of a crash from the servers the mobile app may not be updated                             |
 
-### 3. Functional requirements
+#### 2.5 Functional requirements
 
 The project must achieve multiple requirements to be considered successful:
 | Requirement             | Definition                                                                                               |
 | ----------------------- | -------------------------------------------------------------------------------------------------------- |
+| Plant pot management    | The user must  be able to add (via a qr code), remove or manage a plant pot from the app                 |
 | Energy access           | The planter must access a source of energy to be able to operate                                         |
 | AI precision            | The AI used to identify plants and diseases must operate with a minimum of 98% success rate              |
 | Planter sensors         | The planter must be able to collect data from its sensors, whether it is temperature, humidity or images |
@@ -236,7 +253,7 @@ The project must achieve multiple requirements to be considered successful:
 | Disease notification    | The users must be informed in case of infection from a notification and it must be displayed on the app  |
 | Administrator's website | The website used by administrators must be operational and be able to update the app                     |
 
-### 3. Non-functional requirements
+#### 2.6 Non-functional requirements
 
 | The project must also achieve multiple non-functional requirements: 
 | Requirement                         | Definition                                                                                                                |
@@ -245,5 +262,15 @@ The project must achieve multiple requirements to be considered successful:
 | Updates frequencies                 | The mobile app must update the planters data with a frequency of 2 per hours minimum                                      |
 | Mobile app & website responsiveness | The mobile app and the website must be responsive to scale with the user's phone/computer size                            |
 | Mobile app & website reaction time  | The time between a user's action and the app/website response must not exceed 0.01ms                                      |
+| Maintainability                     | The overall project must be easily maintainable, to ensure an easy way to update the project                              |
+| Security                            | The project must be secure, no one other than the administrators must access user's data or have access to the servers    |
+
+### 2.7 Dependencies 
+
+The project requires a deep understanding of AI and plants' life cycles along with their diseases, meaning it may hinder the project's advancements through the project's life cycle.
+
+It is required by the school (ALGOSUP) to keep this project public on GitHub.
+
+The oral presentations of both the V1 and the V2 depend on the advancements of the projects and my (Aurélien Fernandez) number of points on ALGOSUP's grading system. I need to have at least 20% in each graded category with 40,000 points to take the first oral. To be able to take the second oral, I need to have 50,000 points and to have passed the TOEFL exam with a C1 level.
 
 ### Glossary
