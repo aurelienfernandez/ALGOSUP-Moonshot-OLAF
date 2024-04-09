@@ -1,0 +1,32 @@
+{
+    "plants": [
+        {
+            "name": "tomato",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "disease": "none",
+            "maturation": "flowering",
+            "soilHumidity": "50%",
+            "airHumidity": "50%",
+            "temperature": "20°C"
+        },
+        {
+            "name": "strawberry",
+            "image": "https://ferrymorse.com/cdn/shop/products/Strawberry_Delizz_1_4fc523d0-31d2-4866-ad2f-1378320f373e.jpg?v=1670439348",
+            "disease": "none",
+            "maturation": "flowering",
+            "soilHumidity": "50%",
+            "airHumidity": "50%",
+            "temperature": "20°C"
+        },
+        {
+            "name": "blackberry",
+            "image": "https://almanacplanting.com/cdn/shop/products/ThornlessBlackberry2-min.jpg?v=1662923243&width=800",
+            "status": "ok",
+            "disease": "none",
+            "maturation": "flowering",
+            "soilHumidity": "50%",
+            "airHumidity": "50%",
+            "temperature": "20°C"
+        }
+    ]
+}
