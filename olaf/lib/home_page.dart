@@ -28,18 +28,34 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: MediaQuery.of(context).size.height * 0.08,
         title: CircleAvatar(
-          radius: MediaQuery.of(context).size.height * 0.030,
+          radius: MediaQuery.of(context).size.height * 0.035,
           backgroundImage: NetworkImage(
             User.getInstance().profilePicture,
           ),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+              size: MediaQuery.of(context).size.height * 0.06,
+            ),
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.01,
+                right: MediaQuery.of(context).size.height * 0.01),
+            onPressed: () {
+              // Here it should open the "setting page"
+            },
+          ),
+        ],
         backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
       //
       body: _tabs[_currentIndex],
       bottomNavigationBar: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.10,
+        height: MediaQuery.of(context).size.height * 0.1,
         child: BottomNavigationBar(
           selectedLabelStyle: TextStyle(color: Colors.white),
           selectedItemColor: Colors.white,
@@ -121,7 +137,7 @@ class _GardensState extends State<Gardens> {
   List<Plant> plantsList = User.getInstance().plants;
   late User user;
   bool isLoading = false;
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
