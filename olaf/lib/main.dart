@@ -20,10 +20,10 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               useMaterial3: true,
               colorScheme: ColorScheme.fromSeed(
-                seedColor: Color.fromARGB(255, 57, 91, 41),
-                primary: Color.fromARGB(255, 57, 91, 41),
-                background: Color.fromARGB(255, 206, 255, 183),
-                secondary: Color.fromARGB(255, 99, 157, 72),
+                seedColor: Color.fromARGB(255, 60, 90, 40),
+                primary: Color.fromARGB(255, 40, 90, 45),
+                background: Color.fromARGB(255, 197, 255, 175),
+                secondary: Color.fromARGB(255, 50, 160, 65),
               ),
             ),
             home: MyHomePage(),

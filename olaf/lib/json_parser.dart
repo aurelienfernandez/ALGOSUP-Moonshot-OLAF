@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-//------------------------- PARSER -------------------------
+//------------------------- USER PARSER -------------------------
 Future<void> loadUser() async {
-  final String jsonString = await rootBundle.loadString('assets/data.json');
+  final String jsonString = await rootBundle.loadString('assets/user.json');
   var data = jsonDecode(jsonString);
 
   // Parse user data
@@ -90,6 +90,121 @@ class User {
       username: username,
       email: email,
       profilePicture: profilePicture,
+      plants: plants,
+    );
+  }
+}
+
+//------------------------ LEXICA PARSER ------------------------
+Future<void> loadLexica() async {
+  final String jsonString = await rootBundle.loadString('assets/lexica.json');
+  var data = jsonDecode(jsonString);
+
+  // Parse version
+  var version = data['version'] ?? '';
+
+  // Parse plant data
+  var plantsJson = data['plants'];
+  var plants = plantsJson.entries.map((entry) {
+    var plantJson = entry.value;
+    return LexPlant.fromJson(plantJson);
+  }).toList();
+
+  // Initialize user
+  Lexica.initialize(
+    version: version,
+    plants: plants,
+  );
+}
+
+//------------------------- PLANT -------------------------
+class LexPlant {
+  final String name;
+  final String image;
+  final String howTo;
+  final List<String> tips;
+  final List<Disease> diseases;
+
+  LexPlant({
+    required this.name,
+    required this.image,
+    required this.howTo,
+    required this.tips,
+    required this.diseases,
+  });
+
+  factory LexPlant.fromJson(Map<String, dynamic> json) {
+    return LexPlant(
+      name: json['name'] ?? '',
+      image: json['image'] ?? '',
+      howTo: json['HowTo'] ?? '',
+      tips: List<String>.from(json['tips'] ?? []),
+      diseases: (json['diseases'] as List<dynamic>?)
+              ?.map((diseaseJson) => Disease.fromJson(diseaseJson))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+//------------------------- DISEASE -------------------------
+class Disease {
+  final String name;
+  final String image;
+  final String icon;
+  final String description;
+  final String prevent;
+  final String cure;
+
+  Disease({
+    required this.name,
+    required this.image,
+    required this.icon,
+    required this.description,
+    required this.prevent,
+    required this.cure,
+  });
+
+  factory Disease.fromJson(Map<String, dynamic> json) {
+    return Disease(
+      name: json['name'] ?? '',
+      image: json['image'] ?? '',
+      icon: json['icon'] ?? '',
+      description: json['description'] ?? '',
+      prevent: json['prevent'] ?? '',
+      cure: json['cure'] ?? '',
+    );
+  }
+}
+
+//------------------------ LEXICA ------------------------
+class Lexica {
+  final String version;
+  final List<LexPlant> plants;
+
+  // Private constructor
+  Lexica._({
+    required this.version,
+    required this.plants,
+  });
+
+  // Static instance field
+  static Lexica? _instance;
+
+  // Static method to access the single instance
+  static Lexica getInstance() {
+    if (_instance == null) {
+      throw Exception("User not initialized. Call initialize() first.");
+    }
+    return _instance!;
+  }
+
+  static void initialize({
+    required String version,
+    required List<LexPlant> plants,
+  }) {
+    _instance = Lexica._(
+      version: version,
       plants: plants,
     );
   }

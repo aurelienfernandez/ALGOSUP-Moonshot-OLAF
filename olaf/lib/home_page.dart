@@ -27,14 +27,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //---------- TITLE ----------
       appBar: AppBar(
         toolbarHeight: MediaQuery.of(context).size.height * 0.08,
+        // Create CircleAvatar
         title: CircleAvatar(
           radius: MediaQuery.of(context).size.height * 0.035,
           backgroundImage: NetworkImage(
             User.getInstance().profilePicture,
           ),
         ),
+        //------- BUTTON -------
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -52,35 +55,45 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
-      //
+
       body: _tabs[_currentIndex],
-      bottomNavigationBar: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.1,
-        child: BottomNavigationBar(
-          selectedLabelStyle: TextStyle(color: Colors.white),
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          currentIndex: _currentIndex,
-          onTap: (int index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: Colors.white),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: Colors.white),
-              label: 'Plants',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: Colors.white),
-              label: 'Encyclopedia',
-            ),
-          ],
+      //---------- NAVBAR ----------
+      bottomNavigationBar: ClipRRect(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0), // Adjust the radius as needed
+          topRight: Radius.circular(30.0), // Adjust the radius as needed
+        ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.09,
+          child: BottomNavigationBar(
+            //---- STYLE ----
+            selectedLabelStyle: TextStyle(color: Colors.white),
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.white,
+            backgroundColor: Theme.of(context).primaryColor,
+            //---- STATE ----
+            currentIndex: _currentIndex,
+            onTap: (int index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            //---- ITEMS ----
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Plants',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Encyclopedia',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -93,12 +106,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-            child: Column(children: [Title(), Gardens()])));
+            child: Column(children: [Status(), Gardens()])));
   }
 }
 
-//------------------------- TITLE -------------------------
-class Title extends StatelessWidget {
+//------------------------- STATUS ------------------------
+class Status extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -152,7 +165,7 @@ class _GardensState extends State<Gardens> {
       );
     }
 
-    // If data is loaded, build the plant cards
+    // For each plants in user's account, add it to the widget list
     List<Widget> plantCards = [];
     for (var i = 0; i < plantsList.length; i++) {
       plantCards.add(
@@ -163,13 +176,18 @@ class _GardensState extends State<Gardens> {
           ),
           color: theme.primaryColor,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-            child: PlantCard(plantsList[i].name, plantsList[i].image),
-          ),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+              child: PlantCard(plantsList[i].name, plantsList[i].image)),
         ),
       );
     }
 
+    if (plantCards.isNotEmpty) {
+      plantCards.last = Padding(
+        padding: EdgeInsets.only(bottom: 30.0),
+        child: plantCards.last,
+      );
+    }
     return Column(
       children: plantCards,
     );
@@ -193,7 +211,7 @@ class PlantCard extends StatelessWidget {
         height: 50,
         width: 120,
         child: Stack(clipBehavior: Clip.none, fit: StackFit.loose, children: [
-          //---------- Plant's image ----------
+          //---------- IMAGE ----------
           Positioned(
             left: -100,
             top: -15,
@@ -216,7 +234,7 @@ class PlantCard extends StatelessWidget {
               ),
             ),
           ),
-          //---------- Plant's name ----------
+          //---------- NAME ----------
           Positioned(
             top: 8,
             left: -15,

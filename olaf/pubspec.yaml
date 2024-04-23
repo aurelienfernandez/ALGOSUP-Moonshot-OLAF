@@ -24,7 +24,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets: 
-    - assets/data.json
+    - assets/user.json
+    - assets/lexica.json
   fonts:
     - family: CustomIcons
       fonts:

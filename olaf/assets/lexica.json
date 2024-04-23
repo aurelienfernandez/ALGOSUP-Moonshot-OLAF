@@ -1,0 +1,33 @@
+{
+    "version": "0.01",
+    "plants": {
+        "tomato": {
+            "name": "tomato",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "HowTo": "This is where it should explain how to take care of this plant",
+            "tips": [
+                "first tip",
+                "second tip",
+                "third tip"
+            ],
+            "diseases": [
+                {
+                    "name": "Powdery mildew",
+                    "image": "",
+                    "icon": "",
+                    "description": "What is the disease, how it looks like and the consequences",
+                    "prevent": "how to prevent it",
+                    "cure": "how to cure it"
+                },
+                {
+                    "name": "Mosaic virus",
+                    "image": "",
+                    "icon": "",
+                    "description": "What is the disease, how it looks like and the consequences",
+                    "prevent": "how to prevent it",
+                    "cure": "how to cure it"
+                }
+            ]
+        }
+    }
+}
