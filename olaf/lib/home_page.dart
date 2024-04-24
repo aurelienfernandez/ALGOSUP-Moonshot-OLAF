@@ -1,7 +1,7 @@
 //------------------------- PAGES -------------------------
 
 import 'plant_page.dart';
-import 'encyclopedia_page.dart';
+import 'lexica_page.dart';
 //------------------------ FLUTTER ------------------------
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _tabs = [
     HomeScreen(),
     PlantScreen(),
-    EncyclopediaScreen(),
+    LexicaScreen(),
   ];
 
   @override
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: 'Encyclopedia',
+                label: 'lexica',
               ),
             ],
           ),
@@ -176,7 +176,9 @@ class _GardensState extends State<Gardens> {
           ),
           color: theme.primaryColor,
           child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+              padding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height * 0.012,
+                  horizontal: MediaQuery.of(context).size.width * 0.1),
               child: PlantCard(plantsList[i].name, plantsList[i].image)),
         ),
       );
@@ -184,7 +186,8 @@ class _GardensState extends State<Gardens> {
 
     if (plantCards.isNotEmpty) {
       plantCards.last = Padding(
-        padding: EdgeInsets.only(bottom: 30.0),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02),
         child: plantCards.last,
       );
     }
@@ -208,16 +211,16 @@ class PlantCard extends StatelessWidget {
         backgroundColor: theme.colorScheme.primary);
 
     return SizedBox(
-        height: 50,
-        width: 120,
+        height: MediaQuery.of(context).size.height * 0.06,
+        width: MediaQuery.of(context).size.width * 0.3,
         child: Stack(clipBehavior: Clip.none, fit: StackFit.loose, children: [
           //---------- IMAGE ----------
           Positioned(
-            left: -100,
-            top: -15,
+            left: -MediaQuery.of(context).size.width * 0.24,
+            top: -MediaQuery.of(context).size.height * 0.018,
             child: Container(
-              width: 80.0,
-              height: 80.0,
+              width: MediaQuery.of(context).size.width * 0.2,
+              height: MediaQuery.of(context).size.width * 0.2,
               decoration: BoxDecoration(
                 color: const Color(0xff7c94b6),
                 image: DecorationImage(

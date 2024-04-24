@@ -107,7 +107,7 @@ Future<void> loadLexica() async {
   var plantsJson = data['plants'];
   var plants = plantsJson.entries.map((entry) {
     var plantJson = entry.value;
-    return LexPlant.fromJson(plantJson);
+    return LexPlant.fromJson(plantJson, data['diseases']);
   }).toList();
 
   // Initialize user
@@ -133,16 +133,30 @@ class LexPlant {
     required this.diseases,
   });
 
-  factory LexPlant.fromJson(Map<String, dynamic> json) {
+  factory LexPlant.fromJson(
+      Map<String, dynamic> json, Map<String, dynamic> allDiseases) {
+    var diseasesJson = json['diseases'] as List<dynamic>? ?? [];
+    var diseases = diseasesJson
+        .map((diseaseJson) {
+          var diseaseName = diseaseJson['name'] as String?;
+          if (diseaseName != null) {
+            var diseaseData = allDiseases[diseaseName];
+            if (diseaseData != null) {
+              return Disease.fromJson(diseaseData);
+            }
+          }
+          return null;
+        })
+        .where((disease) => disease != null)
+        .toList()
+        .cast<Disease>();
+
     return LexPlant(
       name: json['name'] ?? '',
       image: json['image'] ?? '',
       howTo: json['HowTo'] ?? '',
       tips: List<String>.from(json['tips'] ?? []),
-      diseases: (json['diseases'] as List<dynamic>?)
-              ?.map((diseaseJson) => Disease.fromJson(diseaseJson))
-              .toList() ??
-          [],
+      diseases: diseases,
     );
   }
 }

@@ -13,21 +13,29 @@
             "diseases": [
                 {
                     "name": "Powdery mildew",
-                    "image": "",
-                    "icon": "",
-                    "description": "What is the disease, how it looks like and the consequences",
-                    "prevent": "how to prevent it",
-                    "cure": "how to cure it"
+                    "image": ""
                 },
                 {
                     "name": "Mosaic virus",
-                    "image": "",
-                    "icon": "",
-                    "description": "What is the disease, how it looks like and the consequences",
-                    "prevent": "how to prevent it",
-                    "cure": "how to cure it"
+                    "image": ""
                 }
             ]
         }
-    }
+    },
+    "diseases": [
+        {
+            "name": "Powdery mildew",
+            "icon": "",
+            "description": "What is the disease, how it looks like and the consequences",
+            "prevent": "how to prevent it",
+            "cure": "how to cure it"
+        },
+        {
+            "name": "Mosaic virus",
+            "icon": "",
+            "description": "What is the disease, how it looks like and the consequences",
+            "prevent": "how to prevent it",
+            "cure": "how to cure it"
+        }
+    ]
 }
