@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:olaf/json_parser.dart';
+import 'package:olaf/user_loader.dart';
+import 'package:olaf/lexica_loader.dart';
 import 'home_page.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure that Flutter is initialized
-  
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure that Flutter is initialized
+
   runApp(MyApp());
+}
+
+Future<void> loadAllData() async {
+  try {
+    await Future.wait([
+      loadUser(),
+      loadLexica(),
+    ]);
+    print("Data loaded successfully");
+  } catch (error) {
+    throw ("Error: couldn't load data from json files");
+  }
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-      future: loadUser(),
+      future: loadAllData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(

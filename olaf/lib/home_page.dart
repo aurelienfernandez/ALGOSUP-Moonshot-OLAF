@@ -6,7 +6,7 @@ import 'lexica_page.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 //-------------------------- JSON -------------------------
-import 'json_parser.dart';
+import 'user_loader.dart';
 
 //---------------- HOMEPAGE INITIALIZATION ----------------
 class MyHomePage extends StatefulWidget {
@@ -16,12 +16,14 @@ class MyHomePage extends StatefulWidget {
 
 //-------------------- HOMEPAGE STATE ---------------------
 class _MyHomePageState extends State<MyHomePage> {
-  int _currentIndex = 0;
+  int currentIndex;
+
+  _MyHomePageState([this.currentIndex = 0]);
 
   final List<Widget> _tabs = [
     HomeScreen(),
     PlantScreen(),
-    LexicaScreen(),
+    LexicaPage(),
   ];
 
   @override
@@ -56,15 +58,16 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
 
-      body: _tabs[_currentIndex],
+      body: _tabs[currentIndex],
       //---------- NAVBAR ----------
       bottomNavigationBar: ClipRRect(
+        // Rounded corners
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30.0), // Adjust the radius as needed
-          topRight: Radius.circular(30.0), // Adjust the radius as needed
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
         ),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.09,
+          height: MediaQuery.of(context).size.height * 0.09, // Navbar size
           child: BottomNavigationBar(
             //---- STYLE ----
             selectedLabelStyle: TextStyle(color: Colors.white),
@@ -72,10 +75,17 @@ class _MyHomePageState extends State<MyHomePage> {
             unselectedItemColor: Colors.white,
             backgroundColor: Theme.of(context).primaryColor,
             //---- STATE ----
-            currentIndex: _currentIndex,
+            currentIndex: currentIndex,
             onTap: (int index) {
               setState(() {
-                _currentIndex = index;
+                if (currentIndex == index && index == 2) {
+                  // If the current index is tapped again, reset the state of the current page
+                  _tabs[currentIndex] = LexicaPage(key: UniqueKey());
+                  // Refresh the page
+                  setState(() {});
+                } else {
+                  currentIndex = index;
+                }
               });
             },
             //---- ITEMS ----
