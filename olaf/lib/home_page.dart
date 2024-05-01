@@ -81,8 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (currentIndex == index && index == 2) {
                   // If the current index is tapped again, reset the state of the current page
                   _tabs[currentIndex] = LexicaPage(key: UniqueKey());
-                  // Refresh the page
-                  setState(() {});
                 } else {
                   currentIndex = index;
                 }
