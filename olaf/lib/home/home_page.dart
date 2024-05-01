@@ -1,12 +1,12 @@
 //------------------------- PAGES -------------------------
 
-import 'plant_page.dart';
-import 'lexica_page.dart';
+import '../plants/plant_page.dart';
+import '../lexica/lexica_page.dart';
 //------------------------ FLUTTER ------------------------
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 //-------------------------- JSON -------------------------
-import 'user_loader.dart';
+import '../user_loader.dart';
 
 //---------------- HOMEPAGE INITIALIZATION ----------------
 class MyHomePage extends StatefulWidget {

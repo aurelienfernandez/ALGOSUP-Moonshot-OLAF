@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:olaf/user_loader.dart';
-import 'package:olaf/lexica_loader.dart';
-import 'home_page.dart';
+import 'package:olaf/lexica/lexica_loader.dart';
+import 'home/home_page.dart';
 
 void main() {
   WidgetsFlutterBinding
