@@ -31,8 +31,9 @@ class _LexicaChoiceState extends State<LexicaPage> {
       Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          // Plant & Disease buttons
           children: [
-            // Plant & Disease buttons
             LexicaChoice("Plants", 1, () {
               setState(() {
                 currentIndex = 1;
@@ -40,11 +41,10 @@ class _LexicaChoiceState extends State<LexicaPage> {
               });
             }),
 
-            // Create a space between the two buttons
+            // An empty space to separate the two buttons
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
             ),
-
             LexicaChoice("Diseases", 1, () {
               setState(() {
                 currentIndex = 1;

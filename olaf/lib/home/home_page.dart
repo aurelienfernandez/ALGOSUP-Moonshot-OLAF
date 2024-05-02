@@ -58,7 +58,8 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
 
-      body: _tabs[currentIndex],
+      body: _tabs[currentIndex], // What is displayed in the center of the app
+
       //---------- NAVBAR ----------
       bottomNavigationBar: ClipRRect(
         // Rounded corners
@@ -192,6 +193,7 @@ class _GardensState extends State<Gardens> {
       );
     }
 
+    // Add a padding at the end of the column
     if (plantCards.isNotEmpty) {
       plantCards.last = Padding(
         padding:

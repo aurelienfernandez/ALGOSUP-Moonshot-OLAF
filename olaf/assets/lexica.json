@@ -2,22 +2,102 @@
     "version": "0.01",
     "plants": {
         "tomato": {
-            "name": "tomato",
+            "name": "Tomato",
             "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
             "howTo": "This is where it should explain how to take care of this plant",
             "tips": [
-                "first tip",
-                "second tip",
-                "third tip"
+                "Plant tomatoes in a sunny location with well-drained soil.",
+                "Water tomato plants regularly, keeping the soil evenly moist but not waterlogged.",
+                "Mulch around tomato plants to retain moisture and suppress weeds."
             ],
             "diseases": [
                 {
                     "name": "Powdery mildew",
-                    "image": ""
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
                 },
                 {
                     "name": "Mosaic virus",
-                    "image": ""
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                }
+            ]
+        },
+        "basil": {
+            "name": "Basil",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "howTo": "This is where it should explain how to take care of this plant",
+            "tips": [
+                "Plant basil in well-drained soil in a sunny location.",
+                "Water basil plants regularly, keeping the soil evenly moist.",
+                "Pinch off basil flowers to encourage leaf growth and prevent the plant from going to seed."
+            ],
+            "diseases": [
+                {
+                    "name": "Downy mildew",
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                },
+                {
+                    "name": "Fusarium wilt",
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                }
+            ]
+        },
+        "strawberry": {
+            "name": "Strawberry",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "howTo": "This is where it should explain how to take care of this plant",
+            "tips": [
+                "Plant strawberries in well-drained, sandy soil with plenty of organic matter.",
+                "Ensure strawberries receive full sun for at least 6 hours a day.",
+                "Keep strawberry plants well-watered, especially during fruit development."
+            ],
+            "diseases": [
+                {
+                    "name": "Powdery mildew",
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                },
+                {
+                    "name": "Botrytis fruit rot",
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                }
+            ]
+        },
+        "pepper": {
+            "name": "Pepper",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "howTo": "This is where it should explain how to take care of this plant",
+            "tips": [
+                "Plant pepper plants in well-drained soil in a sunny location.",
+                "Water pepper plants regularly, keeping the soil consistently moist.",
+                "Fertilize pepper plants regularly with a balanced fertilizer to promote fruiting."
+            ],
+            "diseases": [
+                {
+                    "name": "Anthracnose",
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                },
+                {
+                    "name": "Blossom end rot",
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                }
+            ]
+        },
+        "lettuce": {
+            "name": "Lettuce",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "howTo": "This is where it should explain how to take care of this plant",
+            "tips": [
+                "Plant lettuce in well-drained, loose soil with good drainage.",
+                "Keep lettuce plants consistently watered, especially during hot weather.",
+                "Harvest lettuce leaves regularly to encourage new growth and prevent bolting."
+            ],
+            "diseases": [
+                {
+                    "name": "Lettuce mosaic virus",
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                },
+                {
+                    "name": "Downy mildew",
+                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
                 }
             ]
         }
@@ -26,16 +106,51 @@
         {
             "name": "Powdery mildew",
             "icon": "",
-            "description": "What is the disease, how it looks like and the consequences",
-            "prevent": "how to prevent it",
-            "cure": "how to cure it"
+            "description": "Powdery mildew is a fungal disease that appears as a white powdery substance on the leaves, stems, and sometimes flowers of plants. It can weaken the plant, reduce yield, and affect the overall health and appearance.",
+            "prevent": "To prevent powdery mildew, ensure proper air circulation around plants by spacing them adequately. Avoid overhead watering and keep foliage dry. Remove and destroy infected plant parts.",
+            "cure": "Apply fungicides labeled for powdery mildew control. Prune affected plant parts to improve air circulation and reduce humidity. "
         },
         {
             "name": "Mosaic virus",
             "icon": "",
-            "description": "What is the disease, how it looks like and the consequences",
-            "prevent": "how to prevent it",
-            "cure": "how to cure it"
+            "description": "Mosaic virus causes a mottled or streaked appearance on leaves, often with a yellowing or distortion of the foliage. It can stunt growth, reduce yield, and weaken plants.",
+            "prevent": "Prevent mosaic virus by planting disease-resistant varieties, controlling insect vectors such as aphids, and avoiding mechanical transmission through contaminated tools or hands.",
+            "cure": "There is no cure for mosaic virus once a plant is infected. Remove and destroy infected plants to prevent the spread of the virus to other plants. "
+        },
+        {
+            "name": "Downy mildew",
+            "icon": "",
+            "description": "Downy mildew is a fungal disease that causes yellow or pale green patches on the upper surface of leaves and a fuzzy gray or purple growth on the undersides. It can lead to defoliation and reduced plant vigor.",
+            "prevent": "Prevent downy mildew by providing good air circulation, avoiding overhead watering, and planting resistant varieties. Apply fungicides preventively in humid conditions.",
+            "cure": "Apply fungicides labeled for downy mildew control at the first sign of infection. Remove and destroy infected plant parts to reduce the spread of the disease."
+        },
+        {
+            "name": "Anthracnose",
+            "icon": "",
+            "description": "Anthracnose is a fungal disease that causes dark, sunken lesions on leaves, stems, fruits, and flowers. It can lead to premature leaf drop, fruit rot, and dieback of branches.",
+            "prevent": "Prevent anthracnose by planting in well-drained soil, avoiding overhead irrigation, and promoting good air circulation. Remove and destroy infected plant debris.",
+            "cure": "Apply fungicides labeled for anthracnose control at the first sign of infection. Prune affected branches to improve airflow and reduce disease spread."
+        },
+        {
+            "name": "Botrytis blight",
+            "icon": "",
+            "description": "Botrytis blight, also known as gray mold, is a fungal disease that causes grayish-brown fuzzy growth on flowers, stems, and leaves. It thrives in cool, humid conditions and can lead to wilting, rotting, and collapse of plant tissues.",
+            "prevent": "Prevent botrytis blight by maintaining good air circulation around plants, avoiding overhead watering, and removing dead or decaying plant material. Provide proper spacing between plants to reduce humidity levels.",
+            "cure": "Prune affected plant parts to improve airflow and remove infected tissues. Apply fungicides labeled for botrytis blight control at the first sign of infection."
+        },
+        {
+            "name": "Root rot",
+            "icon": "",
+            "description": "Root rot is a disease caused by various fungi, bacteria, or water mold that infects plant roots, leading to decay and death of the root system. It is often characterized by wilting, yellowing, or stunted growth above ground, and rotting or darkening of roots below ground.",
+            "prevent": "Prevent root rot by planting in well-drained soil, avoiding overwatering, and ensuring proper soil drainage. Use sterilized planting materials and avoid planting susceptible species in areas with a history of root rot.",
+            "cure": "To manage root rot, improve soil drainage by amending with organic matter. Remove and destroy severely infected plants. Apply fungicides or bactericides to protect healthy plants from infection."
+        },
+        {
+            "name": "Leaf spot",
+            "icon": "",
+            "description": "Leaf spot is a common fungal disease characterized by small, circular, dark lesions on plant leaves. It can lead to defoliation, reduced photosynthesis, and overall weakening of the plant. Leaf spot diseases are caused by various fungi and bacteria.",
+            "prevent": "Prevent leaf spot by practicing good garden hygiene, including removing and disposing of infected leaves, pruning to improve air circulation, and avoiding overhead irrigation. Plant disease-resistant varieties when available.",
+            "cure": "Manage leaf spot by applying fungicides labeled for leaf spot control. Prune affected foliage to improve airflow and reduce disease spread. Remove and destroy severely infected plants."
         }
     ]
 }
