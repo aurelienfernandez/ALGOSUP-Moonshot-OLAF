@@ -1,5 +1,7 @@
 //-------------------- FLUTTER IMPORT --------------------
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:olaf/lexica/lexica_loader.dart';
 //--------------------- LEXICA LIST ----------------------
 import './lexica_list.dart';
 import './lexica_desc.dart';
@@ -9,24 +11,48 @@ class LexicaPage extends StatefulWidget {
   const LexicaPage({Key? key}) : super(key: key);
 
   @override
-  _LexicaChoiceState createState() => _LexicaChoiceState();
+  _LexicaTabState createState() => _LexicaTabState();
 }
 
-//--------------------- LEXICA CHOICE --------------------
-class _LexicaChoiceState extends State<LexicaPage> {
-  int currentIndex = 0;
+//--------------------- LEXICA tab --------------------
+class _LexicaTabState extends State<LexicaPage> {
+  int currentTab = 0; // The current tab selected
   int choice = 0;
+  dynamic selected;
 
-  void reset() {
+  /// When a button is tapped it changes the page
+  void changeState(int newIndex, dynamic plantOrDisease) {
     setState(() {
-      print("object");
-      currentIndex = 0;
-      choice = 0;
+      currentTab = newIndex;
+      selected = plantOrDisease;
+    });
+  }
+
+  Disease shownDisease = Disease(
+      name: "", image: "", icon: "", description: "", prevent: "", cure: "");
+  String shownImage = "";
+
+  ///  When one of the disease linked to a plant is tapped, show the disease's description with a corresponding image
+  void plantToDisease(Disease disease, String image) {
+    setState(() {
+      currentTab = 3;
+      shownDisease = disease;
+      shownImage = image;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.displaySmall!
+        .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20);
+
+    /* Every states of the lexica:
+   - The choice between plants and diseases
+   - The list of plants/diseases
+   - The description of a plant/disease
+   - The description of a disease with the image of the plant selected in the third state
+   */
     List<Widget> states = [
       Center(
         child: Column(
@@ -34,9 +60,9 @@ class _LexicaChoiceState extends State<LexicaPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           // Plant & Disease buttons
           children: [
-            LexicaChoice("Plants", 1, () {
+            LexicaChoice("Plants", () {
               setState(() {
-                currentIndex = 1;
+                currentTab = 1;
                 choice = 1;
               });
             }),
@@ -45,9 +71,9 @@ class _LexicaChoiceState extends State<LexicaPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
             ),
-            LexicaChoice("Diseases", 1, () {
+            LexicaChoice("Diseases", () {
               setState(() {
-                currentIndex = 1;
+                currentTab = 1;
                 choice = 2;
               });
             }),
@@ -56,19 +82,38 @@ class _LexicaChoiceState extends State<LexicaPage> {
       ),
 
       // Plants/Disease list
-      LexicaList(choice),
+      LexicaList(choice, changeState: changeState),
+
+      // Plant/Disease description
+      LexicaDescription(selected, plantToDisease: plantToDisease),
+
+      DescriptionWidget(
+        shownDisease.name,
+        shownImage,
+        "What is this disease",
+        shownDisease.description,
+        "how to prevent it",
+        [shownDisease.prevent],
+        moreTitle: "How to cure it",
+        moreWidget: Padding(
+            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+            child: Text(
+              shownDisease.cure,
+              textAlign: TextAlign.center,
+              style: style.copyWith(fontSize: 18),
+            )),
+      )
     ];
 
-    return states[currentIndex];
+    return states[currentTab];
   }
 }
 
 class LexicaChoice extends StatelessWidget {
   final String text;
-  final int result;
   final VoidCallback onPressed;
 
-  LexicaChoice(this.text, this.result, this.onPressed);
+  LexicaChoice(this.text, this.onPressed);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -90,9 +135,11 @@ class LexicaChoice extends StatelessWidget {
             padding: EdgeInsets.all(20),
             child: TextButton(
               onPressed: onPressed,
-              child: Text(
+              child: AutoSizeText(
                 text,
                 style: style,
+                maxFontSize: 25,
+                minFontSize: 20,
                 textAlign: TextAlign.center,
               ),
             ),

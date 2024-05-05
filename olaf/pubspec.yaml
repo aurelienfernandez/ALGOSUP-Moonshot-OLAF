@@ -27,7 +27,6 @@ flutter:
   assets: 
     - assets/user.json
     - assets/lexica.json
-    - assets/icon.png
   fonts:
     - family: CustomIcons
       fonts:

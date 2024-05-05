@@ -6,78 +6,137 @@ import 'package:marquee/marquee.dart';
 //--------------------- LEXICA LIST ----------------------
 class LexicaList extends StatelessWidget {
   final int choice;
-  LexicaList(this.choice);
+  final void Function(int, dynamic) changeState;
+
+  LexicaList(this.choice, {required this.changeState});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    List<Widget> Cards = [];
+    List<Widget> cards = [];
 
     switch (choice) {
       case 1: // if plants have been selected
         for (var i = 0; i < Lexica.getInstance().plants.length; i++) {
-          Cards.add(
+          // An image of the plant in a circle container
+          final Widget plantImage = Positioned(
+            left: -MediaQuery.of(context).size.width * 0.2,
+            top: -MediaQuery.of(context).size.height * 0.02,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.2,
+              height: MediaQuery.of(context).size.width * 0.2,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(Lexica.getInstance().plants[i].image),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                border: Border.all(
+                  color: theme.colorScheme.primary,
+                  width: 4.0,
+                ),
+              ),
+            ),
+          );
+
+          cards.add(
             Card(
-              // the position on the screen
+              // Position on the screen
               margin: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.08,
-                left: MediaQuery.of(context).size.height * 0.15,
+                left: MediaQuery.of(context).size.width * 0.25,
+                right: MediaQuery.of(context).size.width * 0.15,
               ),
               color: theme.primaryColor,
-              child: Padding(
+              child: InkWell(
+                onTap: () {
+                  changeState(2, Lexica.getInstance().plants[i]);
+                },
+                // Optional: custom splash color
+                splashColor: Colors.white.withOpacity(0.5),
+                // Constrain the splash effect within the card by using a clipping behavior
+                borderRadius: BorderRadius.circular(4),
+                child: Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: MediaQuery.of(context).size.height * 0.012,
                       horizontal: MediaQuery.of(context).size.width * 0.1),
-                  child: LexiCard(Lexica.getInstance().plants[i].name,
-                      Lexica.getInstance().plants[i].image)),
+                  child: LexiCard(
+                    Lexica.getInstance().plants[i].name,
+                    plantImage,
+                  ),
+                ),
+              ),
             ),
           );
         }
       case 2: // if diseases have been selected
         for (var i = 0; i < Lexica.getInstance().diseases.length; i++) {
-          Cards.add(
+          // The icon of the disease displayed at the left of the name
+          final Widget diseaseIcon = Positioned(
+            left: -MediaQuery.of(context).size.width * 0.1,
+            top: -MediaQuery.of(context).size.height * 0.02,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.2,
+              height: MediaQuery.of(context).size.width * 0.2,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(Lexica.getInstance().diseases[i].icon),
+                ),
+              ),
+            ),
+          );
+
+          cards.add(
             Card(
               color: theme.primaryColor,
               margin: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.05,
+                left: MediaQuery.of(context).size.width * 0.2,
+                right: MediaQuery.of(context).size.width * 0.15,
               ),
-              child: Padding(
+              child: InkWell(
+                onTap: () {
+                  changeState(2, Lexica.getInstance().diseases[i]);
+                },
+                splashColor: Colors.white.withOpacity(0.5),
+                child: Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * 0.012,
-                      horizontal: MediaQuery.of(context).size.width * 0.1),
-                  child: LexiCard(Lexica.getInstance().diseases[i].name,
-                      "assets/icon.png")),
+                      vertical: MediaQuery.of(context).size.height * 0.012),
+                  child: LexiCard(
+                      Lexica.getInstance().diseases[i].name, diseaseIcon),
+                ),
+              ),
             ),
           );
-          // Perform actions for diseases data
         }
       default:
         break;
     }
-    if (Cards.isNotEmpty) {
-      Cards.last = Padding(
+    if (cards.isNotEmpty) {
+      cards.last = Padding(
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02),
-        child: Cards.last,
+        child: cards.last,
       );
     }
     return Scaffold(
-        body: SingleChildScrollView(child: Column(children: Cards)));
+        body: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Column(children: cards)])));
   }
 }
 
-//-------------------------  CARD -------------------------
+//------------------------- CARD -------------------------
 class LexiCard extends StatelessWidget {
   final String text;
-  final String imagePath;
-  LexiCard(this.text, this.imagePath);
+  final Widget icon;
+  LexiCard(this.text, this.icon);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final style = theme.textTheme.displaySmall!.copyWith(
-        color: theme.colorScheme.onPrimary,
-        fontSize: 25.0,
-        backgroundColor: theme.colorScheme.primary);
+    final style = theme.textTheme.displaySmall!
+        .copyWith(color: theme.colorScheme.onPrimary, fontSize: 25);
 
     // Create text painter
     final textPainter = TextPainter(
@@ -91,62 +150,54 @@ class LexiCard extends StatelessWidget {
     final textWidth = textPainter.width;
 
     Widget textWidget;
-    if (textWidth > MediaQuery.of(context).size.width * 0.6) {
-      // Use Marquee if text exceeds available width
-      textWidget = Marquee(
-        text: text,
-        style: style,
-        scrollAxis: Axis.horizontal,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        blankSpace: MediaQuery.of(context).size.width * 0.3,
-        velocity: 30.0,
-        pauseAfterRound: Duration(seconds: 1),
-        startPadding: 10.0,
-        accelerationDuration: Duration(seconds: 1),
-        accelerationCurve: Curves.linear,
-        decelerationDuration: Duration(milliseconds: 500),
-        decelerationCurve: Curves.easeOut,
-      );
+    if (textWidth > MediaQuery.of(context).size.width * 0.4) {
+      textWidget = Align(
+          alignment:
+              Alignment.centerRight, // Aligns the Marquee widget to the right
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child:
+                  // Use Marquee if text exceeds available width
+                  Marquee(
+                text: text,
+                style: style,
+                scrollAxis: Axis.horizontal,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                blankSpace: MediaQuery.of(context).size.width * 0.3,
+                velocity: 30.0,
+                pauseAfterRound: Duration(seconds: 1),
+                startPadding: 5.0,
+                accelerationDuration: Duration(seconds: 1),
+                accelerationCurve: Curves.linear,
+                decelerationDuration: Duration(milliseconds: 500),
+                decelerationCurve: Curves.easeOut,
+              )));
     } else {
       // Use AutoSizeText if text fits within available width
-      textWidget = AutoSizeText(
-        textAlign: TextAlign.start,
-        text,
-        style: style,
-        maxLines: 1,
-        maxFontSize: 30.0,
-        minFontSize: 25,
-        overflow: TextOverflow.ellipsis,
-      );
+      textWidget = Positioned.fill(
+          child: Align(
+              alignment: Alignment.center,
+              child: AutoSizeText(
+                textAlign: TextAlign.center,
+                text,
+                style: style,
+                maxLines: 1,
+                maxFontSize: 20,
+                minFontSize: 10,
+                overflow: TextOverflow.ellipsis,
+              )));
     }
 
     return Center(
         child: SizedBox(
-      height: MediaQuery.of(context).size.height * 0.06,
-      width: MediaQuery.of(context).size.width * 0.5,
-      child: Stack(clipBehavior: Clip.none, fit: StackFit.loose, children: [
-        //---------- IMAGE ----------
-        Positioned(
-          left: -MediaQuery.of(context).size.width * 0.2,
-          top: -MediaQuery.of(context).size.height * 0.02,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.2,
-            height: MediaQuery.of(context).size.width * 0.2,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(imagePath),
-              ),
-            ),
-          ),
-        ),
-        //---------- NAME ----------
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.center,
-            child: textWidget,
-          ),
-        )
-      ]),
-    ));
+            height: MediaQuery.of(context).size.height * 0.06,
+            width: MediaQuery.of(context).size.width * 0.5,
+            child:
+                Stack(clipBehavior: Clip.none, fit: StackFit.loose, children: [
+              //---------- IMAGE ----------
+              icon,
+              //---------- NAME ----------
+              textWidget
+            ])));
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:olaf/plants/plant_page.dart';
 
 //------------------------- USER PARSER -------------------------
 Future<void> loadUser() async {

@@ -54,21 +54,31 @@ class LexPlant {
   });
 
   factory LexPlant.fromJson(Map<String, dynamic> json) {
-    List<PlantDisease> diseases = [PlantDisease(name: "name", image: "image")];
     List<String> tips = (json['tips'] as List<dynamic>).cast<String>().toList();
 
+    List<PlantDisease> diseases = [];
+    List<dynamic> diseasesJson = json['diseases'];
+    for (var diseaseData in diseasesJson) {
+      diseases.add(PlantDisease(
+        name: diseaseData['name'],
+        image: diseaseData['image'],
+      ));
+    }
+
     return LexPlant(
-        name: json['name'] ?? '',
-        image: json['image'] ?? '',
-        howTo: json['howTo'] ?? '',
-        tips: tips,
-        diseases: diseases);
+      name: json['name'] ?? '',
+      image: json['image'] ?? '',
+      howTo: json['howTo'] ?? '',
+      tips: tips,
+      diseases: diseases,
+    );
   }
 }
 
 //------------------------- DISEASE -------------------------
 class Disease {
   final String name;
+  final String image;
   final String icon;
   final String description;
   final String prevent;
@@ -76,6 +86,7 @@ class Disease {
 
   Disease({
     required this.name,
+    required this.image,
     required this.icon,
     required this.description,
     required this.prevent,
@@ -85,6 +96,7 @@ class Disease {
   factory Disease.fromJson(Map<String, dynamic> json) {
     return Disease(
       name: json['name'] ?? '',
+      image: json['image'] ?? '',
       icon: json['icon'] ?? '',
       description: json['description'] ?? '',
       prevent: json['prevent'] ?? '',
@@ -132,6 +144,13 @@ class Lexica {
         diseases: diseases,
       );
     }
+  }
+
+  Disease findDiseaseByName(String diseaseName) {
+    return diseases.firstWhere(
+      (disease) => disease.name.toLowerCase() == diseaseName.toLowerCase(),
+      orElse: () => throw ("Error: Disease:\"$diseaseName\"not found"),
+    );
   }
 
   static void reset() {

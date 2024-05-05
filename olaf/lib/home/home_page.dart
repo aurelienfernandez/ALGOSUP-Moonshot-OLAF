@@ -125,24 +125,30 @@ class Status extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
-        .copyWith(color: theme.colorScheme.onPrimary, fontSize: 25.0);
+        .copyWith(color: theme.colorScheme.onPrimary, fontSize: 25);
     return Container(
       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Card(
-            color: theme.primaryColor,
+      child: Center(
+        child: Card(
+          color: theme.primaryColor,
+          child: SizedBox(
+            width:
+                MediaQuery.of(context).size.width * 0.9,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-              child: Text(
-                "Hello ${User.getInstance().username},\n Your plants are fine",
-                style: style,
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width *
+                  0.05), // Adjust padding as needed
+              child: AutoSizeText(
+                "Hello ${User.getInstance().username},\nYour plants are fine",
+                style: style, maxLines: 2,
+                maxFontSize: 25,
+                minFontSize: 20,
+                overflow:
+                    TextOverflow.ellipsis, // Handle overflow with ellipsis
                 textAlign: TextAlign.center,
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -217,7 +223,7 @@ class PlantCard extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!.copyWith(
         color: theme.colorScheme.onPrimary,
-        fontSize: 25.0,
+        fontSize: 15,
         backgroundColor: theme.colorScheme.primary);
 
     return SizedBox(
@@ -253,8 +259,11 @@ class PlantCard extends StatelessWidget {
             left: -15,
             width: 150,
             child: AutoSizeText(
-              text, style: style, maxLines: 1, maxFontSize: 25.0,
+              text, style: style, maxLines: 1,
+              maxFontSize: 25,
+
               minFontSize: 20,
+              textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis, // Handle overflow with ellipsis
             ),
           ),

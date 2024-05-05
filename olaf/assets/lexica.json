@@ -4,26 +4,32 @@
         "tomato": {
             "name": "Tomato",
             "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
-            "howTo": "This is where it should explain how to take care of this plant",
+            "howTo": "Tomatoes are relatively easy to grow but require proper care to ensure a healthy harvest. Here are some steps to take care of your tomato plants:\n\n1. Plant tomatoes in a sunny location with well-drained soil. Choose a spot in your garden or container that receives at least 6-8 hours of sunlight daily.\n\n2. Prepare the soil by adding organic matter such as compost or aged manure to improve soil fertility and drainage.\n\n3. Water tomato plants regularly, keeping the soil evenly moist but not waterlogged. Avoid overhead watering to prevent the spread of diseases.\n\n4. Mulch around tomato plants with organic mulch such as straw or shredded leaves to retain moisture, suppress weeds, and regulate soil temperature.\n\n5. Support tomato plants with stakes, cages, or trellises to keep the plants upright and prevent fruit from touching the ground, which can lead to rot.\n\n6. Monitor tomato plants for signs of pests and diseases such as aphids, whiteflies, powdery mildew, and early blight. Take appropriate measures to control pests and diseases to protect your tomato crop.\n\n7. Harvest ripe tomatoes when they are firm and fully colored. Store tomatoes at room temperature away from direct sunlight to ripen further, or refrigerate for longer storage.\n\nBy following these care tips, you can enjoy a bountiful harvest of delicious tomatoes from your garden or container.",
             "tips": [
                 "Plant tomatoes in a sunny location with well-drained soil.",
                 "Water tomato plants regularly, keeping the soil evenly moist but not waterlogged.",
-                "Mulch around tomato plants to retain moisture and suppress weeds."
+                "Mulch around tomato plants to retain moisture and suppress weeds.",
+                "Prune tomato plants by removing suckers to improve air circulation and encourage larger fruit.",
+                "Fertilize tomato plants regularly with a balanced fertilizer to promote healthy growth and fruit production.",
+                "Protect tomato plants from extreme temperatures by providing shade during hot summer days and covering them during frosty nights.",
+                "Rotate tomato plants annually to prevent soil-borne diseases and maintain soil fertility.",
+                "Harvest tomatoes when they are fully ripe to enjoy the best flavor and texture.",
+                "Store harvested tomatoes at room temperature away from direct sunlight to maintain their freshness and flavor."
             ],
             "diseases": [
                 {
                     "name": "Powdery mildew",
-                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                    "image": "https://vegcropshotline.org/wp-content/uploads/2016/02/602-114-0.jpg"
                 },
                 {
                     "name": "Mosaic virus",
-                    "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
+                    "image": "https://extension.umn.edu/sites/extension.umn.edu/files/tomato-spotted-wilt-virus-fruit.jpg"
                 }
             ]
         },
         "basil": {
             "name": "Basil",
-            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/9/90/Basil-Basilico-Ocimum_basilicum-albahaca.jpg",
             "howTo": "This is where it should explain how to take care of this plant",
             "tips": [
                 "Plant basil in well-drained soil in a sunny location.",
@@ -105,52 +111,83 @@
     "diseases": [
         {
             "name": "Powdery mildew",
-            "icon": "",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
             "description": "Powdery mildew is a fungal disease that appears as a white powdery substance on the leaves, stems, and sometimes flowers of plants. It can weaken the plant, reduce yield, and affect the overall health and appearance.",
             "prevent": "To prevent powdery mildew, ensure proper air circulation around plants by spacing them adequately. Avoid overhead watering and keep foliage dry. Remove and destroy infected plant parts.",
             "cure": "Apply fungicides labeled for powdery mildew control. Prune affected plant parts to improve air circulation and reduce humidity. "
         },
         {
             "name": "Mosaic virus",
-            "icon": "",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
             "description": "Mosaic virus causes a mottled or streaked appearance on leaves, often with a yellowing or distortion of the foliage. It can stunt growth, reduce yield, and weaken plants.",
             "prevent": "Prevent mosaic virus by planting disease-resistant varieties, controlling insect vectors such as aphids, and avoiding mechanical transmission through contaminated tools or hands.",
             "cure": "There is no cure for mosaic virus once a plant is infected. Remove and destroy infected plants to prevent the spread of the virus to other plants. "
         },
         {
             "name": "Downy mildew",
-            "icon": "",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
             "description": "Downy mildew is a fungal disease that causes yellow or pale green patches on the upper surface of leaves and a fuzzy gray or purple growth on the undersides. It can lead to defoliation and reduced plant vigor.",
             "prevent": "Prevent downy mildew by providing good air circulation, avoiding overhead watering, and planting resistant varieties. Apply fungicides preventively in humid conditions.",
             "cure": "Apply fungicides labeled for downy mildew control at the first sign of infection. Remove and destroy infected plant parts to reduce the spread of the disease."
         },
         {
             "name": "Anthracnose",
-            "icon": "",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
             "description": "Anthracnose is a fungal disease that causes dark, sunken lesions on leaves, stems, fruits, and flowers. It can lead to premature leaf drop, fruit rot, and dieback of branches.",
             "prevent": "Prevent anthracnose by planting in well-drained soil, avoiding overhead irrigation, and promoting good air circulation. Remove and destroy infected plant debris.",
             "cure": "Apply fungicides labeled for anthracnose control at the first sign of infection. Prune affected branches to improve airflow and reduce disease spread."
         },
         {
             "name": "Botrytis blight",
-            "icon": "",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
             "description": "Botrytis blight, also known as gray mold, is a fungal disease that causes grayish-brown fuzzy growth on flowers, stems, and leaves. It thrives in cool, humid conditions and can lead to wilting, rotting, and collapse of plant tissues.",
             "prevent": "Prevent botrytis blight by maintaining good air circulation around plants, avoiding overhead watering, and removing dead or decaying plant material. Provide proper spacing between plants to reduce humidity levels.",
             "cure": "Prune affected plant parts to improve airflow and remove infected tissues. Apply fungicides labeled for botrytis blight control at the first sign of infection."
         },
         {
             "name": "Root rot",
-            "icon": "",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
             "description": "Root rot is a disease caused by various fungi, bacteria, or water mold that infects plant roots, leading to decay and death of the root system. It is often characterized by wilting, yellowing, or stunted growth above ground, and rotting or darkening of roots below ground.",
             "prevent": "Prevent root rot by planting in well-drained soil, avoiding overwatering, and ensuring proper soil drainage. Use sterilized planting materials and avoid planting susceptible species in areas with a history of root rot.",
             "cure": "To manage root rot, improve soil drainage by amending with organic matter. Remove and destroy severely infected plants. Apply fungicides or bactericides to protect healthy plants from infection."
         },
         {
             "name": "Leaf spot",
-            "icon": "",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
             "description": "Leaf spot is a common fungal disease characterized by small, circular, dark lesions on plant leaves. It can lead to defoliation, reduced photosynthesis, and overall weakening of the plant. Leaf spot diseases are caused by various fungi and bacteria.",
             "prevent": "Prevent leaf spot by practicing good garden hygiene, including removing and disposing of infected leaves, pruning to improve air circulation, and avoiding overhead irrigation. Plant disease-resistant varieties when available.",
             "cure": "Manage leaf spot by applying fungicides labeled for leaf spot control. Prune affected foliage to improve airflow and reduce disease spread. Remove and destroy severely infected plants."
+        },
+        {
+            "name": "Botrytis fruit rot",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "description": "Botrytis fruit rot is a fungal disease that affects many fruit crops, causing brownish-gray mold growth on the fruit surface. It can lead to fruit decay, reduced yield, and post-harvest losses.",
+            "prevent": "Prevent botrytis fruit rot by providing good air circulation around plants, avoiding overhead watering, and removing infected or overripe fruits. Use fungicides preventively during periods of high humidity.",
+            "cure": "Prune affected plant parts to improve airflow and remove infected tissues. Apply fungicides labeled for botrytis fruit rot control at the first sign of infection."
+        },
+        {
+            "name": "Blossom end rot",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "description": "Blossom end rot is a physiological disorder rather than a disease, characterized by dark, sunken lesions on the blossom end of fruit. It is caused by calcium deficiency or uneven water uptake, leading to cell death in fruit tissues.",
+            "prevent": "Prevent blossom end rot by maintaining consistent soil moisture levels, avoiding fluctuations in watering, and providing adequate calcium through soil amendments or foliar applications. ",
+            "cure": "There is no cure for blossom end rot once it occurs. Remove affected fruits and address underlying soil issues to prevent further occurrences."
+        },
+        {
+            "name": "Lettuce mosaic virus",
+            "icon": "https://drive.google.com/uc?export=view&id=1xcb2tz8mBQqOnNOqYoTf-IOCRX4lBQNt",
+            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "description": "Lettuce mosaic virus is a viral disease that affects lettuce plants, causing mottled or distorted leaves and stunted growth. It can reduce yield and quality of lettuce crops.",
+            "prevent": "Prevent lettuce mosaic virus by controlling aphid populations, which spread the virus. Plant disease-resistant lettuce varieties and remove infected plants promptly to prevent further spread.",
+            "cure": "There is no cure for lettuce mosaic virus once a plant is infected. Remove and destroy infected plants to prevent the spread of the virus to other plants."
         }
     ]
 }
