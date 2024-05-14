@@ -1,5 +1,7 @@
 //------------------------- PAGES -------------------------
 
+import 'package:marquee/marquee.dart';
+
 import '../plants/plant_page.dart';
 import '../lexica/lexica_page.dart';
 //------------------------ FLUTTER ------------------------
@@ -132,8 +134,7 @@ class Status extends StatelessWidget {
         child: Card(
           color: theme.primaryColor,
           child: SizedBox(
-            width:
-                MediaQuery.of(context).size.width * 0.9,
+            width: MediaQuery.of(context).size.width * 0.9,
             child: Padding(
               padding: EdgeInsets.all(MediaQuery.of(context).size.width *
                   0.05), // Adjust padding as needed
@@ -223,13 +224,65 @@ class PlantCard extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!.copyWith(
         color: theme.colorScheme.onPrimary,
-        fontSize: 15,
+        fontSize: 22,
         backgroundColor: theme.colorScheme.primary);
 
+    final textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    final textWidth = textPainter.width;
+    Widget textWidget;
+
+    if (textWidth > MediaQuery.of(context).size.width * 0.3) {
+      textWidget = Align(
+        alignment:
+            Alignment.centerRight, // Aligns the Marquee widget to the right
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.3,
+          child:
+              // Use Marquee if text exceeds available width
+              Marquee(
+            text: text,
+            style: style,
+            scrollAxis: Axis.horizontal,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            blankSpace: MediaQuery.of(context).size.width * 0.3,
+            velocity: 30.0,
+            pauseAfterRound: Duration(seconds: 1),
+            startPadding: 5.0,
+            accelerationDuration: Duration(seconds: 1),
+            accelerationCurve: Curves.linear,
+            decelerationDuration: Duration(milliseconds: 500),
+            decelerationCurve: Curves.easeOut,
+          ),
+        ),
+      );
+    } else {
+      // Use AutoSizeText if text fits within available width
+      textWidget = Positioned.fill(
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            textAlign: TextAlign.center,
+            text,
+            style: style,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      );
+    }
+
     return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.06,
-        width: MediaQuery.of(context).size.width * 0.3,
-        child: Stack(clipBehavior: Clip.none, fit: StackFit.loose, children: [
+      height: MediaQuery.of(context).size.height * 0.06,
+      width: MediaQuery.of(context).size.width * 0.3,
+      child: Stack(
+        clipBehavior: Clip.none,
+        fit: StackFit.loose,
+        children: [
           //---------- IMAGE ----------
           Positioned(
             left: -MediaQuery.of(context).size.width * 0.24,
@@ -254,19 +307,9 @@ class PlantCard extends StatelessWidget {
             ),
           ),
           //---------- NAME ----------
-          Positioned(
-            top: 8,
-            left: -15,
-            width: 150,
-            child: AutoSizeText(
-              text, style: style, maxLines: 1,
-              maxFontSize: 25,
-
-              minFontSize: 20,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis, 
-            ),
-          ),
-        ]));
+          textWidget
+        ],
+      ),
+    );
   }
 }

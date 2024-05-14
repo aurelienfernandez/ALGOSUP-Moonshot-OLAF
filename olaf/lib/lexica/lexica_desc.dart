@@ -386,7 +386,6 @@ class DiseaseButton extends StatelessWidget {
                                 ),
                               ),
                               //---------- NAME ----------
-
                               textWidget
                             ]))))));
   }
