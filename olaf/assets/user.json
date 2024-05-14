@@ -5,7 +5,7 @@
         "profilePicture": "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=400",
         "plants": [
             {
-                "name": "tomato",
+                "name": "My first tomato",
                 "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
                 "disease": "none",
                 "maturation": "flowering",
@@ -28,9 +28,9 @@
                 "status": "ok",
                 "disease": "none",
                 "maturation": "flowering",
-                "soilHumidity": "50%",
-                "airHumidity": "50%",
-                "temperature": "20°C"
+                "soilHumidity": "40%",
+                "airHumidity": "65%",
+                "temperature": "30°C"
             },
             {
                 "name": "tomato",
@@ -51,14 +51,14 @@
                 "temperature": "20°C"
             },
             {
-                "name": "blackberry",
+                "name": "My last blackberry",
                 "image": "https://almanacplanting.com/cdn/shop/products/ThornlessBlackberry2-min.jpg?v=1662923243&width=800",
                 "status": "ok",
                 "disease": "none",
                 "maturation": "flowering",
-                "soilHumidity": "50%",
-                "airHumidity": "50%",
-                "temperature": "20°C"
+                "soilHumidity": "90%",
+                "airHumidity": "80%",
+                "temperature": "5°C"
             }
         ]
     }

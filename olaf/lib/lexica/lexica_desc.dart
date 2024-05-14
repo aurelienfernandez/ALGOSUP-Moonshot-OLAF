@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:marquee/marquee.dart';
 import 'package:olaf/lexica/lexica_loader.dart';
 
@@ -32,7 +31,12 @@ class LexicaDescription extends StatelessWidget {
               var diseaseIcon =
                   (Lexica.getInstance().findDiseaseByName(diseaseName)).icon;
 
-              return DiseaseButton(diseaseName, diseaseIcon,element.diseases[index].image, plantToDisease: plantToDisease,);
+              return DiseaseButton(
+                diseaseName,
+                diseaseIcon,
+                element.diseases[index].image,
+                plantToDisease: plantToDisease,
+              );
             },
           ),
         );
@@ -233,8 +237,10 @@ class DescriptionWidget extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(
-                                  left:MediaQuery.of(context).size.height * 0.02,
-                                  right:MediaQuery.of(context).size.height * 0.02,
+                                  left:
+                                      MediaQuery.of(context).size.height * 0.02,
+                                  right:
+                                      MediaQuery.of(context).size.height * 0.02,
                                 ),
                                 child: Text(
                                   moreTitle!,
@@ -301,26 +307,28 @@ class DiseaseButton extends StatelessWidget {
     Widget textWidget;
     if (textWidth > MediaQuery.of(context).size.width * 0.4) {
       textWidget = Align(
-          alignment:
-              Alignment.centerRight, // Aligns the Marquee widget to the right
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.4,
-              child:
-                  // Use Marquee if text exceeds available width
-                  Marquee(
-                text: name,
-                style: style,
-                scrollAxis: Axis.horizontal,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                blankSpace: MediaQuery.of(context).size.width * 0.3,
-                velocity: 30.0,
-                pauseAfterRound: Duration(seconds: 1),
-                startPadding: 5.0,
-                accelerationDuration: Duration(seconds: 1),
-                accelerationCurve: Curves.linear,
-                decelerationDuration: Duration(milliseconds: 500),
-                decelerationCurve: Curves.easeOut,
-              )));
+        alignment:
+            Alignment.centerRight, // Aligns the Marquee widget to the right
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.4,
+          child:
+              // Use Marquee if text exceeds available width
+              Marquee(
+            text: name,
+            style: style,
+            scrollAxis: Axis.horizontal,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            blankSpace: MediaQuery.of(context).size.width * 0.3,
+            velocity: 30.0,
+            pauseAfterRound: Duration(seconds: 1),
+            startPadding: 5.0,
+            accelerationDuration: Duration(seconds: 1),
+            accelerationCurve: Curves.linear,
+            decelerationDuration: Duration(milliseconds: 500),
+            decelerationCurve: Curves.easeOut,
+          ),
+        ),
+      );
     } else {
       // Use AutoSizeText if text fits within available width
       textWidget = Positioned.fill(

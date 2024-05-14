@@ -22,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Widget> _tabs = [
     HomeScreen(),
-    PlantScreen(),
+    PlantPage(),
     LexicaPage(),
   ];
 
@@ -264,7 +264,7 @@ class PlantCard extends StatelessWidget {
 
               minFontSize: 20,
               textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis, // Handle overflow with ellipsis
+              overflow: TextOverflow.ellipsis, 
             ),
           ),
         ]));

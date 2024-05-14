@@ -35,9 +35,9 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color.fromARGB(255, 60, 90, 40),
-                primary: Color.fromARGB(255, 40, 90, 45),
-                background: Color.fromARGB(255, 197, 255, 175),
-                secondary: Color.fromARGB(255, 50, 160, 65),
+                primary: Color.fromARGB(255, 41, 65, 31),
+                background: Color.fromARGB(255, 187, 230, 135),
+                secondary: Color.fromARGB(255, 98, 155, 71),
               ),
             ),
             home: MyHomePage(),

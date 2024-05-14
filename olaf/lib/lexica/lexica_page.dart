@@ -8,7 +8,7 @@ import './lexica_desc.dart';
 
 //--------------------- LEXICA STATE ---------------------
 class LexicaPage extends StatefulWidget {
-  const LexicaPage({Key? key}) : super(key: key);
+  const LexicaPage({super.key});
 
   @override
   _LexicaTabState createState() => _LexicaTabState();
