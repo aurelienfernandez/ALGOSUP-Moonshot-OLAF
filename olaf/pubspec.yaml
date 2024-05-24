@@ -15,12 +15,13 @@ dependencies:
   english_words: ^4.0.0
   provider: ^6.0.0
   marquee: ^2.0.4
+  fading_edge_scrollview: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true

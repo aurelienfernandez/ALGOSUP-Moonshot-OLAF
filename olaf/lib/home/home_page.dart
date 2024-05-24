@@ -1,10 +1,9 @@
 //------------------------- PAGES -------------------------
-
-import 'package:marquee/marquee.dart';
-
+import '../settings/settings.dart';
 import '../plants/plant_page.dart';
 import '../lexica/lexica_page.dart';
 //------------------------ FLUTTER ------------------------
+import 'package:marquee/marquee.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 //-------------------------- JSON -------------------------
@@ -18,25 +17,27 @@ class MyHomePage extends StatefulWidget {
 
 //-------------------- HOMEPAGE STATE ---------------------
 class _MyHomePageState extends State<MyHomePage> {
-  int currentIndex;
-
-  _MyHomePageState([this.currentIndex = 0]);
-
+  _MyHomePageState();
+  int currentIndex = 0;
   final List<Widget> _tabs = [
     HomeScreen(),
     PlantPage(),
     LexicaPage(),
+    SettingsPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
     return Scaffold(
       //---------- TITLE ----------
       appBar: AppBar(
-        toolbarHeight: MediaQuery.of(context).size.height * 0.08,
+        automaticallyImplyLeading: false,
+        toolbarHeight: mediaQuery.height * 0.08,
         // Create CircleAvatar
         title: CircleAvatar(
-          radius: MediaQuery.of(context).size.height * 0.035,
+          radius: mediaQuery.height * 0.035,
           backgroundImage: NetworkImage(
             User.getInstance().profilePicture,
           ),
@@ -47,17 +48,19 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(
               Icons.settings,
               color: Colors.white,
-              size: MediaQuery.of(context).size.height * 0.06,
+              size: mediaQuery.height * 0.06,
             ),
             padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.01,
-                right: MediaQuery.of(context).size.height * 0.01),
+                top: mediaQuery.height * 0.01, right: mediaQuery.height * 0.01),
             onPressed: () {
+              setState(() {
+                currentIndex = 3;
+              });
               // Here it should open the "setting page"
             },
           ),
         ],
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: theme.colorScheme.secondary,
       ),
 
       body: _tabs[currentIndex], // What is displayed in the center of the app
@@ -70,15 +73,14 @@ class _MyHomePageState extends State<MyHomePage> {
           topRight: Radius.circular(30.0),
         ),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.09, // Navbar size
+          height: mediaQuery.height * 0.09, // Navbar size
           child: BottomNavigationBar(
             //---- STYLE ----
             selectedLabelStyle: TextStyle(color: Colors.white),
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.white,
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: theme.colorScheme.primary,
             //---- STATE ----
-            currentIndex: currentIndex,
             onTap: (int index) {
               setState(() {
                 if (currentIndex == index && index == 2) {
@@ -128,16 +130,18 @@ class Status extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 25);
+    final mediaQuery = MediaQuery.sizeOf(context);
+
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
+      margin: EdgeInsets.only(top: mediaQuery.height * 0.05),
       child: Center(
         child: Card(
-          color: theme.primaryColor,
+          color: theme.colorScheme.primary,
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
+            width: mediaQuery.width * 0.9,
             child: Padding(
-              padding: EdgeInsets.all(MediaQuery.of(context).size.width *
-                  0.05), // Adjust padding as needed
+              padding: EdgeInsets.all(
+                  mediaQuery.width * 0.05), // Adjust padding as needed
               child: AutoSizeText(
                 "Hello ${User.getInstance().username},\nYour plants are fine",
                 style: style, maxLines: 2,
@@ -170,13 +174,14 @@ class _GardensState extends State<Gardens> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final mediaQuery = MediaQuery.sizeOf(context);
 
     if (isLoading) {
       // Return a loading indicator or placeholder widget while data is being loaded
       return Padding(
         padding: EdgeInsets.only(top: 50),
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
+          valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
         ),
       );
     }
@@ -187,15 +192,20 @@ class _GardensState extends State<Gardens> {
       plantCards.add(
         Card(
           margin: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.05,
-            left: MediaQuery.of(context).size.height * 0.05,
+            top: mediaQuery.height * 0.05,
+            left: mediaQuery.height * 0.05,
           ),
-          color: theme.primaryColor,
-          child: Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.012,
-                  horizontal: MediaQuery.of(context).size.width * 0.1),
-              child: PlantCard(plantsList[i].name, plantsList[i].image)),
+          color: theme.colorScheme.primary,
+          child: InkWell(
+            onTap: (() {
+              print("hello");
+            }),
+            child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: mediaQuery.height * 0.012,
+                    horizontal: mediaQuery.width * 0.1),
+                child: PlantCard(plantsList[i].name, plantsList[i].image)),
+          ),
         ),
       );
     }
@@ -203,8 +213,7 @@ class _GardensState extends State<Gardens> {
     // Add a padding at the end of the column
     if (plantCards.isNotEmpty) {
       plantCards.last = Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02),
+        padding: EdgeInsets.only(bottom: mediaQuery.height * 0.02),
         child: plantCards.last,
       );
     }
@@ -236,20 +245,22 @@ class PlantCard extends StatelessWidget {
     final textWidth = textPainter.width;
     Widget textWidget;
 
-    if (textWidth > MediaQuery.of(context).size.width * 0.3) {
+    final mediaQuery = MediaQuery.sizeOf(context);
+
+    if (textWidth > mediaQuery.width * 0.3) {
       textWidget = Align(
         alignment:
             Alignment.centerRight, // Aligns the Marquee widget to the right
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.3,
+          width: mediaQuery.width * 0.3,
           child:
               // Use Marquee if text exceeds available width
               Marquee(
             text: text,
-            style: style,
+            style: style.copyWith(backgroundColor: Colors.transparent),
             scrollAxis: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.center,
-            blankSpace: MediaQuery.of(context).size.width * 0.3,
+            blankSpace: mediaQuery.width * 0.3,
             velocity: 30.0,
             pauseAfterRound: Duration(seconds: 1),
             startPadding: 5.0,
@@ -268,7 +279,7 @@ class PlantCard extends StatelessWidget {
           child: Text(
             textAlign: TextAlign.center,
             text,
-            style: style,
+            style: style.copyWith(backgroundColor: Colors.transparent),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -277,19 +288,19 @@ class PlantCard extends StatelessWidget {
     }
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.06,
-      width: MediaQuery.of(context).size.width * 0.3,
+      height: mediaQuery.height * 0.06,
+      width: mediaQuery.width * 0.3,
       child: Stack(
         clipBehavior: Clip.none,
         fit: StackFit.loose,
         children: [
           //---------- IMAGE ----------
           Positioned(
-            left: -MediaQuery.of(context).size.width * 0.24,
-            top: -MediaQuery.of(context).size.height * 0.018,
+            left: -mediaQuery.width * 0.24,
+            top: -mediaQuery.height * 0.018,
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.2,
-              height: MediaQuery.of(context).size.width * 0.2,
+              width: mediaQuery.width * 0.2,
+              height: mediaQuery.width * 0.2,
               decoration: BoxDecoration(
                 color: const Color(0xff7c94b6),
                 image: DecorationImage(

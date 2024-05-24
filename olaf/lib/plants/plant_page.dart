@@ -1,7 +1,6 @@
 //------------------- FLUTTER IMPORTS -------------------
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:olaf/user_loader.dart';
 
 //--------------------- PLANT STATE ---------------------
@@ -292,7 +291,7 @@ class StatusTitle extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(50.0)),
                   border: Border.all(
-                    color: theme.colorScheme.primary,
+                    color: theme.colorScheme.secondary,
                     width: 3.0,
                   ),
                 ),

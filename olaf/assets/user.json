@@ -1,8 +1,9 @@
 {
     "user": {
-        "email": "User@mail.com",
-        "name": "UserTestName",
-        "profilePicture": "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=400",
+        "email": "aurelien.fernandez@algosup.com",
+        "name": "admin",
+        "password":"olafPassword",
+        "profilePicture": "https://ca.slack-edge.com/T019N8PRR7W-U01B88PK535-f967388d0975-72",
         "plants": [
             {
                 "name": "My first tomato",

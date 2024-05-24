@@ -111,7 +111,7 @@ class DescriptionWidget extends StatelessWidget {
             top: MediaQuery.of(context).size.height * 0.05,
             bottom: MediaQuery.of(context).size.height * 0.05,
           ),
-          color: theme.colorScheme.secondary, // Background color
+          color: theme.colorScheme.primary, // Background color
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -346,47 +346,51 @@ class DiseaseButton extends StatelessWidget {
     }
 
     return Card(
-        color: theme.primaryColor,
-        margin: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * 0.05,
-          left: MediaQuery.of(context).size.width * 0.15,
-          right: MediaQuery.of(context).size.width * 0.1,
+      color: theme.primaryColor,
+      margin: EdgeInsets.only(
+        top: MediaQuery.of(context).size.height * 0.05,
+        left: MediaQuery.of(context).size.width * 0.15,
+        right: MediaQuery.of(context).size.width * 0.1,
+      ),
+      child: InkWell(
+        onTap: () {
+          plantToDisease(
+              Lexica.getInstance().findDiseaseByName(name), plantImage);
+        },
+        splashColor: Colors.white.withOpacity(0.5),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height * 0.012),
+          child: Center(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Stack(
+                clipBehavior: Clip.none,
+                fit: StackFit.loose,
+                children: [
+                  //---------- IMAGE ----------
+                  Positioned(
+                    left: -MediaQuery.of(context).size.width * 0.07,
+                    top: -MediaQuery.of(context).size.height * 0.02,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      height: MediaQuery.of(context).size.width * 0.2,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(icon),
+                        ),
+                      ),
+                    ),
+                  ),
+                  //---------- NAME ----------
+                  textWidget
+                ],
+              ),
+            ),
+          ),
         ),
-        child: InkWell(
-            onTap: () {
-              plantToDisease(
-                  Lexica.getInstance().findDiseaseByName(name), plantImage);
-            },
-            splashColor: Colors.white.withOpacity(0.5),
-            child: Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * 0.012),
-                child: Center(
-                    child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Stack(
-                            clipBehavior: Clip.none,
-                            fit: StackFit.loose,
-                            children: [
-                              //---------- IMAGE ----------
-                              Positioned(
-                                left: -MediaQuery.of(context).size.width * 0.07,
-                                top: -MediaQuery.of(context).size.height * 0.02,
-                                child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(icon),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              //---------- NAME ----------
-                              textWidget
-                            ]))))));
+      ),
+    );
   }
 }

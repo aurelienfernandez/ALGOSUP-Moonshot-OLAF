@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:olaf/user_loader.dart';
+import 'package:olaf/connection/connection_page.dart';
 import 'package:olaf/lexica/lexica_loader.dart';
-import 'home/home_page.dart';
 
 void main() {
   WidgetsFlutterBinding
@@ -13,7 +12,6 @@ void main() {
 Future<void> loadAllData() async {
   try {
     await Future.wait([
-      loadUser(),
       loadLexica(),
     ]);
     print("Data loaded successfully");
@@ -40,7 +38,7 @@ class MyApp extends StatelessWidget {
                 secondary: Color.fromARGB(255, 98, 155, 71),
               ),
             ),
-            home: MyHomePage(),
+            home: ConnectionPage(),
           );
         } else {
           return CircularProgressIndicator(); // Show a loading indicator while user data is being loaded
