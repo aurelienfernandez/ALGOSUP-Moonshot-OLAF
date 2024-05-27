@@ -1,53 +1,53 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marquee/marquee.dart';
 import 'package:olaf/lexica/lexica_loader.dart';
+import 'package:olaf/lexica/lexica_page.dart';
 
 //------------------ LEXICA DESCRIPTION ------------------
-class LexicaDescription extends StatelessWidget {
-  final dynamic element;
-  final void Function(Disease, String) plantToDisease;
-
-  LexicaDescription(this.element, {required this.plantToDisease});
+class LexicaDescription extends ConsumerWidget {
+  LexicaDescription();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20);
 
     Widget description;
-
-    switch (element.runtimeType) {
+    switch (ref.read(PlantorDisease).runtimeType) {
       case const (LexPlant): // If the current element is a plant
 
         Widget relatedDiseases = SizedBox(
           height: MediaQuery.of(context).size.height *
               0.14 *
-              element.diseases.length, // Set a fixed height to avoid crash
+              ref
+                  .read(PlantorDisease)
+                  .diseases
+                  .length, // Set a fixed height to avoid crash
           child: ListView.builder(
-            itemCount: element.diseases.length,
+            itemCount: ref.read(PlantorDisease).diseases.length,
             itemBuilder: (BuildContext context, int index) {
-              var diseaseName = element.diseases[index].name;
-              var diseaseIcon =
-                  (Lexica.getInstance().findDiseaseByName(diseaseName)).icon;
+              var diseaseName = ref.read(PlantorDisease).diseases[index].name;
+              var disease =
+                  (Lexica.getInstance().findDiseaseByName(diseaseName));
 
               return DiseaseButton(
+
                 diseaseName,
-                diseaseIcon,
-                element.diseases[index].image,
-                plantToDisease: plantToDisease,
+                disease,
               );
             },
           ),
         );
 
         description = DescriptionWidget(
-            element.name,
-            element.image,
+            ref.read(PlantorDisease).name,
+            ref.read(PlantorDisease).image,
             "How to take care\nof this plant",
-            element.howTo,
+            ref.read(PlantorDisease).howTo,
             "Tips",
-            element.tips,
+            ref.read(PlantorDisease).tips,
             moreTitle: "Related diseases",
             moreWidget: relatedDiseases);
 
@@ -56,17 +56,17 @@ class LexicaDescription extends StatelessWidget {
         Widget cure = Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
             child: Text(
-              element.cure,
+              ref.read(PlantorDisease).cure,
               textAlign: TextAlign.center,
               style: style.copyWith(fontSize: 18),
             ));
         description = DescriptionWidget(
-          element.name,
-          element.image,
+          ref.read(PlantorDisease).name,
+          ref.read(PlantorDisease).image,
           "What is this disease",
-          element.description,
+          ref.read(PlantorDisease).description,
           "how to prevent it",
-          [element.prevent],
+          [ref.read(PlantorDisease).prevent],
           moreTitle: "How to cure it",
           moreWidget: cure,
         );
@@ -278,17 +278,14 @@ class DescriptionWidget extends StatelessWidget {
 }
 
 //------------------------ BUTTON ------------------------
-class DiseaseButton extends StatelessWidget {
+class DiseaseButton extends ConsumerWidget {
   final String name;
-  final String icon;
-  final String plantImage;
-  final void Function(Disease, String) plantToDisease;
+  final Disease disease;
 
-  DiseaseButton(this.name, this.icon, this.plantImage,
-      {required this.plantToDisease});
+  DiseaseButton(this.name, this.disease);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20);
@@ -346,7 +343,7 @@ class DiseaseButton extends StatelessWidget {
     }
 
     return Card(
-      color: theme.primaryColor,
+      color: theme.colorScheme.secondary,
       margin: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.05,
         left: MediaQuery.of(context).size.width * 0.15,
@@ -354,8 +351,10 @@ class DiseaseButton extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          plantToDisease(
-              Lexica.getInstance().findDiseaseByName(name), plantImage);
+          ref.read(tab.notifier).state = 3;
+          ref.read(PlantorDisease.notifier).state=disease;
+          ref.read(infectedPlantImage.notifier).state =
+              ref.read(PlantorDisease).image;
         },
         splashColor: Colors.white.withOpacity(0.5),
         child: Padding(
@@ -378,7 +377,7 @@ class DiseaseButton extends StatelessWidget {
                       height: MediaQuery.of(context).size.width * 0.2,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(icon),
+                          image: NetworkImage(disease.icon),
                         ),
                       ),
                     ),

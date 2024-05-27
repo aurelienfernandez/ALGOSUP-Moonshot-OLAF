@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olaf/connection/connection_page.dart';
 import 'package:olaf/lexica/lexica_loader.dart';
 
 void main() {
   WidgetsFlutterBinding
       .ensureInitialized(); // Ensure that Flutter is initialized
-
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 Future<void> loadAllData() async {
@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color.fromARGB(255, 60, 90, 40),
-                primary: Color.fromARGB(255, 41, 65, 31),
-                background: Color.fromARGB(255, 187, 230, 135),
-                secondary: Color.fromARGB(255, 98, 155, 71),
+                primary: Color.fromARGB(255, 60, 90, 45),
+                background: Color.fromARGB(255, 200, 240, 150),
+                secondary: Color.fromARGB(255, 80, 130, 60),
               ),
             ),
             home: ConnectionPage(),

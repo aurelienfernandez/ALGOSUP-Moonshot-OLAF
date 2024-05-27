@@ -2,9 +2,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:olaf/user_loader.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
+
+//--------------------- PROVIDERS ----------------------
+final plantsIndex = StateProvider<int>((ref) => 0);
 
 //--------------------- PLANT STATE ---------------------
-class PlantPage extends StatefulWidget {
+class PlantPage extends ConsumerStatefulWidget {
   const PlantPage({super.key});
 
   @override
@@ -12,33 +17,15 @@ class PlantPage extends StatefulWidget {
 }
 
 //---------------------- PLANT TAB ----------------------
-class _PlantTabState extends State<PlantPage> {
-  int index = 0;
-  int plantsLength = User.getInstance().plants.length - 1;
-  void changeIndex(int newIndex) {
-    setState(() {
-      index = newIndex;
-    });
-  }
-
+class _PlantTabState extends ConsumerState<PlantPage> {
   @override
   Widget build(BuildContext context) {
-    if (index < 0) {
-      index = plantsLength;
-    } else if (index > plantsLength) {
-      index = 0;
-    }
-
     return Scaffold(
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          PlantStatus(
-            User.getInstance().plants[index],
-            index,
-            changeIndex: changeIndex,
-          ),
+          PlantStatus(User.getInstance().plants[ref.watch(plantsIndex)]),
         ],
       ),
     ));
@@ -48,10 +35,8 @@ class _PlantTabState extends State<PlantPage> {
 //--------------------- PLANT STATUS --------------------
 class PlantStatus extends StatelessWidget {
   final Plant plant;
-  final int currentIndex;
-  final void Function(int) changeIndex;
 
-  PlantStatus(this.plant, this.currentIndex, {required this.changeIndex});
+  PlantStatus(this.plant);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -73,11 +58,7 @@ class PlantStatus extends StatelessWidget {
             child: Column(
               children: [
                 //--------------- TITLE ---------------
-                StatusTitle(
-                  plant,
-                  currentIndex,
-                  changeIndex: changeIndex,
-                ),
+                StatusTitle(plant),
 
                 Text("General", style: style.copyWith(fontSize: 20)),
 
@@ -253,15 +234,12 @@ Color _getColorForhumidity(String temperature) {
 }
 
 /// This widget contains the image and the selection of the plant
-class StatusTitle extends StatelessWidget {
+class StatusTitle extends ConsumerWidget {
   final Plant plant;
-  final int currentIndex;
-  final void Function(int) changeIndex;
-
-  StatusTitle(this.plant, this.currentIndex, {required this.changeIndex});
+  StatusTitle(this.plant);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final mediaQuery = MediaQuery.sizeOf(context);
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!
@@ -310,7 +288,15 @@ class StatusTitle extends StatelessWidget {
             //--------- PREVIOUS --------
             IconButton(
               onPressed: () {
-                changeIndex(currentIndex - 1);
+                ref.read(plantsIndex.notifier).state--;
+
+                if (ref.watch(plantsIndex) < 0) {
+                  ref.read(plantsIndex.notifier).state =
+                      User.getInstance().plants.length - 1;
+                } else if (ref.watch(plantsIndex) >
+                    User.getInstance().plants.length - 1) {
+                  ref.read(plantsIndex.notifier).state = 0;
+                }
               },
               icon: Icon(
                 Icons.arrow_back_ios,
@@ -333,7 +319,15 @@ class StatusTitle extends StatelessWidget {
             //----------- NEXT ----------
             IconButton(
               onPressed: () {
-                changeIndex(currentIndex + 1);
+                ref.read(plantsIndex.notifier).state++;
+
+                if (ref.watch(plantsIndex) < 0) {
+                  ref.read(plantsIndex.notifier).state =
+                      User.getInstance().plants.length - 1;
+                } else if (ref.watch(plantsIndex) >
+                    User.getInstance().plants.length - 1) {
+                  ref.read(plantsIndex.notifier).state = 0;
+                }
               },
               icon: Icon(
                 Icons.arrow_forward_ios_rounded,

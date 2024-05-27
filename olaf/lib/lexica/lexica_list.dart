@@ -1,21 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olaf/lexica/lexica_loader.dart';
 import 'package:marquee/marquee.dart';
+import 'package:olaf/lexica/lexica_page.dart';
 
 //--------------------- LEXICA LIST ----------------------
-class LexicaList extends StatelessWidget {
-  final int choice;
-  final void Function(int, dynamic) changeState;
-
-  LexicaList(this.choice, {required this.changeState});
-
+class LexicaList extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     List<Widget> cards = [];
 
-    switch (choice) {
+    switch (ref.read(choice)) {
       case 1: // if plants have been selected
         for (var i = 0; i < Lexica.getInstance().plants.length; i++) {
           // An image of the plant in a circle container
@@ -50,7 +47,9 @@ class LexicaList extends StatelessWidget {
               color: theme.primaryColor,
               child: InkWell(
                 onTap: () {
-                  changeState(2, Lexica.getInstance().plants[i]);
+                  ref.read(tab.notifier).state = 2;
+                  ref.read(PlantorDisease.notifier).state =
+                      Lexica.getInstance().plants[i];
                 },
                 // Optional: custom splash color
                 splashColor: Colors.white.withOpacity(0.5),
@@ -96,7 +95,9 @@ class LexicaList extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () {
-                  changeState(2, Lexica.getInstance().diseases[i]);
+                  ref.read(tab.notifier).state = 2;
+                  ref.read(PlantorDisease.notifier).state =
+                      Lexica.getInstance().diseases[i];
                 },
                 splashColor: Colors.white.withOpacity(0.5),
                 child: Padding(

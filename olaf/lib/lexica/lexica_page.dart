@@ -2,47 +2,33 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:olaf/lexica/lexica_loader.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 //--------------------- LEXICA LIST ----------------------
 import './lexica_list.dart';
 import './lexica_desc.dart';
 
+//----------------------- PROVIDERS ----------------------
+final tab = StateProvider<int>((ref) => 0);
+final choice = StateProvider<int>((ref) => 0);
+final PlantorDisease = StateProvider<dynamic>((ref) => null);
+final infectedPlantImage = StateProvider<String>((ref) => "");
+
 //--------------------- LEXICA STATE ---------------------
-class LexicaPage extends StatefulWidget {
+class LexicaPage extends ConsumerStatefulWidget {
   const LexicaPage({super.key});
 
   @override
   _LexicaTabState createState() => _LexicaTabState();
 }
 
-//--------------------- LEXICA tab --------------------
-class _LexicaTabState extends State<LexicaPage> {
-  int currentTab = 0; // The current tab selected
-  int choice = 0;
-  dynamic selected;
-
-  /// When a button is tapped it changes the page
-  void changeState(int newIndex, dynamic plantOrDisease) {
-    setState(() {
-      currentTab = newIndex;
-      selected = plantOrDisease;
-    });
-  }
-
-  Disease shownDisease = Disease(
-      name: "", image: "", icon: "", description: "", prevent: "", cure: "");
-  String shownImage = "";
-
-  ///  When one of the disease linked to a plant is tapped, show the disease's description with a corresponding image
-  void plantToDisease(Disease disease, String image) {
-    setState(() {
-      currentTab = 3;
-      shownDisease = disease;
-      shownImage = image;
-    });
-  }
+//--------------------- LEXICA TAB --------------------
+class _LexicaTabState extends ConsumerState<LexicaPage> {
+//----------------------- PROVIDERS ----------------------
 
   @override
   Widget build(BuildContext context) {
+    int currentTab = ref.watch(tab);
+
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20);
@@ -62,8 +48,8 @@ class _LexicaTabState extends State<LexicaPage> {
           children: [
             LexicaChoice("Plants", () {
               setState(() {
-                currentTab = 1;
-                choice = 1;
+                ref.read(tab.notifier).state = 1;
+                ref.read(choice.notifier).state = 1;
               });
             }),
 
@@ -73,32 +59,33 @@ class _LexicaTabState extends State<LexicaPage> {
             ),
             LexicaChoice("Diseases", () {
               setState(() {
-                currentTab = 1;
-                choice = 2;
+                ref.read(tab.notifier).state = 1;
+                ref.read(choice.notifier).state = 2;
               });
             }),
           ],
         ),
       ),
-
       // Plants/Disease list
-      LexicaList(choice, changeState: changeState),
+      LexicaList(),
 
       // Plant/Disease description
-      LexicaDescription(selected, plantToDisease: plantToDisease),
+      LexicaDescription(),
 
       DescriptionWidget(
-        shownDisease.name,
-        shownImage,
+        ref.read(PlantorDisease)?.name ?? "",
+        ref.read(infectedPlantImage),
         "What is this disease",
-        shownDisease.description,
+        ref.read(PlantorDisease).runtimeType==Disease? ref.read(PlantorDisease).description : "",
         "how to prevent it",
-        [shownDisease.prevent],
+        [
+        ref.read(PlantorDisease).runtimeType==Disease? ref.read(PlantorDisease).prevent : "",
+        ],
         moreTitle: "How to cure it",
         moreWidget: Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
             child: Text(
-              shownDisease.cure,
+        ref.read(PlantorDisease).runtimeType==Disease? ref.read(PlantorDisease).cure : "",
               textAlign: TextAlign.center,
               style: style.copyWith(fontSize: 18),
             )),

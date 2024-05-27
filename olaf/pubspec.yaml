@@ -16,6 +16,8 @@ dependencies:
   provider: ^6.0.0
   marquee: ^2.0.4
   fading_edge_scrollview: ^3.0.0
+  flutter_riverpod: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:

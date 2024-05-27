@@ -1,4 +1,6 @@
 //------------------------- PAGES -------------------------
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 import '../settings/settings.dart';
 import '../plants/plant_page.dart';
 import '../lexica/lexica_page.dart';
@@ -9,16 +11,18 @@ import 'package:flutter/material.dart';
 //-------------------------- JSON -------------------------
 import '../user_loader.dart';
 
+//--------------------- PROVIDERS ----------------------
+final pageIndex = StateProvider<int>((ref) => 0);
+
 //---------------- HOMEPAGE INITIALIZATION ----------------
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 //-------------------- HOMEPAGE STATE ---------------------
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
   _MyHomePageState();
-  int currentIndex = 0;
   final List<Widget> _tabs = [
     HomeScreen(),
     PlantPage(),
@@ -54,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 top: mediaQuery.height * 0.01, right: mediaQuery.height * 0.01),
             onPressed: () {
               setState(() {
-                currentIndex = 3;
+                ref.read(pageIndex.notifier).state = 3;
               });
               // Here it should open the "setting page"
             },
@@ -63,7 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: theme.colorScheme.secondary,
       ),
 
-      body: _tabs[currentIndex], // What is displayed in the center of the app
+      body: _tabs[
+          ref.watch(pageIndex)], // What is displayed in the center of the app
 
       //---------- NAVBAR ----------
       bottomNavigationBar: ClipRRect(
@@ -83,11 +88,12 @@ class _MyHomePageState extends State<MyHomePage> {
             //---- STATE ----
             onTap: (int index) {
               setState(() {
-                if (currentIndex == index && index == 2) {
+                ref.invalidate(tab);
+                if (ref.read(pageIndex) == index && index == 2) {
                   // If the current index is tapped again, reset the state of the current page
-                  _tabs[currentIndex] = LexicaPage(key: UniqueKey());
+                  _tabs[ref.read(pageIndex)] = LexicaPage(key: UniqueKey());
                 } else {
-                  currentIndex = index;
+                  ref.read(pageIndex.notifier).state = index;
                 }
               });
             },
@@ -160,13 +166,13 @@ class Status extends StatelessWidget {
 }
 
 //------------------------ GARDENS ------------------------
-class Gardens extends StatefulWidget {
+class Gardens extends ConsumerStatefulWidget {
   @override
   _GardensState createState() => _GardensState();
 }
 
 //--------------------- GARDENS STATE ---------------------
-class _GardensState extends State<Gardens> {
+class _GardensState extends ConsumerState<Gardens> {
   List<Plant> plantsList = User.getInstance().plants;
   late User user;
   bool isLoading = false;
@@ -190,23 +196,29 @@ class _GardensState extends State<Gardens> {
     List<Widget> plantCards = [];
     for (var i = 0; i < plantsList.length; i++) {
       plantCards.add(
-        Card(
-          margin: EdgeInsets.only(
-            top: mediaQuery.height * 0.05,
-            left: mediaQuery.height * 0.05,
-          ),
-          color: theme.colorScheme.primary,
-          child: InkWell(
-            onTap: (() {
-              print("hello");
-            }),
-            child: Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: mediaQuery.height * 0.012,
-                    horizontal: mediaQuery.width * 0.1),
-                child: PlantCard(plantsList[i].name, plantsList[i].image)),
-          ),
-        ),
+        Container(
+            margin: EdgeInsets.only(
+              top: mediaQuery.height * 0.05,
+              left: mediaQuery.height * 0.1,
+              right: mediaQuery.height * 0.08,
+            ),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary),
+                onPressed: () {
+                  ref.read(pageIndex.notifier).state = 1;
+                  ref.read(plantsIndex.notifier).state = i;
+                },
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: mediaQuery.height * 0.012,
+                          horizontal: mediaQuery.width * 0.1),
+                      child: PlantCard(plantsList[i].name, plantsList[i].image),
+                    ),
+                  ],
+                ))),
       );
     }
 
