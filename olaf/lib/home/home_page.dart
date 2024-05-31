@@ -1,5 +1,6 @@
 //------------------------- PAGES -------------------------
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:olaf/user_loader.dart';
 import 'package:provider/provider.dart';
 import '../settings/settings.dart';
 import '../plants/plant_page.dart';
@@ -8,27 +9,31 @@ import '../lexica/lexica_page.dart';
 import 'package:marquee/marquee.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-//-------------------------- JSON -------------------------
-import '../user_loader.dart';
 
 //--------------------- PROVIDERS ----------------------
 final pageIndex = StateProvider<int>((ref) => 0);
 
 //---------------- HOMEPAGE INITIALIZATION ----------------
-class MyHomePage extends ConsumerStatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
 //-------------------- HOMEPAGE STATE ---------------------
-class _MyHomePageState extends ConsumerState<MyHomePage> {
-  _MyHomePageState();
+class _HomePageState extends ConsumerState<HomePage> {
+  final PageController _pageController = PageController();
   final List<Widget> _tabs = [
     HomeScreen(),
     PlantPage(),
     LexicaPage(),
     SettingsPage(),
   ];
+  void onTabTapped(int index) {
+    _tabs[ref.watch(pageIndex)];
+
+    _pageController.animateToPage(index,
+        duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +72,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         backgroundColor: theme.colorScheme.secondary,
       ),
 
-      body: _tabs[
-          ref.watch(pageIndex)], // What is displayed in the center of the app
+      body: PageView(
+        controller: _pageController,
+        children: _tabs,
+      ),
+      // What is displayed in the center of the app
 
       //---------- NAVBAR ----------
       bottomNavigationBar: ClipRRect(
@@ -93,6 +101,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                   // If the current index is tapped again, reset the state of the current page
                   _tabs[ref.read(pageIndex)] = LexicaPage(key: UniqueKey());
                 } else {
+                  onTabTapped(index);
                   ref.read(pageIndex.notifier).state = index;
                 }
               });
@@ -120,12 +129,15 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 }
 
 //------------------------ HOMEPAGE -----------------------
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    ref.invalidate(pageIndex);
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Column(children: [Status(), Gardens()])));
+      body: SingleChildScrollView(
+        child: Column(children: [Status(), Gardens()]),
+      ),
+    );
   }
 }
 

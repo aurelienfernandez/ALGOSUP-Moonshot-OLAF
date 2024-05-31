@@ -10,6 +10,7 @@ class LexicaList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    var mediaQuery = MediaQuery.sizeOf(context);
     List<Widget> cards = [];
 
     switch (ref.read(choice)) {
@@ -17,11 +18,11 @@ class LexicaList extends ConsumerWidget {
         for (var i = 0; i < Lexica.getInstance().plants.length; i++) {
           // An image of the plant in a circle container
           final Widget plantImage = Positioned(
-            left: -MediaQuery.of(context).size.width * 0.2,
-            top: -MediaQuery.of(context).size.height * 0.02,
+            left: -mediaQuery.width * 0.2,
+            top: -mediaQuery.height * 0.02,
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.2,
-              height: MediaQuery.of(context).size.width * 0.2,
+              width: mediaQuery.width * 0.2,
+              height: mediaQuery.width * 0.2,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(Lexica.getInstance().plants[i].image),
@@ -40,9 +41,9 @@ class LexicaList extends ConsumerWidget {
             Card(
               // Position on the screen
               margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.08,
-                left: MediaQuery.of(context).size.width * 0.25,
-                right: MediaQuery.of(context).size.width * 0.15,
+                top: mediaQuery.height * 0.08,
+                left: mediaQuery.width * 0.25,
+                right: mediaQuery.width * 0.15,
               ),
               color: theme.primaryColor,
               child: InkWell(
@@ -57,8 +58,8 @@ class LexicaList extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * 0.012,
-                      horizontal: MediaQuery.of(context).size.width * 0.1),
+                      vertical: mediaQuery.height * 0.012,
+                      horizontal: mediaQuery.width * 0.1),
                   child: LexiCard(
                     Lexica.getInstance().plants[i].name,
                     plantImage,
@@ -72,11 +73,11 @@ class LexicaList extends ConsumerWidget {
         for (var i = 0; i < Lexica.getInstance().diseases.length; i++) {
           // The icon of the disease displayed at the left of the name
           final Widget diseaseIcon = Positioned(
-            left: -MediaQuery.of(context).size.width * 0.1,
-            top: -MediaQuery.of(context).size.height * 0.02,
+            left: -mediaQuery.width * 0.1,
+            top: -mediaQuery.height * 0.02,
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.2,
-              height: MediaQuery.of(context).size.width * 0.2,
+              width: mediaQuery.width * 0.2,
+              height: mediaQuery.width * 0.2,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(Lexica.getInstance().diseases[i].icon),
@@ -89,9 +90,9 @@ class LexicaList extends ConsumerWidget {
             Card(
               color: theme.primaryColor,
               margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.05,
-                left: MediaQuery.of(context).size.width * 0.2,
-                right: MediaQuery.of(context).size.width * 0.15,
+                top: mediaQuery.height * 0.05,
+                left: mediaQuery.width * 0.2,
+                right: mediaQuery.width * 0.15,
               ),
               child: InkWell(
                 onTap: () {
@@ -101,8 +102,8 @@ class LexicaList extends ConsumerWidget {
                 },
                 splashColor: Colors.white.withOpacity(0.5),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * 0.012),
+                  padding:
+                      EdgeInsets.symmetric(vertical: mediaQuery.height * 0.012),
                   child: LexiCard(
                       Lexica.getInstance().diseases[i].name, diseaseIcon),
                 ),
@@ -115,16 +116,14 @@ class LexicaList extends ConsumerWidget {
     }
     if (cards.isNotEmpty) {
       cards.last = Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02),
+        padding: EdgeInsets.only(bottom: mediaQuery.height * 0.02),
         child: cards.last,
       );
     }
-    return Scaffold(
-        body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Column(children: cards)])));
+    return SingleChildScrollView(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Column(children: cards)]));
   }
 }
 
@@ -135,6 +134,8 @@ class LexiCard extends StatelessWidget {
   LexiCard(this.text, this.icon);
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.sizeOf(context);
+
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 25);
@@ -151,12 +152,12 @@ class LexiCard extends StatelessWidget {
     final textWidth = textPainter.width;
 
     Widget textWidget;
-    if (textWidth > MediaQuery.of(context).size.width * 0.4) {
+    if (textWidth > mediaQuery.width * 0.4) {
       textWidget = Align(
           alignment:
               Alignment.centerRight, // Aligns the Marquee widget to the right
           child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.4,
+              width: mediaQuery.width * 0.4,
               child:
                   // Use Marquee if text exceeds available width
                   Marquee(
@@ -164,7 +165,7 @@ class LexiCard extends StatelessWidget {
                 style: style,
                 scrollAxis: Axis.horizontal,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                blankSpace: MediaQuery.of(context).size.width * 0.3,
+                blankSpace: mediaQuery.width * 0.3,
                 velocity: 30.0,
                 pauseAfterRound: Duration(seconds: 1),
                 startPadding: 5.0,
@@ -191,8 +192,8 @@ class LexiCard extends StatelessWidget {
 
     return Center(
         child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.06,
-            width: MediaQuery.of(context).size.width * 0.5,
+            height: mediaQuery.height * 0.06,
+            width: mediaQuery.width * 0.5,
             child:
                 Stack(clipBehavior: Clip.none, fit: StackFit.loose, children: [
               //---------- IMAGE ----------

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:olaf/home/home_page.dart';
-import 'package:olaf/user_loader.dart';
 
-class ConnectionPage extends StatefulWidget {
+class loginPage extends StatefulWidget {
   @override
-  _ConnectionState createState() => _ConnectionState();
+  _loginPageState createState() => _loginPageState();
 }
 
-class _ConnectionState extends State<ConnectionPage> {
+class _loginPageState extends State<loginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool error = false;
@@ -104,18 +102,7 @@ class _ConnectionState extends State<ConnectionPage> {
                     passwordColor = Colors.red;
                   });
                 } else {
-                  await loadUser();
-                  int result = 1;
-                  if (result == 0) {
-                    setState(() {
-                      error = true;
-                    });
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
-                    );
-                  }
+                  await login(emailController.text, passwordController.text);
                 }
               },
               //------------- CONNECT BUTTON ------------
@@ -126,4 +113,7 @@ class _ConnectionState extends State<ConnectionPage> {
       ),
     );
   }
+
+  login(String email, String password) =>
+      Navigator.pushNamed(context, "Home");
 }

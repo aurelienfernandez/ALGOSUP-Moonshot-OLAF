@@ -11,6 +11,7 @@ import './lexica_desc.dart';
 final tab = StateProvider<int>((ref) => 0);
 final choice = StateProvider<int>((ref) => 0);
 final PlantorDisease = StateProvider<dynamic>((ref) => null);
+final DiseaseDescription = StateProvider<dynamic>((ref) => null);
 final infectedPlantImage = StateProvider<String>((ref) => "");
 
 //--------------------- LEXICA STATE ---------------------
@@ -28,7 +29,7 @@ class _LexicaTabState extends ConsumerState<LexicaPage> {
   @override
   Widget build(BuildContext context) {
     int currentTab = ref.watch(tab);
-
+    var mediaQuery = MediaQuery.sizeOf(context);
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20);
@@ -44,6 +45,7 @@ class _LexicaTabState extends ConsumerState<LexicaPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
+
           // Plant & Disease buttons
           children: [
             LexicaChoice("Plants", () {
@@ -55,7 +57,7 @@ class _LexicaTabState extends ConsumerState<LexicaPage> {
 
             // An empty space to separate the two buttons
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
+              height: mediaQuery.height * 0.1,
             ),
             LexicaChoice("Diseases", () {
               setState(() {
@@ -73,26 +75,47 @@ class _LexicaTabState extends ConsumerState<LexicaPage> {
       LexicaDescription(),
 
       DescriptionWidget(
-        ref.read(PlantorDisease)?.name ?? "",
+        ref.read(DiseaseDescription)?.name ?? "",
         ref.read(infectedPlantImage),
         "What is this disease",
-        ref.read(PlantorDisease).runtimeType==Disease? ref.read(PlantorDisease).description : "",
+        ref.read(DiseaseDescription).runtimeType == Disease
+            ? ref.read(DiseaseDescription).description
+            : "",
         "how to prevent it",
         [
-        ref.read(PlantorDisease).runtimeType==Disease? ref.read(PlantorDisease).prevent : "",
+          ref.read(DiseaseDescription).runtimeType == Disease
+              ? ref.read(DiseaseDescription).prevent
+              : "",
         ],
         moreTitle: "How to cure it",
         moreWidget: Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+            padding: EdgeInsets.all(mediaQuery.height * 0.02),
             child: Text(
-        ref.read(PlantorDisease).runtimeType==Disease? ref.read(PlantorDisease).cure : "",
+              ref.read(DiseaseDescription).runtimeType == Disease
+                  ? ref.read(DiseaseDescription).cure
+                  : "",
               textAlign: TextAlign.center,
               style: style.copyWith(fontSize: 18),
             )),
       )
     ];
 
-    return states[currentTab];
+    return Scaffold(
+        appBar: ref.watch(tab) != 0
+            ? AppBar(
+                backgroundColor: Colors.transparent,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                    size: mediaQuery.width * 0.1,
+                  ), // Icon for the back arrow
+                  onPressed: () {
+                    ref.read(tab.notifier).state--;
+                  },
+                ))
+            : null,
+        body: states[currentTab]);
   }
 }
 
@@ -103,6 +126,7 @@ class LexicaChoice extends StatelessWidget {
   LexicaChoice(this.text, this.onPressed);
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.sizeOf(context);
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -116,8 +140,8 @@ class LexicaChoice extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(10),
           ),
-          height: MediaQuery.of(context).size.height * 0.1,
-          width: MediaQuery.of(context).size.width * 0.8,
+          height: mediaQuery.height * 0.1,
+          width: mediaQuery.width * 0.8,
           child: Padding(
             padding: EdgeInsets.all(20),
             child: TextButton(

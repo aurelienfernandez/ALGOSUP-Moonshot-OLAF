@@ -10,6 +10,7 @@ class LexicaDescription extends ConsumerWidget {
   LexicaDescription();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var mediaQuery = MediaQuery.sizeOf(context);
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20);
@@ -19,7 +20,7 @@ class LexicaDescription extends ConsumerWidget {
       case const (LexPlant): // If the current element is a plant
 
         Widget relatedDiseases = SizedBox(
-          height: MediaQuery.of(context).size.height *
+          height: mediaQuery.height *
               0.14 *
               ref
                   .read(PlantorDisease)
@@ -33,7 +34,6 @@ class LexicaDescription extends ConsumerWidget {
                   (Lexica.getInstance().findDiseaseByName(diseaseName));
 
               return DiseaseButton(
-
                 diseaseName,
                 disease,
               );
@@ -54,7 +54,7 @@ class LexicaDescription extends ConsumerWidget {
       case const (Disease): // If the current element is a disease
 
         Widget cure = Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+            padding: EdgeInsets.all(mediaQuery.height * 0.02),
             child: Text(
               ref.read(PlantorDisease).cure,
               textAlign: TextAlign.center,
@@ -76,6 +76,7 @@ class LexicaDescription extends ConsumerWidget {
     }
 
     return description;
+    
   }
 }
 
@@ -96,6 +97,7 @@ class DescriptionWidget extends StatelessWidget {
       {this.moreTitle, this.moreWidget, this.icon});
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.sizeOf(context);
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20);
@@ -103,13 +105,13 @@ class DescriptionWidget extends StatelessWidget {
     return Center(
       child: SizedBox(
         // Size of the card
-        width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.height * 1,
+        width: mediaQuery.width * 0.8,
+        height: mediaQuery.height * 1,
         child: Card(
           margin: EdgeInsets.only(
             // Position of the card
-            top: MediaQuery.of(context).size.height * 0.05,
-            bottom: MediaQuery.of(context).size.height * 0.05,
+            top: mediaQuery.height * 0.05,
+            bottom: mediaQuery.height * 0.05,
           ),
           color: theme.colorScheme.primary, // Background color
           child: SingleChildScrollView(
@@ -129,14 +131,14 @@ class DescriptionWidget extends StatelessWidget {
                 // Plant's image
                 Image(
                   image: NetworkImage(image),
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  height: MediaQuery.of(context).size.width * 0.5,
+                  width: mediaQuery.width * 0.6,
+                  height: mediaQuery.width * 0.5,
                 ),
 
                 // How to take care of the plant (title)
                 Container(
                   padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.height * 0.02,
+                    bottom: mediaQuery.height * 0.02,
                   ),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -145,8 +147,7 @@ class DescriptionWidget extends StatelessWidget {
                           fit: BoxFit.scaleDown,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.05),
+                                horizontal: mediaQuery.width * 0.05),
                             child: Text(
                                 textAlign: TextAlign.center,
                                 title,
@@ -156,8 +157,8 @@ class DescriptionWidget extends StatelessWidget {
 
                         // Separation line
                         Container(
-                          height: MediaQuery.of(context).size.height * 0.02,
-                          width: MediaQuery.of(context).size.width * 0.5,
+                          height: mediaQuery.height * 0.02,
+                          width: mediaQuery.width * 0.5,
                           decoration: BoxDecoration(
                             border: Border(
                               bottom: BorderSide(
@@ -170,8 +171,7 @@ class DescriptionWidget extends StatelessWidget {
 
                         // How to take care of the plant (text)
                         Padding(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.height * 0.02),
+                            padding: EdgeInsets.all(mediaQuery.height * 0.02),
                             child: AutoSizeText(
                               text,
                               textAlign: TextAlign.center,
@@ -188,8 +188,8 @@ class DescriptionWidget extends StatelessWidget {
 
                         // Separation line
                         Container(
-                          height: MediaQuery.of(context).size.height * 0.02,
-                          width: MediaQuery.of(context).size.width * 0.5,
+                          height: mediaQuery.height * 0.02,
+                          width: mediaQuery.width * 0.5,
                           decoration: BoxDecoration(
                             border: Border(
                               bottom: BorderSide(
@@ -203,8 +203,7 @@ class DescriptionWidget extends StatelessWidget {
                         // if there is only 1 text in the list, only add the text, else add each text and create a space between them
                         if (text2.length == 1)
                           Padding(
-                              padding: EdgeInsets.all(
-                                  MediaQuery.of(context).size.height * 0.02),
+                              padding: EdgeInsets.all(mediaQuery.height * 0.02),
                               child: AutoSizeText(
                                 text2[0],
                                 textAlign: TextAlign.center,
@@ -216,12 +215,9 @@ class DescriptionWidget extends StatelessWidget {
                           for (int i = 0; i < text2.length; i++)
                             Padding(
                                 padding: EdgeInsets.only(
-                                  top:
-                                      MediaQuery.of(context).size.height * 0.01,
-                                  left:
-                                      MediaQuery.of(context).size.height * 0.02,
-                                  right:
-                                      MediaQuery.of(context).size.height * 0.02,
+                                  top: mediaQuery.height * 0.01,
+                                  left: mediaQuery.height * 0.02,
+                                  right: mediaQuery.height * 0.02,
                                 ),
                                 child: Text(
                                   "- ${text2[i]}",
@@ -237,10 +233,8 @@ class DescriptionWidget extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.height * 0.02,
-                                  right:
-                                      MediaQuery.of(context).size.height * 0.02,
+                                  left: mediaQuery.height * 0.02,
+                                  right: mediaQuery.height * 0.02,
                                 ),
                                 child: Text(
                                   moreTitle!,
@@ -250,9 +244,8 @@ class DescriptionWidget extends StatelessWidget {
                               ),
                               // Separation line
                               Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.02,
-                                width: MediaQuery.of(context).size.width * 0.5,
+                                height: mediaQuery.height * 0.02,
+                                width: mediaQuery.width * 0.5,
                                 decoration: BoxDecoration(
                                   border: Border(
                                     bottom: BorderSide(
@@ -286,6 +279,7 @@ class DiseaseButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var mediaQuery=MediaQuery.sizeOf(context);
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20);
@@ -302,12 +296,12 @@ class DiseaseButton extends ConsumerWidget {
     final textWidth = textPainter.width;
 
     Widget textWidget;
-    if (textWidth > MediaQuery.of(context).size.width * 0.4) {
+    if (textWidth > mediaQuery.width * 0.4) {
       textWidget = Align(
         alignment:
             Alignment.centerRight, // Aligns the Marquee widget to the right
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.4,
+          width: mediaQuery.width * 0.4,
           child:
               // Use Marquee if text exceeds available width
               Marquee(
@@ -315,7 +309,7 @@ class DiseaseButton extends ConsumerWidget {
             style: style,
             scrollAxis: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.center,
-            blankSpace: MediaQuery.of(context).size.width * 0.3,
+            blankSpace: mediaQuery.width * 0.3,
             velocity: 30.0,
             pauseAfterRound: Duration(seconds: 1),
             startPadding: 5.0,
@@ -345,36 +339,35 @@ class DiseaseButton extends ConsumerWidget {
     return Card(
       color: theme.colorScheme.secondary,
       margin: EdgeInsets.only(
-        top: MediaQuery.of(context).size.height * 0.05,
-        left: MediaQuery.of(context).size.width * 0.15,
-        right: MediaQuery.of(context).size.width * 0.1,
+        top: mediaQuery.height * 0.05,
+        left: mediaQuery.width * 0.15,
+        right: mediaQuery.width * 0.1,
       ),
       child: InkWell(
         onTap: () {
           ref.read(tab.notifier).state = 3;
-          ref.read(PlantorDisease.notifier).state=disease;
+          ref.read(DiseaseDescription.notifier).state = disease;
           ref.read(infectedPlantImage.notifier).state =
               ref.read(PlantorDisease).image;
         },
         splashColor: Colors.white.withOpacity(0.5),
         child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height * 0.012),
+          padding: EdgeInsets.symmetric(vertical: mediaQuery.height * 0.012),
           child: Center(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.06,
-              width: MediaQuery.of(context).size.width * 0.5,
+              height: mediaQuery.height * 0.06,
+              width: mediaQuery.width * 0.5,
               child: Stack(
                 clipBehavior: Clip.none,
                 fit: StackFit.loose,
                 children: [
                   //---------- IMAGE ----------
                   Positioned(
-                    left: -MediaQuery.of(context).size.width * 0.07,
-                    top: -MediaQuery.of(context).size.height * 0.02,
+                    left: -mediaQuery.width * 0.07,
+                    top: -mediaQuery.height * 0.02,
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: MediaQuery.of(context).size.width * 0.2,
+                      width: mediaQuery.width * 0.2,
+                      height: mediaQuery.width * 0.2,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: NetworkImage(disease.icon),
