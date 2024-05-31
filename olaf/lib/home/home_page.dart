@@ -1,7 +1,6 @@
 //------------------------- PAGES -------------------------
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olaf/user_loader.dart';
-import 'package:provider/provider.dart';
 import '../settings/settings.dart';
 import '../plants/plant_page.dart';
 import '../lexica/lexica_page.dart';
@@ -28,7 +27,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     LexicaPage(),
     SettingsPage(),
   ];
-  void onTabTapped(int index) {
+
+  // A short animation when changing page
+  void pageAnimation(int index) {
     _tabs[ref.watch(pageIndex)];
 
     _pageController.animateToPage(index,
@@ -62,21 +63,18 @@ class _HomePageState extends ConsumerState<HomePage> {
             padding: EdgeInsets.only(
                 top: mediaQuery.height * 0.01, right: mediaQuery.height * 0.01),
             onPressed: () {
-              setState(() {
-                ref.read(pageIndex.notifier).state = 3;
-              });
-              // Here it should open the "setting page"
+              pageAnimation(3);
             },
           ),
         ],
         backgroundColor: theme.colorScheme.secondary,
       ),
 
+      // What is displayed in the center of the app
       body: PageView(
         controller: _pageController,
         children: _tabs,
       ),
-      // What is displayed in the center of the app
 
       //---------- NAVBAR ----------
       bottomNavigationBar: ClipRRect(
@@ -86,7 +84,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           topRight: Radius.circular(30.0),
         ),
         child: SizedBox(
-          height: mediaQuery.height * 0.09, // Navbar size
+          height: mediaQuery.height * 0.09,
           child: BottomNavigationBar(
             //---- STYLE ----
             selectedLabelStyle: TextStyle(color: Colors.white),
@@ -95,16 +93,14 @@ class _HomePageState extends ConsumerState<HomePage> {
             backgroundColor: theme.colorScheme.primary,
             //---- STATE ----
             onTap: (int index) {
-              setState(() {
-                ref.invalidate(tab);
-                if (ref.read(pageIndex) == index && index == 2) {
-                  // If the current index is tapped again, reset the state of the current page
-                  _tabs[ref.read(pageIndex)] = LexicaPage(key: UniqueKey());
-                } else {
-                  onTabTapped(index);
-                  ref.read(pageIndex.notifier).state = index;
-                }
-              });
+              ref.invalidate(tab);
+              // If the current index is tapped again, reset the state of the current page
+              if (ref.read(pageIndex) == index && index == 2) {
+                _tabs[ref.read(pageIndex)] = LexicaPage(key: UniqueKey());
+              } else {
+                pageAnimation(index);
+                ref.read(pageIndex.notifier).state = index;
+              }
             },
             //---- ITEMS ----
             items: [
@@ -131,7 +127,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 //------------------------ HOMEPAGE -----------------------
 class HomeScreen extends ConsumerWidget {
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ref.invalidate(pageIndex);
     return Scaffold(
       body: SingleChildScrollView(

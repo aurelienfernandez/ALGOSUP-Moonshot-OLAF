@@ -1,4 +1,5 @@
 //------------------- FLUTTER IMPORTS -------------------
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 //--------------------- PLANT STATE ---------------------
@@ -11,6 +12,12 @@ class SettingsPage extends StatefulWidget {
 
 //---------------------- PLANT TAB ----------------------
 class _SettingsState extends State<SettingsPage> {
+  final DropDownFlags = [
+    "assets/uk.png",
+    "assets/fr.png",
+    "assets/de.png",
+  ];
+  String currentFlag = "assets/uk.png";
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -26,7 +33,7 @@ class _SettingsState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Card(
-              color: theme.colorScheme.primary,
+              color: Colors.transparent,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: Padding(
@@ -105,6 +112,57 @@ class _SettingsState extends State<SettingsPage> {
                           Text(
                             "Language:",
                             style: style.copyWith(fontSize: 20),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(left: mediaQuery.width * 0.1),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: theme.colorScheme.secondary,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30))),
+                              width: mediaQuery.width * 0.2,
+                              height: mediaQuery.width * 0.15,
+                              child: DropdownButton<String>(
+                                padding: EdgeInsets.only(
+                                    left: mediaQuery.width * 0.05),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                                itemHeight: mediaQuery.height * 0.1,
+                                value: currentFlag,
+                                dropdownColor: theme.colorScheme.secondary,
+                                iconEnabledColor: Colors.grey.shade200,
+                                items: DropDownFlags.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Center(
+                                      child: Image.asset(
+                                        value,
+                                        width: mediaQuery.width * 0.1,
+                                        alignment: Alignment.center,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                selectedItemBuilder: (BuildContext context) {
+                                  return DropDownFlags.map((String value) {
+                                    return Center(
+                                      child: Image.asset(
+                                        value,
+                                        width: mediaQuery.width * 0.08,
+                                        height: mediaQuery.width * 0.08,
+                                        alignment: Alignment.center,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    );
+                                  }).toList();
+                                },
+                                onChanged: (String? newValue) {
+                                  // Your logic here
+                                },
+                              ),
+                            ),
                           ),
                         ],
                       )

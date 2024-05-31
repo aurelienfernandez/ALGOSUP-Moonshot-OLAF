@@ -19,6 +19,7 @@ dependencies:
   flutter_riverpod: ^2.0.0
   amazon_cognito_identity_dart_2: ^3.1.1
   flutter_dotenv: ^5.0.2
+  dropdown_button2: ^2.3.9
 
 
 dev_dependencies:
@@ -32,7 +33,9 @@ flutter:
   assets: 
     - assets/user.json
     - assets/lexica.json
-    - .env
+    - assets/uk.png
+    - assets/fr.png
+    - assets/de.png
   fonts:
     - family: CustomIcons
       fonts:
