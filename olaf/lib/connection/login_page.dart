@@ -116,4 +116,5 @@ class _loginPageState extends State<loginPage> {
 
   login(String email, String password) =>
       Navigator.pushNamed(context, "Home");
+      
 }

@@ -50,13 +50,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// A route manager to transition from the connection pages to the home page
 class RouteGenerator {
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => loginPage());
       case 'Home':
-        return MaterialPageRoute(builder: (_) => HomePage());
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
       default:
         return _errorRoute();
     }
