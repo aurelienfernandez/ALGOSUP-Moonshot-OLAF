@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olaf/app_localization.dart';
 
 class loginPage extends StatefulWidget {
   @override
@@ -38,7 +39,9 @@ class _loginPageState extends State<loginPage> {
                   hintStyle: TextStyle(color: emailColor),
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   border: const UnderlineInputBorder(),
-                  label: const Text("Enter your email"),
+                  label: Text(
+                    AppLocalizations.of(context).translate('email'),
+                  ),
                 ),
               ),
             ),
@@ -58,7 +61,9 @@ class _loginPageState extends State<loginPage> {
                   hintStyle: TextStyle(color: passwordColor),
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   border: const UnderlineInputBorder(),
-                  label: const Text("Enter your password"),
+                  label: Text(
+                    AppLocalizations.of(context).translate('password'),
+                  ),
                 ),
               ),
             ),
@@ -106,7 +111,9 @@ class _loginPageState extends State<loginPage> {
                 }
               },
               //------------- CONNECT BUTTON ------------
-              label: const Text('Connect'),
+              label: Text(
+                AppLocalizations.of(context).translate('connect'),
+              ),
             ),
           ],
         ),
@@ -114,7 +121,5 @@ class _loginPageState extends State<loginPage> {
     );
   }
 
-  login(String email, String password) =>
-      Navigator.pushNamed(context, "Home");
-      
+  login(String email, String password) => Navigator.pushNamed(context, "Home");
 }

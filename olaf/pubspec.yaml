@@ -12,15 +12,12 @@ dependencies:
   flutter:
     sdk: flutter
   auto_size_text: ^3.0.0
-  english_words: ^4.0.0
-  provider: ^6.0.0
   marquee: ^2.0.4
   fading_edge_scrollview: ^3.0.0
   flutter_riverpod: ^2.0.0
   amazon_cognito_identity_dart_2: ^3.1.1
-  flutter_dotenv: ^5.0.2
-  dropdown_button2: ^2.3.9
-
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +33,9 @@ flutter:
     - assets/uk.png
     - assets/fr.png
     - assets/de.png
+    - assets/lang/en.json
+    - assets/lang/fr.json
+    - assets/lang/de.json
   fonts:
     - family: CustomIcons
       fonts:

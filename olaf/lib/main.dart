@@ -1,9 +1,15 @@
+//------------------- FLUTTER IMPORTS -------------------
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:olaf/app_localization.dart';
 import 'package:olaf/connection/login_page.dart';
 import 'package:olaf/home/home_page.dart';
 import 'package:olaf/lexica/lexica_loader.dart';
 import 'package:olaf/user_loader.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+//---------------------- PROVIDERS ----------------------
+final localeProvider = StateProvider<Locale>((ref) => Locale('en'));
 
 void main() {
   WidgetsFlutterBinding
@@ -23,14 +29,28 @@ Future<void> loadAllData() async {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+
     return FutureBuilder<void>(
       future: loadAllData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
+              locale: locale,
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: [
+                Locale('en', ''), // English
+                Locale('fr', ''), // French
+                Locale('de', ''), // German
+              ],
               title: 'OLAF',
               theme: ThemeData(
                 useMaterial3: true,

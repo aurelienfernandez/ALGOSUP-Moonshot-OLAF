@@ -1,0 +1,27 @@
+{
+    "email": "Enter your email",
+    "password": "Enter your password",
+    "connect": "Connect",
+    "hello_fine": "Hello, {username}, your plants are fine.",
+    "Hello_not_fine": "Hello, {username}, some of your plants requires your attention.",
+    "settings": "settings",
+    "version": "version",
+    "general": "general",
+    "language": "language",
+    "home": "home",
+    "plants": "plants",
+    "lexica": "lexica",
+    "diseases":"diseases",
+    "global_status":"global status",
+    "additional_data":"additional data",
+    "temperature":"temperature",
+    "soil_humidity":"soil humidity",
+    "air_humidity":"air humidity",
+    "how_to":"how to take care\nof this plant",
+    "tips":"tips",
+    "related": "related diseases",
+    "what_is_it":"what is this disease",
+    "prevent":"how to prevent it",
+    "cure":"how to cure it"
+
+}

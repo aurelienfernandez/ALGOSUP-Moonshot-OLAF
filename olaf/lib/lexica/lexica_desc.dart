@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marquee/marquee.dart';
+import 'package:olaf/app_localization.dart';
 import 'package:olaf/lexica/lexica_loader.dart';
 import 'package:olaf/lexica/lexica_page.dart';
 
@@ -44,11 +45,11 @@ class LexicaDescription extends ConsumerWidget {
         description = DescriptionWidget(
             ref.read(PlantorDisease).name,
             ref.read(PlantorDisease).image,
-            "How to take care\nof this plant",
+            AppLocalizations.of(context).translate('how_to'),
             ref.read(PlantorDisease).howTo,
-            "Tips",
+            AppLocalizations.of(context).translate("tips"),
             ref.read(PlantorDisease).tips,
-            moreTitle: "Related diseases",
+            moreTitle: AppLocalizations.of(context).translate('related'),
             moreWidget: relatedDiseases);
 
       case const (Disease): // If the current element is a disease
@@ -63,11 +64,11 @@ class LexicaDescription extends ConsumerWidget {
         description = DescriptionWidget(
           ref.read(PlantorDisease).name,
           ref.read(PlantorDisease).image,
-          "What is this disease",
+          AppLocalizations.of(context).translate('what_is_it'),
           ref.read(PlantorDisease).description,
-          "how to prevent it",
+          AppLocalizations.of(context).translate('prevent'),
           [ref.read(PlantorDisease).prevent],
-          moreTitle: "How to cure it",
+          moreTitle: AppLocalizations.of(context).translate('cure'),
           moreWidget: cure,
         );
 
@@ -76,7 +77,6 @@ class LexicaDescription extends ConsumerWidget {
     }
 
     return description;
-    
   }
 }
 
@@ -279,7 +279,7 @@ class DiseaseButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var mediaQuery=MediaQuery.sizeOf(context);
+    var mediaQuery = MediaQuery.sizeOf(context);
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20);

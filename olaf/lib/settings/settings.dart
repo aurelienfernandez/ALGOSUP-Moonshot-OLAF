@@ -1,9 +1,11 @@
 //------------------- FLUTTER IMPORTS -------------------
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:olaf/app_localization.dart';
+import 'package:olaf/main.dart';
 
 //--------------------- PLANT STATE ---------------------
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
   @override
@@ -11,15 +13,21 @@ class SettingsPage extends StatefulWidget {
 }
 
 //---------------------- PLANT TAB ----------------------
-class _SettingsState extends State<SettingsPage> {
-  final DropDownFlags = [
-    "assets/uk.png",
-    "assets/fr.png",
-    "assets/de.png",
+class _SettingsState extends ConsumerState<SettingsPage> {
+  final DropDownFlags = {
+    'en': 'assets/uk.png',
+    'fr': 'assets/fr.png',
+    'de': 'assets/de.png',
+  };
+  final Languages = [
+    const Locale('en'),
+    const Locale('fr'),
+    const Locale('de'),
   ];
-  String currentFlag = "assets/uk.png";
   @override
   Widget build(BuildContext context) {
+    final currentFlag = DropDownFlags[ref.watch(localeProvider).languageCode] ??
+        DropDownFlags.values.first;
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 25);
@@ -49,7 +57,8 @@ class _SettingsState extends State<SettingsPage> {
                               padding: EdgeInsets.only(
                                   left: mediaQuery.width * 0.15),
                               child: Text(
-                                "Settings",
+                                AppLocalizations.of(context)
+                                    .translate('settings'),
                                 style: style,
                                 textAlign: TextAlign.center,
                               ),
@@ -63,7 +72,9 @@ class _SettingsState extends State<SettingsPage> {
                             child: Column(
                               children: [
                                 Text(
-                                  "Version:",
+                                  AppLocalizations.of(context)
+                                          .translate('version') +
+                                      ':',
                                   style: style.copyWith(fontSize: 15),
                                 ),
                                 Text(
@@ -82,7 +93,7 @@ class _SettingsState extends State<SettingsPage> {
 
                       //--------- GENERAL ---------
                       Text(
-                        "General",
+                        AppLocalizations.of(context).translate('general'),
                         style: style,
                       ),
 
@@ -110,7 +121,8 @@ class _SettingsState extends State<SettingsPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Language:",
+                            AppLocalizations.of(context).translate('language') +
+                                ':',
                             style: style.copyWith(fontSize: 20),
                           ),
                           Padding(
@@ -132,7 +144,7 @@ class _SettingsState extends State<SettingsPage> {
                                 value: currentFlag,
                                 dropdownColor: theme.colorScheme.secondary,
                                 iconEnabledColor: Colors.grey.shade200,
-                                items: DropDownFlags.map((String value) {
+                                items: DropDownFlags.values.map((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
                                     child: Center(
@@ -146,7 +158,8 @@ class _SettingsState extends State<SettingsPage> {
                                   );
                                 }).toList(),
                                 selectedItemBuilder: (BuildContext context) {
-                                  return DropDownFlags.map((String value) {
+                                  return DropDownFlags.values
+                                      .map((String value) {
                                     return Center(
                                       child: Image.asset(
                                         value,
@@ -159,7 +172,10 @@ class _SettingsState extends State<SettingsPage> {
                                   }).toList();
                                 },
                                 onChanged: (String? newValue) {
-                                  // Your logic here
+                                  final List<String> temp =
+                                      DropDownFlags.values.toList();
+                                  ref.read(localeProvider.notifier).state =
+                                      Languages[temp.indexOf(newValue!)];
                                 },
                               ),
                             ),

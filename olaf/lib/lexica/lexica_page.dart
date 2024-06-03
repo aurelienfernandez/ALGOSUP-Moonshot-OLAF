@@ -1,6 +1,7 @@
 //-------------------- FLUTTER IMPORT --------------------
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:olaf/app_localization.dart';
 import 'package:olaf/lexica/lexica_loader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 //--------------------- LEXICA LIST ----------------------
@@ -48,7 +49,7 @@ class _LexicaTabState extends ConsumerState<LexicaPage> {
 
           // Plant & Disease buttons
           children: [
-            LexicaChoice("Plants", () {
+            LexicaChoice(AppLocalizations.of(context).translate('plants'), () {
               setState(() {
                 ref.read(tab.notifier).state = 1;
                 ref.read(choice.notifier).state = 1;
@@ -59,7 +60,8 @@ class _LexicaTabState extends ConsumerState<LexicaPage> {
             SizedBox(
               height: mediaQuery.height * 0.1,
             ),
-            LexicaChoice("Diseases", () {
+            LexicaChoice(AppLocalizations.of(context).translate('diseases'),
+                () {
               setState(() {
                 ref.read(tab.notifier).state = 1;
                 ref.read(choice.notifier).state = 2;
@@ -77,17 +79,17 @@ class _LexicaTabState extends ConsumerState<LexicaPage> {
       DescriptionWidget(
         ref.read(DiseaseDescription)?.name ?? "",
         ref.read(infectedPlantImage),
-        "What is this disease",
+        AppLocalizations.of(context).translate('what_is_it'),
         ref.read(DiseaseDescription).runtimeType == Disease
             ? ref.read(DiseaseDescription).description
             : "",
-        "how to prevent it",
+        AppLocalizations.of(context).translate('prevent'),
         [
           ref.read(DiseaseDescription).runtimeType == Disease
               ? ref.read(DiseaseDescription).prevent
               : "",
         ],
-        moreTitle: "How to cure it",
+        moreTitle: AppLocalizations.of(context).translate('cure'),
         moreWidget: Padding(
             padding: EdgeInsets.all(mediaQuery.height * 0.02),
             child: Text(

@@ -1,5 +1,6 @@
 //------------------------- PAGES -------------------------
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:olaf/app_localization.dart';
 import 'package:olaf/user_loader.dart';
 import '../settings/settings.dart';
 import '../plants/plant_page.dart';
@@ -38,6 +39,9 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(pageIndex, (previous, next) {
+      pageAnimation(ref.read(pageIndex));
+    });
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.sizeOf(context);
     return Scaffold(
@@ -106,15 +110,15 @@ class _HomePageState extends ConsumerState<HomePage> {
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: 'Home',
+                label: AppLocalizations.of(context).translate('home'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: 'Plants',
+                label: AppLocalizations.of(context).translate('plants'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: 'lexica',
+                label: AppLocalizations.of(context).translate('lexica'),
               ),
             ],
           ),
@@ -157,7 +161,10 @@ class Status extends StatelessWidget {
               padding: EdgeInsets.all(
                   mediaQuery.width * 0.05), // Adjust padding as needed
               child: AutoSizeText(
-                "Hello ${User.getInstance().username},\nYour plants are fine",
+                AppLocalizations.of(context)
+                    .translate('hello_fine')
+                    .replaceAll('{username}', User.getInstance().username),
+
                 style: style, maxLines: 2,
                 maxFontSize: 25,
                 minFontSize: 20,
