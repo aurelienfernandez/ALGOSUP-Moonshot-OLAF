@@ -1,6 +1,10 @@
 //------------------------- PAGES -------------------------
+import 'dart:async';
+
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olaf/app_localization.dart';
+import 'package:olaf/main.dart';
 import 'package:olaf/user_loader.dart';
 import '../settings/settings.dart';
 import '../plants/plant_page.dart';
@@ -9,6 +13,7 @@ import '../lexica/lexica_page.dart';
 import 'package:marquee/marquee.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:horizontal_blocked_scroll_physics/horizontal_blocked_scroll_physics.dart';
 
 //--------------------- PROVIDERS ----------------------
 final pageIndex = StateProvider<int>((ref) => 0);
@@ -29,19 +34,42 @@ class _HomePageState extends ConsumerState<HomePage> {
     SettingsPage(),
   ];
 
+  Timer? _authCheckTimer;
+  void _startAuthCheckTimer() {
+    _authCheckTimer = Timer.periodic(Duration(milliseconds: 1), (timer) async {
+      try {
+        final result = await Amplify.Auth.fetchAuthSession();
+        if (result.isSignedIn) {
+          ref.read(themeChangerProvider.notifier).setTheme(stdTheme);
+          _authCheckTimer?.cancel();
+        }
+      } catch (e) {
+        print('Error checking auth status: $e');
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startAuthCheckTimer();
+  }
+
   // A short animation when changing page
   void pageAnimation(int index) {
     _tabs[ref.watch(pageIndex)];
+    debugPrint("${index}");
 
-    _pageController.animateToPage(index,
-        duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+    if (index != 3) {
+      _pageController.animateToPage(index,
+          duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+    } else {
+      _pageController.jumpTo(3 * MediaQuery.sizeOf(context).width);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(pageIndex, (previous, next) {
-      pageAnimation(ref.read(pageIndex));
-    });
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.sizeOf(context);
     return Scaffold(
@@ -67,6 +95,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             padding: EdgeInsets.only(
                 top: mediaQuery.height * 0.01, right: mediaQuery.height * 0.01),
             onPressed: () {
+              ref.read(pageIndex.notifier).state = 3;
               pageAnimation(3);
             },
           ),
@@ -76,7 +105,15 @@ class _HomePageState extends ConsumerState<HomePage> {
 
       // What is displayed in the center of the app
       body: PageView(
+        physics:
+         ref.watch(pageIndex) == 2
+            ? LeftBlockedScrollPhysics()
+            : ref.watch(pageIndex) == 3
+                ? NeverScrollableScrollPhysics():null,
         controller: _pageController,
+        onPageChanged: (index) {
+          ref.read(pageIndex.notifier).state = index;
+        },
         children: _tabs,
       ),
 
@@ -109,15 +146,30 @@ class _HomePageState extends ConsumerState<HomePage> {
             //---- ITEMS ----
             items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(
+                  Icons.home,
+                  size: ref.watch(pageIndex) == 0
+                      ? mediaQuery.height * 0.05
+                      : mediaQuery.height * 0.03,
+                ),
                 label: AppLocalizations.of(context).translate('home'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(
+                  Icons.home,
+                  size: ref.watch(pageIndex) == 1
+                      ? mediaQuery.height * 0.05
+                      : mediaQuery.height * 0.03,
+                ),
                 label: AppLocalizations.of(context).translate('plants'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(
+                  Icons.home,
+                  size: ref.watch(pageIndex) == 2
+                      ? mediaQuery.height * 0.05
+                      : mediaQuery.height * 0.03,
+                ),
                 label: AppLocalizations.of(context).translate('lexica'),
               ),
             ],
@@ -276,8 +328,7 @@ class PlantCard extends StatelessWidget {
 
     if (textWidth > mediaQuery.width * 0.3) {
       textWidget = Align(
-        alignment:
-            Alignment.centerRight, // Aligns the Marquee widget to the right
+        alignment: Alignment.centerRight,
         child: SizedBox(
           width: mediaQuery.width * 0.3,
           child:
@@ -299,7 +350,7 @@ class PlantCard extends StatelessWidget {
         ),
       );
     } else {
-      // Use AutoSizeText if text fits within available width
+      // Use a normal text field if text fits within available width
       textWidget = Positioned.fill(
         child: Align(
           alignment: Alignment.center,

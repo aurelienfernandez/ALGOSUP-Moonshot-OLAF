@@ -16,8 +16,13 @@ dependencies:
   fading_edge_scrollview: ^3.0.0
   flutter_riverpod: ^2.0.0
   amazon_cognito_identity_dart_2: ^3.1.1
+  amplify_api: ^2.0.0
+  amplify_auth_cognito: ^2.0.0
+  amplify_authenticator: ^2.0.0
+  amplify_flutter: ^2.0.0
   flutter_localizations:
     sdk: flutter
+  horizontal_blocked_scroll_physics: ^4.0.1
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 //------------------- FLUTTER IMPORTS -------------------
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olaf/app_localization.dart';
@@ -24,16 +25,14 @@ class _SettingsState extends ConsumerState<SettingsPage> {
     const Locale('fr'),
     const Locale('de'),
   ];
+  String currentFlag = "assets/uk.png";
   @override
   Widget build(BuildContext context) {
-    final currentFlag = DropDownFlags[ref.watch(localeProvider).languageCode] ??
-        DropDownFlags.values.first;
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 25);
 
     final mediaQuery = MediaQuery.sizeOf(context);
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -135,53 +134,74 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                                       BorderRadius.all(Radius.circular(30))),
                               width: mediaQuery.width * 0.2,
                               height: mediaQuery.width * 0.15,
-                              child: DropdownButton<String>(
-                                padding: EdgeInsets.only(
-                                    left: mediaQuery.width * 0.05),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                                itemHeight: mediaQuery.height * 0.1,
-                                value: currentFlag,
-                                dropdownColor: theme.colorScheme.secondary,
-                                iconEnabledColor: Colors.grey.shade200,
-                                items: DropDownFlags.values.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Center(
-                                      child: Image.asset(
-                                        value,
-                                        width: mediaQuery.width * 0.1,
-                                        alignment: Alignment.center,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                selectedItemBuilder: (BuildContext context) {
-                                  return DropDownFlags.values
-                                      .map((String value) {
-                                    return Center(
-                                      child: Image.asset(
-                                        value,
-                                        width: mediaQuery.width * 0.08,
-                                        height: mediaQuery.width * 0.08,
-                                        alignment: Alignment.center,
-                                        fit: BoxFit.contain,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  padding: EdgeInsets.only(
+                                      left: mediaQuery.width * 0.05),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30)),
+                                  itemHeight: mediaQuery.height * 0.1,
+                                  value: currentFlag,
+                                  dropdownColor: theme.colorScheme.secondary,
+                                  iconEnabledColor: Colors.grey.shade200,
+                                  items:
+                                      DropDownFlags.values.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Center(
+                                        child: Image.asset(
+                                          value,
+                                          width: mediaQuery.width * 0.1,
+                                          alignment: Alignment.center,
+                                          fit: BoxFit.fill,
+                                        ),
                                       ),
                                     );
-                                  }).toList();
-                                },
-                                onChanged: (String? newValue) {
-                                  final List<String> temp =
-                                      DropDownFlags.values.toList();
-                                  ref.read(localeProvider.notifier).state =
-                                      Languages[temp.indexOf(newValue!)];
-                                },
+                                  }).toList(),
+                                  selectedItemBuilder: (BuildContext context) {
+                                    return DropDownFlags.values
+                                        .map((String value) {
+                                      return Center(
+                                        child: Image.asset(
+                                          value,
+                                          width: mediaQuery.width * 0.08,
+                                          height: mediaQuery.width * 0.08,
+                                          alignment: Alignment.center,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      );
+                                    }).toList();
+                                  },
+                                  onChanged: (String? newValue) {
+                                    final List<String> temp =
+                                        DropDownFlags.values.toList();
+                                    ref.read(localeProvider.notifier).state =
+                                        Languages[temp.indexOf(newValue!)];
+                                    currentFlag = newValue;
+                                  },
+                                ),
                               ),
                             ),
                           ),
                         ],
-                      )
+                      ),
+                      //--------- SIGN OUT --------
+                      ElevatedButton(
+                        onPressed: () {
+                          ref
+                              .read(themeChangerProvider.notifier)
+                              .setTheme(authTheme);
+                          Amplify.Auth.signOut();
+                        },
+                        child: Text(
+                          "Sign out",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red),
+                        ),
+                      ),
                     ],
                   ),
                 ),
