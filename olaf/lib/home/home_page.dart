@@ -1,22 +1,25 @@
 //------------------------- PAGES -------------------------
-import 'dart:async';
-
-import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:olaf/app_localization.dart';
 import 'package:olaf/main.dart';
 import 'package:olaf/user_loader.dart';
-import '../settings/settings.dart';
-import '../plants/plant_page.dart';
-import '../lexica/lexica_page.dart';
+import 'package:olaf/settings/settings.dart';
+import 'package:olaf/plants/plant_page.dart';
+import 'package:olaf/lexica/lexica_page.dart';
 //------------------------ FLUTTER ------------------------
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:marquee/marquee.dart';
+import 'package:olaf/app_localization.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:horizontal_blocked_scroll_physics/horizontal_blocked_scroll_physics.dart';
+import 'dart:async';
+//------------------------- UTILS -------------------------
+import 'package:olaf/utils.dart';
 
 //--------------------- PROVIDERS ----------------------
 final pageIndex = StateProvider<int>((ref) => 0);
+
+final _pageController =
+    StateProvider<PageController>(((ref) => PageController()));
 
 //---------------- HOMEPAGE INITIALIZATION ----------------
 class HomePage extends ConsumerStatefulWidget {
@@ -26,12 +29,10 @@ class HomePage extends ConsumerStatefulWidget {
 
 //-------------------- HOMEPAGE STATE ---------------------
 class _HomePageState extends ConsumerState<HomePage> {
-  final PageController _pageController = PageController();
   final List<Widget> _tabs = [
     HomeScreen(),
     PlantPage(),
     LexicaPage(),
-    SettingsPage(),
   ];
 
   Timer? _authCheckTimer;
@@ -55,16 +56,14 @@ class _HomePageState extends ConsumerState<HomePage> {
     _startAuthCheckTimer();
   }
 
-  // A short animation when changing page
   void pageAnimation(int index) {
-    _tabs[ref.watch(pageIndex)];
-    debugPrint("${index}");
-
-    if (index != 3) {
-      _pageController.animateToPage(index,
+    // Push the setting route when the setting button is pressed
+    if (index == 3) {
+      Navigator.push(context, SlideToSettings(page: SettingsPage()));
+    } else if (index != ref.read(pageIndex)) {
+      // A short animation when changing page
+      ref.read(_pageController.notifier).state.animateToPage(index,
           duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-    } else {
-      _pageController.jumpTo(3 * MediaQuery.sizeOf(context).width);
     }
   }
 
@@ -84,7 +83,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             User.getInstance().profilePicture,
           ),
         ),
-        //------- BUTTON -------
+        //------ SETTINGS ------
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -95,7 +94,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             padding: EdgeInsets.only(
                 top: mediaQuery.height * 0.01, right: mediaQuery.height * 0.01),
             onPressed: () {
-              ref.read(pageIndex.notifier).state = 3;
               pageAnimation(3);
             },
           ),
@@ -105,15 +103,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
       // What is displayed in the center of the app
       body: PageView(
-        physics:
-         ref.watch(pageIndex) == 2
-            ? LeftBlockedScrollPhysics()
-            : ref.watch(pageIndex) == 3
-                ? NeverScrollableScrollPhysics():null,
-        controller: _pageController,
-        onPageChanged: (index) {
-          ref.read(pageIndex.notifier).state = index;
-        },
+        physics: ScrollPhysics(),
+        controller: ref.watch(_pageController),
         children: _tabs,
       ),
 
@@ -135,13 +126,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             //---- STATE ----
             onTap: (int index) {
               ref.invalidate(tab);
-              // If the current index is tapped again, reset the state of the current page
-              if (ref.read(pageIndex) == index && index == 2) {
-                _tabs[ref.read(pageIndex)] = LexicaPage(key: UniqueKey());
-              } else {
-                pageAnimation(index);
-                ref.read(pageIndex.notifier).state = index;
-              }
+
+              pageAnimation(index);
+              ref.read(pageIndex.notifier).state = index;
             },
             //---- ITEMS ----
             items: [
@@ -186,9 +173,14 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.invalidate(pageIndex);
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(children: [Status(), Gardens()]),
-      ),
+      body: Stack(children: [
+        SingleChildScrollView(
+          child: Column(
+            children: [Status(), Gardens()],
+          ),
+        ),
+        Analyse()
+      ]),
     );
   }
 }
@@ -273,6 +265,9 @@ class _GardensState extends ConsumerState<Gardens> {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary),
                 onPressed: () {
+                  ref.read(_pageController.notifier).state.animateToPage(1,
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut);
                   ref.read(pageIndex.notifier).state = 1;
                   ref.read(plantsIndex.notifier).state = i;
                 },
@@ -400,5 +395,25 @@ class PlantCard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class Analyse extends StatelessWidget {
+  Analyse();
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.sizeOf(context);
+    return Positioned(
+        top: mediaQuery.height * 0.63,
+        left: mediaQuery.width * 0.83,
+        child: IconButton(
+          onPressed: (){},
+          icon: Icon(
+            Icons.search,
+            size: mediaQuery.width * 0.15,
+          ),
+          color: Colors.green.shade900,
+        ));
   }
 }

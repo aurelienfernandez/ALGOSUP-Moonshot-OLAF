@@ -23,6 +23,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   horizontal_blocked_scroll_physics: ^4.0.1
+  camera: ^0.11.0+1
+  path_provider: ^2.1.3
 
 dev_dependencies:
   flutter_test:

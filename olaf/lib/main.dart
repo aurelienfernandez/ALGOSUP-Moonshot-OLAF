@@ -91,6 +91,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               final theme = ref.watch(themeChangerProvider).getTheme;
 
               return MaterialApp(
+                debugShowCheckedModeBanner: false,
                 builder: Authenticator.builder(),
                 locale: locale,
                 localizationsDelegates: [

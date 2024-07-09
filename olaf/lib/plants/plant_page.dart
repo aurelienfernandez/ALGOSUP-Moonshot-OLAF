@@ -298,7 +298,7 @@ class StatusTitle extends ConsumerWidget {
                 }
               },
               icon: Icon(
-                Icons.arrow_back_ios,
+                Icons.arrow_back_ios_rounded,
                 color: Colors.white,
                 size: mediaQuery.width * 0.1,
               ),
