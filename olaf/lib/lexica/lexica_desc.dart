@@ -120,13 +120,14 @@ class DescriptionWidget extends StatelessWidget {
               children: [
                 // Plant's name
                 Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                        color: theme.colorScheme.onPrimary, fontSize: 30),
-                  ),
-                ),
+                    padding: EdgeInsets.only(top: 20),
+                    child: Center(
+                      child: Text(
+                        name,
+                        style: TextStyle(
+                            color: theme.colorScheme.onPrimary, fontSize: 30),
+                      ),
+                    )),
 
                 // Plant's image
                 Image(

@@ -1,6 +1,7 @@
 //------------------- FLUTTER IMPORTS -------------------
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:olaf/user_loader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,120 +44,120 @@ class PlantStatus extends StatelessWidget {
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 18);
 
     final mediaQuery = MediaQuery.sizeOf(context);
-    return SingleChildScrollView(
-      child: Padding(
-        // Padding left/right
-        padding: EdgeInsets.only(
-          left: mediaQuery.width * 0.08,
-          right: mediaQuery.width * 0.08,
-        ),
-        child: Card(
-          color: theme.colorScheme.primary,
-          child: SizedBox(
-            height: mediaQuery.height * 0.6,
-            child: Column(
-              children: [
-                //--------------- TITLE ---------------
-                StatusTitle(plant),
+    return Padding(
+      // Padding left/right
+      padding: EdgeInsets.only(
+        left: mediaQuery.width * 0.08,
+        right: mediaQuery.width * 0.08,
+      ),
+      child: Card(
+        color: theme.colorScheme.primary,
+        child: SizedBox(
+          height: mediaQuery.height * 0.6,
+          child: Stack(children: [
+            //--------------- TITLE ---------------
+            StatusTitle(plant),
+            Padding(
+              padding: EdgeInsets.only(top: mediaQuery.height * 0.11),
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  Text("General", style: style.copyWith(fontSize: 20)),
 
-                Text("General", style: style.copyWith(fontSize: 20)),
-
-                // Separation line
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.white,
-                        width: 2, // the line's size
+                  // Separation line
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.white,
+                          width: 2, // the line's size
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                Padding(
-                  padding: EdgeInsets.only(top: mediaQuery.height * 0.02),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Global status: ", style: style),
-                          Icon(
-                            Icons.add_reaction,
-                            color: Colors.white,
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: mediaQuery.height * 0.02,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Temperature:  ", style: style),
-                          Icon(
-                            Icons.thumb_up,
-                            color: _getColorForTemperature(plant.temperature),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: mediaQuery.height * 0.02,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Soil humidity:  ", style: style),
-                          Icon(
-                            Icons.water_drop_rounded,
-                            color: _getColorForhumidity(plant.soilHumidity),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: mediaQuery.height * 0.02,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Air humidity:  ", style: style),
-                          Icon(
-                            Icons.water_drop,
-                            color: _getColorForhumidity(plant.airHumidity),
-                          ),
-                          Icon(
-                            Icons.air,
-                            color: _getColorForhumidity(plant.airHumidity),
-                          )
-                        ],
-                      ),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(top: mediaQuery.height * 0.02),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Global status: ", style: style),
+                            Icon(
+                              Icons.add_reaction,
+                              color: Colors.white,
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: mediaQuery.height * 0.02,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Temperature:  ", style: style),
+                            Icon(
+                              Icons.thumb_up,
+                              color: _getColorForTemperature(plant.temperature),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: mediaQuery.height * 0.02,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Soil humidity:  ", style: style),
+                            Icon(
+                              Icons.water_drop_rounded,
+                              color: _getColorForhumidity(plant.soilHumidity),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: mediaQuery.height * 0.02,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Air humidity:  ", style: style),
+                            Icon(
+                              Icons.water_drop,
+                              color: _getColorForhumidity(plant.airHumidity),
+                            ),
+                            Icon(
+                              Icons.air,
+                              color: _getColorForhumidity(plant.airHumidity),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: mediaQuery.height * 0.04,
-                ),
-                Text("Additional data", style: style.copyWith(fontSize: 20)),
+                  SizedBox(
+                    height: mediaQuery.height * 0.04,
+                  ),
+                  Text("Additional data", style: style.copyWith(fontSize: 20)),
 
-                // Separation line
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.white,
-                        width: 2, // the line's size
+                  // Separation line
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.white,
+                          width: 2, // the line's size
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: mediaQuery.height * 0.02),
-                  child: Column(
-                    children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: mediaQuery.height * 0.02),
+                    child: Column(children: [
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -191,12 +192,12 @@ class PlantStatus extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                )
-              ],
+                    ]),
+                  )
+                ]),
+              ),
             ),
-          ),
+          ]),
         ),
       ),
     );
@@ -279,64 +280,80 @@ class StatusTitle extends ConsumerWidget {
       ),
       //------------- SELECTION -------------
       Padding(
-        padding: EdgeInsets.only(
-          left: mediaQuery.width * 0.03,
-        ),
-        child: Row(
-          children: [
-            //--------- PREVIOUS --------
-            IconButton(
-              onPressed: () {
-                ref.read(plantsIndex.notifier).state--;
+          padding: EdgeInsets.only(
+            left: mediaQuery.width * 0.03,
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  //--------- PREVIOUS --------
+                  IconButton(
+                    onPressed: () {
+                      ref.read(plantsIndex.notifier).state--;
 
-                if (ref.watch(plantsIndex) < 0) {
-                  ref.read(plantsIndex.notifier).state =
-                      User.getInstance().plants.length - 1;
-                } else if (ref.watch(plantsIndex) >
-                    User.getInstance().plants.length - 1) {
-                  ref.read(plantsIndex.notifier).state = 0;
-                }
-              },
-              icon: Icon(
-                Icons.arrow_back_ios_rounded,
-                color: Colors.white,
-                size: mediaQuery.width * 0.1,
-              ),
-            ),
-            //----------- NAME ----------
-            Expanded(
-              child: AutoSizeText(
-                plant.name,
-                style: style,
-                maxLines: 1,
-                maxFontSize: 40,
-                minFontSize: 20,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            //----------- NEXT ----------
-            IconButton(
-              onPressed: () {
-                ref.read(plantsIndex.notifier).state++;
+                      if (ref.watch(plantsIndex) < 0) {
+                        ref.read(plantsIndex.notifier).state =
+                            User.getInstance().plants.length - 1;
+                      } else if (ref.watch(plantsIndex) >
+                          User.getInstance().plants.length - 1) {
+                        ref.read(plantsIndex.notifier).state = 0;
+                      }
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_rounded,
+                      color: Colors.white,
+                      size: mediaQuery.width * 0.1,
+                    ),
+                  ),
+                  //----------- NAME ----------
+                  Expanded(
+                    child: AutoSizeText(
+                      plant.name,
+                      style: style,
+                      maxLines: 1,
+                      maxFontSize: 40,
+                      minFontSize: 20,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  //----------- NEXT ----------
+                  IconButton(
+                    onPressed: () {
+                      ref.read(plantsIndex.notifier).state++;
 
-                if (ref.watch(plantsIndex) < 0) {
-                  ref.read(plantsIndex.notifier).state =
-                      User.getInstance().plants.length - 1;
-                } else if (ref.watch(plantsIndex) >
-                    User.getInstance().plants.length - 1) {
-                  ref.read(plantsIndex.notifier).state = 0;
-                }
-              },
-              icon: Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: Colors.white,
-                size: mediaQuery.width * 0.1,
+                      if (ref.watch(plantsIndex) < 0) {
+                        ref.read(plantsIndex.notifier).state =
+                            User.getInstance().plants.length - 1;
+                      } else if (ref.watch(plantsIndex) >
+                          User.getInstance().plants.length - 1) {
+                        ref.read(plantsIndex.notifier).state = 0;
+                      }
+                    },
+                    icon: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Colors.white,
+                      size: mediaQuery.width * 0.1,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
+              // Separation line
+              Container(
+                height: MediaQuery.of(context).size.height * 0.008,
+                width: MediaQuery.of(context).size.width * 0.7,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.white,
+                      width: 2, // the line's size
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )),
     ]);
   }
 }

@@ -16,10 +16,10 @@ class LexicaList extends ConsumerWidget {
     switch (ref.read(choice)) {
       case 1: // if plants have been selected
         for (var i = 0; i < Lexica.getInstance().plants.length; i++) {
-          // An image of the plant in a circle container
+          // An image of the plant in a rounded container
           final Widget plantImage = Positioned(
             left: -mediaQuery.width * 0.2,
-            top: -mediaQuery.height * 0.02,
+            top: -mediaQuery.height * 0.015,
             child: Container(
               width: mediaQuery.width * 0.2,
               height: mediaQuery.width * 0.2,
@@ -71,7 +71,7 @@ class LexicaList extends ConsumerWidget {
         }
       case 2: // if diseases have been selected
         for (var i = 0; i < Lexica.getInstance().diseases.length; i++) {
-          // The icon of the disease displayed at the left of the name
+          // The icon of the disease displayed at the right of the name
           final Widget diseaseIcon = Positioned(
             left: -mediaQuery.width * 0.1,
             top: -mediaQuery.height * 0.02,

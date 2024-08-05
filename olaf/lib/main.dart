@@ -1,29 +1,40 @@
+//------------------- CUSTOM IMPORTS --------------------
+import 'package:olaf/amplifyconfiguration.dart';
+import 'package:olaf/app_localization.dart';
+import 'package:olaf/home/home_page.dart';
+import 'package:olaf/lexica/lexica_loader.dart';
+import 'package:olaf/user_loader.dart';
+
 //------------------- FLUTTER IMPORTS -------------------
 import 'dart:async';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:olaf/amplifyconfiguration.dart';
-import 'package:olaf/app_localization.dart';
-import 'package:olaf/home/home_page.dart';
-import 'package:olaf/lexica/lexica_loader.dart';
-import 'package:olaf/user_loader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/services.dart';
 
 //---------------------- PROVIDERS ----------------------
 final localeProvider = StateProvider<Locale>((ref) => Locale('en'));
+
 final themeChangerProvider = ChangeNotifierProvider<ThemeChanger>((ref) {
   return ThemeChanger(authTheme);
 });
+
+final CamerasProvider = StateProvider<List<CameraDescription>>(((ref) => []));
 
 Future<void> main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await _configureAmplify();
-    runApp(ProviderScope(child: MyApp()));
+    final cameras = await availableCameras();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+        .then((value) => runApp(ProviderScope(overrides: [
+              CamerasProvider.overrideWith((ref) => cameras),
+            ], child: MyApp())));
   } on AmplifyException catch (e) {
     runApp(Text("Error configuring Amplify: ${e.message}"));
   }

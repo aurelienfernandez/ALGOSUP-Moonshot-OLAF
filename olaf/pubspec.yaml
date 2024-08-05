@@ -37,10 +37,13 @@ flutter:
   assets: 
     - assets/user.json
     - assets/lexica.json
-    - assets/uk.png
-    - assets/fr.png
-    - assets/de.png
-    - assets/lang/en.json
+    - assets/images/uk.png
+    - assets/images/fr.png
+    - assets/images/de.png
+    - assets/images/home.png
+    - assets/images/plants.png
+    - assets/images/lexica.png
+    - assets//lang/en.json
     - assets/lang/fr.json
     - assets/lang/de.json
   fonts:

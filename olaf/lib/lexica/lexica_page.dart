@@ -145,14 +145,14 @@ class LexicaChoice extends StatelessWidget {
           height: mediaQuery.height * 0.1,
           width: mediaQuery.width * 0.8,
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(2),
             child: TextButton(
               onPressed: onPressed,
               child: AutoSizeText(
                 text,
                 style: style,
-                maxFontSize: 25,
-                minFontSize: 20,
+                maxFontSize: 20,
+                minFontSize: 15,
                 textAlign: TextAlign.center,
               ),
             ),

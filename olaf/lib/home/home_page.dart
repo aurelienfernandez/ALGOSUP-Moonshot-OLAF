@@ -4,6 +4,7 @@ import 'package:olaf/user_loader.dart';
 import 'package:olaf/settings/settings.dart';
 import 'package:olaf/plants/plant_page.dart';
 import 'package:olaf/lexica/lexica_page.dart';
+import 'package:olaf/camera/camera.dart';
 //------------------------ FLUTTER ------------------------
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -119,7 +120,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           height: mediaQuery.height * 0.09,
           child: BottomNavigationBar(
             //---- STYLE ----
-            selectedLabelStyle: TextStyle(color: Colors.white),
+            selectedLabelStyle: TextStyle(fontSize: 0),
+            unselectedLabelStyle: TextStyle(fontSize: 0),
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.white,
             backgroundColor: theme.colorScheme.primary,
@@ -133,29 +135,29 @@ class _HomePageState extends ConsumerState<HomePage> {
             //---- ITEMS ----
             items: [
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  size: ref.watch(pageIndex) == 0
-                      ? mediaQuery.height * 0.05
-                      : mediaQuery.height * 0.03,
+                icon: Image.asset(
+                  "assets/images/home.png",
+                  width: ref.watch(pageIndex) == 0
+                      ? mediaQuery.height * 0.09
+                      : mediaQuery.height * 0.05,
                 ),
                 label: AppLocalizations.of(context).translate('home'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  size: ref.watch(pageIndex) == 1
-                      ? mediaQuery.height * 0.05
-                      : mediaQuery.height * 0.03,
+                icon: Image.asset(
+                  "assets/images/plants.png",
+                  width: ref.watch(pageIndex) == 1
+                      ? mediaQuery.height * 0.09
+                      : mediaQuery.height * 0.05,
                 ),
                 label: AppLocalizations.of(context).translate('plants'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  size: ref.watch(pageIndex) == 2
-                      ? mediaQuery.height * 0.05
-                      : mediaQuery.height * 0.03,
+                icon: Image.asset(
+                  "assets/images/lexica.png",
+                  width: ref.watch(pageIndex) == 2
+                      ? mediaQuery.height * 0.09
+                      : mediaQuery.height * 0.05,
                 ),
                 label: AppLocalizations.of(context).translate('lexica'),
               ),
@@ -276,7 +278,7 @@ class _GardensState extends ConsumerState<Gardens> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                           vertical: mediaQuery.height * 0.012,
-                          horizontal: mediaQuery.width * 0.1),
+                          horizontal: mediaQuery.width * 0.08),
                       child: PlantCard(plantsList[i].name, plantsList[i].image),
                     ),
                   ],
@@ -307,11 +309,11 @@ class PlantCard extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!.copyWith(
         color: theme.colorScheme.onPrimary,
-        fontSize: 22,
         backgroundColor: theme.colorScheme.primary);
-
+    final mediaQuery = MediaQuery.sizeOf(context);
     final textPainter = TextPainter(
-      text: TextSpan(text: text, style: style),
+      text: TextSpan(
+          text: text, style: style.copyWith(fontSize: mediaQuery.width * 0.05)),
       maxLines: 1,
       textDirection: TextDirection.ltr,
     );
@@ -319,18 +321,17 @@ class PlantCard extends StatelessWidget {
     final textWidth = textPainter.width;
     Widget textWidget;
 
-    final mediaQuery = MediaQuery.sizeOf(context);
-
     if (textWidth > mediaQuery.width * 0.3) {
       textWidget = Align(
-        alignment: Alignment.centerRight,
         child: SizedBox(
           width: mediaQuery.width * 0.3,
           child:
               // Use Marquee if text exceeds available width
               Marquee(
             text: text,
-            style: style.copyWith(backgroundColor: Colors.transparent),
+            style: style.copyWith(
+                backgroundColor: Colors.transparent,
+                fontSize: mediaQuery.width * 0.05),
             scrollAxis: Axis.horizontal,
             crossAxisAlignment: CrossAxisAlignment.center,
             blankSpace: mediaQuery.width * 0.3,
@@ -347,12 +348,14 @@ class PlantCard extends StatelessWidget {
     } else {
       // Use a normal text field if text fits within available width
       textWidget = Positioned.fill(
+        bottom: mediaQuery.height * 0.002,
         child: Align(
-          alignment: Alignment.center,
           child: Text(
             textAlign: TextAlign.center,
             text,
-            style: style.copyWith(backgroundColor: Colors.transparent),
+            style: style.copyWith(
+                backgroundColor: Colors.transparent,
+                fontSize: mediaQuery.width * 0.05),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -369,8 +372,8 @@ class PlantCard extends StatelessWidget {
         children: [
           //---------- IMAGE ----------
           Positioned(
-            left: -mediaQuery.width * 0.24,
-            top: -mediaQuery.height * 0.018,
+            left: -mediaQuery.width * 0.2,
+            top: -mediaQuery.height * 0.015,
             child: Container(
               width: mediaQuery.width * 0.2,
               height: mediaQuery.width * 0.2,
@@ -398,17 +401,22 @@ class PlantCard extends StatelessWidget {
   }
 }
 
-class Analyse extends StatelessWidget {
-  Analyse();
-
+class Analyse extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final mediaQuery = MediaQuery.sizeOf(context);
     return Positioned(
         top: mediaQuery.height * 0.63,
         left: mediaQuery.width * 0.83,
         child: IconButton(
-          onPressed: (){},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CameraScreen(
+                          cameras: ref.read(CamerasProvider),
+                        )));
+          },
           icon: Icon(
             Icons.search,
             size: mediaQuery.width * 0.15,
