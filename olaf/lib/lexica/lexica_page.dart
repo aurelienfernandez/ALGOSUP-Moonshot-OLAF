@@ -2,7 +2,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:olaf/app_localization.dart';
-import 'package:olaf/lexica/lexica_loader.dart';
+import 'package:olaf/classes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 //--------------------- LEXICA LIST ----------------------
 import './lexica_list.dart';

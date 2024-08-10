@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olaf/app_localization.dart';
 import 'package:olaf/main.dart';
-import 'package:olaf/user_loader.dart';
+import 'package:olaf/classes.dart';
 
 //--------------------- PLANT STATE ---------------------
 class SettingsPage extends ConsumerStatefulWidget {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marquee/marquee.dart';
 import 'package:olaf/app_localization.dart';
-import 'package:olaf/lexica/lexica_loader.dart';
+import 'package:olaf/classes.dart';
 import 'package:olaf/lexica/lexica_page.dart';
 
 //------------------ LEXICA DESCRIPTION ------------------
@@ -32,7 +32,7 @@ class LexicaDescription extends ConsumerWidget {
             itemBuilder: (BuildContext context, int index) {
               var diseaseName = ref.read(PlantorDisease).diseases[index].name;
               var disease =
-                  (Lexica.getInstance().findDiseaseByName(diseaseName));
+                  (cacheData.getInstance().lexica.findDiseaseByName(diseaseName));
 
               return DiseaseButton(
                 diseaseName,

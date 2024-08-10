@@ -1,6 +1,6 @@
 //------------------------- PAGES -------------------------
 import 'package:olaf/main.dart';
-import 'package:olaf/user_loader.dart';
+import 'package:olaf/classes.dart';
 import 'package:olaf/settings/settings.dart';
 import 'package:olaf/plants/plant_page.dart';
 import 'package:olaf/lexica/lexica_page.dart';
@@ -209,7 +209,7 @@ class Status extends StatelessWidget {
               child: AutoSizeText(
                 AppLocalizations.of(context)
                     .translate('hello_fine')
-                    .replaceAll('{username}', User.getInstance().username),
+                    .replaceAll('{username}', cacheData.getInstance().username),
 
                 style: style, maxLines: 2,
                 maxFontSize: 25,
@@ -234,7 +234,7 @@ class Gardens extends ConsumerStatefulWidget {
 
 //--------------------- GARDENS STATE ---------------------
 class _GardensState extends ConsumerState<Gardens> {
-  List<Plant> plantsList = User.getInstance().plants;
+  List<Plant> plantsList = cacheData.getInstance().savedPlants;
   late User user;
   bool isLoading = false;
 

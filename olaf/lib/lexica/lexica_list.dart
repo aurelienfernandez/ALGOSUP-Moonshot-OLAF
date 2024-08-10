@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:olaf/lexica/lexica_loader.dart';
+import 'package:olaf/classes.dart';
 import 'package:marquee/marquee.dart';
 import 'package:olaf/lexica/lexica_page.dart';
 
@@ -15,7 +15,7 @@ class LexicaList extends ConsumerWidget {
 
     switch (ref.read(choice)) {
       case 1: // if plants have been selected
-        for (var i = 0; i < Lexica.getInstance().plants.length; i++) {
+        for (var i = 0; i < cacheData.getInstance().lexica.plants.length; i++) {
           // An image of the plant in a rounded container
           final Widget plantImage = Positioned(
             left: -mediaQuery.width * 0.2,
@@ -25,7 +25,7 @@ class LexicaList extends ConsumerWidget {
               height: mediaQuery.width * 0.2,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(Lexica.getInstance().plants[i].image),
+                  image: NetworkImage(cacheData.getInstance().lexica.plants[i].image),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -50,7 +50,7 @@ class LexicaList extends ConsumerWidget {
                 onTap: () {
                   ref.read(tab.notifier).state = 2;
                   ref.read(PlantorDisease.notifier).state =
-                      Lexica.getInstance().plants[i];
+                      cacheData.getInstance().lexica.plants[i];
                 },
                 // Optional: custom splash color
                 splashColor: Colors.white.withOpacity(0.5),
@@ -61,7 +61,7 @@ class LexicaList extends ConsumerWidget {
                       vertical: mediaQuery.height * 0.012,
                       horizontal: mediaQuery.width * 0.1),
                   child: LexiCard(
-                    Lexica.getInstance().plants[i].name,
+                    cacheData.getInstance().lexica.plants[i].name,
                     plantImage,
                   ),
                 ),
@@ -70,7 +70,7 @@ class LexicaList extends ConsumerWidget {
           );
         }
       case 2: // if diseases have been selected
-        for (var i = 0; i < Lexica.getInstance().diseases.length; i++) {
+        for (var i = 0; i < cacheData.getInstance().lexica.diseases.length; i++) {
           // The icon of the disease displayed at the right of the name
           final Widget diseaseIcon = Positioned(
             left: -mediaQuery.width * 0.1,
@@ -80,7 +80,7 @@ class LexicaList extends ConsumerWidget {
               height: mediaQuery.width * 0.2,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(Lexica.getInstance().diseases[i].icon),
+                  image: NetworkImage(cacheData.getInstance().lexica.diseases[i].icon),
                 ),
               ),
             ),
@@ -98,14 +98,14 @@ class LexicaList extends ConsumerWidget {
                 onTap: () {
                   ref.read(tab.notifier).state = 2;
                   ref.read(PlantorDisease.notifier).state =
-                      Lexica.getInstance().diseases[i];
+                      cacheData.getInstance().lexica.diseases[i];
                 },
                 splashColor: Colors.white.withOpacity(0.5),
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: mediaQuery.height * 0.012),
                   child: LexiCard(
-                      Lexica.getInstance().diseases[i].name, diseaseIcon),
+                      cacheData.getInstance().lexica.diseases[i].name, diseaseIcon),
                 ),
               ),
             ),

@@ -1,7 +1,6 @@
 {
-    "version": "0.01",
-    "plants": {
-        "tomato": {
+    "plants": [
+        {
             "name": "Tomato",
             "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
             "howTo": "Tomatoes are relatively easy to grow but require proper care to ensure a healthy harvest. Here are some steps to take care of your tomato plants:\n\n1. Plant tomatoes in a sunny location with well-drained soil. Choose a spot in your garden or container that receives at least 6-8 hours of sunlight daily.\n\n2. Prepare the soil by adding organic matter such as compost or aged manure to improve soil fertility and drainage.\n\n3. Water tomato plants regularly, keeping the soil evenly moist but not waterlogged. Avoid overhead watering to prevent the spread of diseases.\n\n4. Mulch around tomato plants with organic mulch such as straw or shredded leaves to retain moisture, suppress weeds, and regulate soil temperature.\n\n5. Support tomato plants with stakes, cages, or trellises to keep the plants upright and prevent fruit from touching the ground, which can lead to rot.\n\n6. Monitor tomato plants for signs of pests and diseases such as aphids, whiteflies, powdery mildew, and early blight. Take appropriate measures to control pests and diseases to protect your tomato crop.\n\n7. Harvest ripe tomatoes when they are firm and fully colored. Store tomatoes at room temperature away from direct sunlight to ripen further, or refrigerate for longer storage.\n\nBy following these care tips, you can enjoy a bountiful harvest of delicious tomatoes from your garden or container.",
@@ -27,7 +26,7 @@
                 }
             ]
         },
-        "basil": {
+        {
             "name": "Basil",
             "image": "https://upload.wikimedia.org/wikipedia/commons/9/90/Basil-Basilico-Ocimum_basilicum-albahaca.jpg",
             "howTo": "This is where it should explain how to take care of this plant",
@@ -47,9 +46,9 @@
                 }
             ]
         },
-        "strawberry": {
+        {
             "name": "Strawberry",
-            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "image": "https://cdn.britannica.com/22/75922-050-D3982BD0/flowers-fruits-garden-strawberry-plant-species.jpg",
             "howTo": "This is where it should explain how to take care of this plant",
             "tips": [
                 "Plant strawberries in well-drained, sandy soil with plenty of organic matter.",
@@ -67,9 +66,9 @@
                 }
             ]
         },
-        "pepper": {
+        {
             "name": "Pepper",
-            "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
+            "image": "https://www.thespruce.com/thmb/P1bHpM8gAhm9eDlBczgbrX74IY4=/2121x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1323318476-ea577b06f3f5437da3999be527c458dc.jpg",
             "howTo": "This is where it should explain how to take care of this plant",
             "tips": [
                 "Plant pepper plants in well-drained soil in a sunny location.",
@@ -87,27 +86,27 @@
                 }
             ]
         },
-        "lettuce": {
-            "name": "Lettuce",
+        {
+            "name": "Squash",
             "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg",
             "howTo": "This is where it should explain how to take care of this plant",
             "tips": [
-                "Plant lettuce in well-drained, loose soil with good drainage.",
-                "Keep lettuce plants consistently watered, especially during hot weather.",
-                "Harvest lettuce leaves regularly to encourage new growth and prevent bolting."
+                "Plant squash in well-drained soil enriched with compost or organic matter.",
+                "Water squash plants deeply and consistently, keeping the soil evenly moist.",
+                "Mulch around squash plants to retain moisture and suppress weeds."
             ],
             "diseases": [
                 {
-                    "name": "Lettuce mosaic virus",
+                    "name": "Powdery mildew",
                     "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
                 },
                 {
-                    "name": "Downy mildew",
+                    "name": "Squash vine borer",
                     "image": "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg"
                 }
             ]
         }
-    },
+    ],
     "diseases": [
         {
             "name": "Powdery mildew",

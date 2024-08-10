@@ -1,8 +1,10 @@
 //------------------- CUSTOM IMPORTS --------------------
+import 'package:aws_dynamodb_api/dynamodb-2012-08-10.dart';
 import 'package:olaf/amplifyconfiguration.dart';
 import 'package:olaf/app_localization.dart';
+import 'package:olaf/cache/shared_preferences%20.dart';
 import 'package:olaf/home/home_page.dart';
-import 'package:olaf/lexica/lexica_loader.dart';
+import 'package:olaf/cache/loader.dart';
 import 'package:olaf/user_loader.dart';
 
 //------------------- FLUTTER IMPORTS -------------------
@@ -42,14 +44,19 @@ Future<void> main() async {
 
 Future<void> loadAllData() async {
   try {
-    await Future.wait([
-      login("empty", "empty"),
-      loadLexica(),
-    ]);
+    // Initialize AWS DynamoDB and login sequentially
+    final dynamoDb = await initializeDynamoDB();
+    await login("empty", "empty");
+
+    // Fetch data from AWS and save to cache, then retrieve cached data
+    await AWStoCache(dynamoDb);
+
     print("Data loaded successfully");
   } catch (error) {
-    throw ("Error: couldn't load data from json files");
+    print("Error: couldn't load data");
+    print(error);
   }
+    await GetCachedData();
 }
 
 final ThemeData authTheme = ThemeData(
@@ -96,33 +103,37 @@ class _MyAppState extends ConsumerState<MyApp> {
     return FutureBuilder<void>(
       future: loadAllData(),
       builder: (context, snapshot) {
-        return Authenticator(
-          child: Consumer(
-            builder: (context, ref, child) {
-              final theme = ref.watch(themeChangerProvider).getTheme;
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return Authenticator(
+            child: Consumer(
+              builder: (context, ref, child) {
+                final theme = ref.watch(themeChangerProvider).getTheme;
 
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                builder: Authenticator.builder(),
-                locale: locale,
-                localizationsDelegates: [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                supportedLocales: [
-                  Locale('en', ''), // English
-                  Locale('fr', ''), // French
-                  Locale('de', ''), // German
-                ],
-                title: 'OLAF',
-                theme: theme,
-                home: HomePage(),
-              );
-            },
-          ),
-        );
+                return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  builder: Authenticator.builder(),
+                  locale: locale,
+                  localizationsDelegates: [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: [
+                    Locale('en', ''), // English
+                    Locale('fr', ''), // French
+                    Locale('de', ''), // German
+                  ],
+                  title: 'OLAF',
+                  theme: theme,
+                  home: HomePage(),
+                );
+              },
+            ),
+          );
+        }
       },
     );
   }
