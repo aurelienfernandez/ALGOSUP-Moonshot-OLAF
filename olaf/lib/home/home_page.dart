@@ -1,6 +1,7 @@
 //------------------------- PAGES -------------------------
+import 'dart:io';
+
 import 'package:olaf/main.dart';
-import 'package:olaf/classes.dart';
 import 'package:olaf/settings/settings.dart';
 import 'package:olaf/plants/plant_page.dart';
 import 'package:olaf/lexica/lexica_page.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 //------------------------- UTILS -------------------------
 import 'package:olaf/utils.dart';
+import 'package:olaf/classes.dart';
 
 //--------------------- PROVIDERS ----------------------
 final pageIndex = StateProvider<int>((ref) => 0);
@@ -60,7 +62,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   void pageAnimation(int index) {
     // Push the setting route when the setting button is pressed
     if (index == 3) {
-      Navigator.push(context, SlideToSettings(page: SettingsPage()));
+      Navigator.push(context, SlideToSettings(page: SettingsPage()))
+          .then((value) => setState(() {}));
     } else if (index != ref.read(pageIndex)) {
       // A short animation when changing page
       ref.read(_pageController.notifier).state.animateToPage(index,
@@ -72,6 +75,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.sizeOf(context);
+    if (!cacheData.isInitialized()) {
+      return Center(child: CircularProgressIndicator());
+    }
     return Scaffold(
       //---------- TITLE ----------
       appBar: AppBar(
@@ -79,10 +85,12 @@ class _HomePageState extends ConsumerState<HomePage> {
         toolbarHeight: mediaQuery.height * 0.08,
         // Create CircleAvatar
         title: CircleAvatar(
+          backgroundColor: Colors.transparent,
           radius: mediaQuery.height * 0.035,
-          backgroundImage: NetworkImage(
-            User.getInstance().profilePicture,
-          ),
+          backgroundImage: cacheData.getInstance().user.profilePicture ==
+                  "assets/images/no-image.png"
+              ? AssetImage("assets/images/no-image.png") as ImageProvider
+              : FileImage(File(cacheData.getInstance().user.profilePicture)),
         ),
         //------ SETTINGS ------
         actions: <Widget>[
@@ -175,7 +183,8 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.invalidate(pageIndex);
     return Scaffold(
-      body: Stack(children: [
+        body: SizedBox.expand(
+      child: Stack(children: [
         SingleChildScrollView(
           child: Column(
             children: [Status(), Gardens()],
@@ -183,7 +192,7 @@ class HomeScreen extends ConsumerWidget {
         ),
         Analyse()
       ]),
-    );
+    ));
   }
 }
 
@@ -207,9 +216,8 @@ class Status extends StatelessWidget {
               padding: EdgeInsets.all(
                   mediaQuery.width * 0.05), // Adjust padding as needed
               child: AutoSizeText(
-                AppLocalizations.of(context)
-                    .translate('hello_fine')
-                    .replaceAll('{username}', cacheData.getInstance().username),
+                AppLocalizations.of(context).translate('hello_fine').replaceAll(
+                    '{username}', cacheData.getInstance().user.username),
 
                 style: style, maxLines: 2,
                 maxFontSize: 25,
@@ -236,25 +244,73 @@ class Gardens extends ConsumerStatefulWidget {
 class _GardensState extends ConsumerState<Gardens> {
   List<Plant> plantsList = cacheData.getInstance().savedPlants;
   late User user;
-  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.sizeOf(context);
 
-    if (isLoading) {
-      // Return a loading indicator or placeholder widget while data is being loaded
-      return Padding(
-        padding: EdgeInsets.only(top: 50),
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
-        ),
-      );
-    }
-
     // For each plants in user's account, add it to the widget list
     List<Widget> plantCards = [];
+    if (plantsList.isEmpty) {
+      var name = "new plant";
+      var image =
+          "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg";
+
+      plantCards.add(Card(
+        child: TextButton.icon(
+            onPressed: () {
+              setState(() {
+                plantCards.remove(0);
+                cacheData.getInstance().savedPlants.add(Plant(
+                    name: name,
+                    image: image,
+                    disease: "none",
+                    maturation: "mature",
+                    soilHumidity: "90M",
+                    airHumidity: "70%",
+                    temperature: "23°"));
+                plantCards.add(
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        top: mediaQuery.height * 0.05,
+                        left: mediaQuery.height * 0.1,
+                        right: mediaQuery.height * 0.08,
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primary),
+                        onPressed: () {
+                          ref
+                              .read(_pageController.notifier)
+                              .state
+                              .animateToPage(1,
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut);
+                          ref.read(pageIndex.notifier).state = 1;
+                          ref.read(plantsIndex.notifier).state = 0;
+                        },
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: mediaQuery.height * 0.012,
+                                  horizontal: mediaQuery.width * 0.08),
+                              child: PlantCard(name, image),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              });
+            },
+            icon: Icon(Icons.add),
+            label: Text("Add a plant")),
+      ));
+    }
     for (var i = 0; i < plantsList.length; i++) {
       plantCards.add(
         Container(
@@ -287,13 +343,14 @@ class _GardensState extends ConsumerState<Gardens> {
     }
 
     // Add a padding at the end of the column
-    if (plantCards.isNotEmpty) {
-      plantCards.last = Padding(
-        padding: EdgeInsets.only(bottom: mediaQuery.height * 0.02),
-        child: plantCards.last,
-      );
-    }
+
+    plantCards.last = Padding(
+      padding: EdgeInsets.only(bottom: mediaQuery.height * 0.02),
+      child: plantCards.last,
+    );
+
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: plantCards,
     );
   }
@@ -351,8 +408,8 @@ class PlantCard extends StatelessWidget {
         bottom: mediaQuery.height * 0.002,
         child: Align(
           child: Text(
-            textAlign: TextAlign.center,
             text,
+            textAlign: TextAlign.center,
             style: style.copyWith(
                 backgroundColor: Colors.transparent,
                 fontSize: mediaQuery.width * 0.05),

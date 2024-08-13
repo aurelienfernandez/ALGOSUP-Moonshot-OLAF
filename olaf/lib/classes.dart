@@ -183,53 +183,41 @@ class Plant {
 //------------------------- USER -------------------------
 class User {
   final String username;
-  final String profilePicture;
+  String profilePicture;
   final String email;
-  final List<Plant> plants;
 
-  User._({
+  User({
     required this.username,
     required this.profilePicture,
     required this.email,
-    required this.plants,
   });
 
-  static User? _instance;
-
-  static User getInstance() {
-    if (_instance == null) {
-      throw Exception("User not initialized. Call initialize() first.");
-    }
-    return _instance!;
+  // Convert a User object into a map
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'profilePicture': profilePicture,
+      'email': email,
+    };
   }
 
-  static void initialize({
-    required String username,
-    required String profilePicture,
-    required String email,
-    required List<Plant> plants,
-  }) {
-    if (_instance != null) {
-      throw Exception("User already initialized.");
-    }
-    _instance = User._(
-      username: username,
-      email: email,
-      profilePicture: profilePicture,
-      plants: plants,
+  // Convert a json map into a User object
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      username: json['username'] ?? '',
+      profilePicture: json['profilePicture'] ?? '',
+      email: json['email'] ?? '',
     );
   }
 }
 
 class cacheData {
-  final String username;
+  final User user;
   final List<Plant> savedPlants;
   final Lexica lexica;
 
   cacheData._(
-      {required this.username,
-      required this.savedPlants,
-      required this.lexica});
+      {required this.user, required this.savedPlants, required this.lexica});
   static cacheData? _instance;
 
   static cacheData getInstance() {
@@ -240,16 +228,20 @@ class cacheData {
   }
 
   static void initialize(
-      {required String username,
+      {required User user,
       required List<Plant> savedPlants,
       required Lexica lexica}) {
     if (_instance != null) {
       throw Exception("User already initialized.");
     }
     _instance = cacheData._(
-      username: username,
+      user: user,
       savedPlants: savedPlants,
       lexica: lexica,
     );
+  }
+
+  static bool isInitialized() {
+    return _instance != null;
   }
 }

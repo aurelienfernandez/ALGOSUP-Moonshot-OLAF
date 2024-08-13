@@ -69,6 +69,7 @@ class LexicaList extends ConsumerWidget {
             ),
           );
         }
+        break;
       case 2: // if diseases have been selected
         for (var i = 0; i < cacheData.getInstance().lexica.diseases.length; i++) {
           // The icon of the disease displayed at the right of the name
@@ -111,6 +112,7 @@ class LexicaList extends ConsumerWidget {
             ),
           );
         }
+        break;
       default:
         break;
     }

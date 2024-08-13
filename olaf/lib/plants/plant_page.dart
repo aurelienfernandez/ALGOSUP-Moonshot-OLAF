@@ -24,7 +24,30 @@ class _PlantTabState extends ConsumerState<PlantPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          PlantStatus(User.getInstance().plants[ref.watch(plantsIndex)]),
+          cacheData.getInstance().savedPlants.isNotEmpty
+              ? PlantStatus(
+                  cacheData.getInstance().savedPlants[ref.watch(plantsIndex)])
+              : TextButton.icon(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white)),
+                  onPressed: () {
+                    setState(() {
+                      String name = "new plant";
+                      String image =
+                          "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg";
+                      ;
+                      cacheData.getInstance().savedPlants.add(Plant(
+                          name: name,
+                          image: image,
+                          disease: "none",
+                          maturation: "mature",
+                          soilHumidity: "90M",
+                          airHumidity: "70%",
+                          temperature: "23°"));
+                    });
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text("Add a plant")),
         ],
       ),
     ));
@@ -293,9 +316,9 @@ class StatusTitle extends ConsumerWidget {
 
                       if (ref.watch(plantsIndex) < 0) {
                         ref.read(plantsIndex.notifier).state =
-                            User.getInstance().plants.length - 1;
+                            cacheData.getInstance().savedPlants.length - 1;
                       } else if (ref.watch(plantsIndex) >
-                          User.getInstance().plants.length - 1) {
+                          cacheData.getInstance().savedPlants.length - 1) {
                         ref.read(plantsIndex.notifier).state = 0;
                       }
                     },
@@ -324,9 +347,9 @@ class StatusTitle extends ConsumerWidget {
 
                       if (ref.watch(plantsIndex) < 0) {
                         ref.read(plantsIndex.notifier).state =
-                            User.getInstance().plants.length - 1;
+                            cacheData.getInstance().savedPlants.length - 1;
                       } else if (ref.watch(plantsIndex) >
-                          User.getInstance().plants.length - 1) {
+                          cacheData.getInstance().savedPlants.length - 1) {
                         ref.read(plantsIndex.notifier).state = 0;
                       }
                     },

@@ -1,4 +1,4 @@
-import { defineAuth } from '@aws-amplify/backend';
+import { defineAuth, defineStorage } from '@aws-amplify/backend';
 
 /**
  * Define and configure your auth resource
@@ -8,4 +8,22 @@ export const auth = defineAuth({
   loginWith: {
     email: true,
   },
+
+  userAttributes: {
+    profilePicture: {
+      mutable: true,
+      required: false,
+    }
+
+  },
+});
+export const storage = defineStorage({
+  name: 'olaf-user14bdc-dev',
+  access: (allow) => ({
+    '*': [
+      allow.authenticated.to(['read']),
+      allow.authenticated.to(['write']),
+      allow.authenticated.to(['delete']) 
+    ]
+  })
 });

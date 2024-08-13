@@ -30,5 +30,7 @@
     "delete_account": "supprimer\nle compte",
     "yes": "oui",
     "cancel": "annuler",
-    "confirm": "êtes-vous sûr de vouloir supprimer votre compte?"
+    "confirm": "êtes-vous sûr de vouloir supprimer votre compte?",
+    "profile_picture": "photo de profil"
+
 }

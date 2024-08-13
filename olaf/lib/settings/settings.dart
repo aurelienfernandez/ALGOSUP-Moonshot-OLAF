@@ -1,13 +1,19 @@
 //------------------- FLUTTER IMPORTS -------------------
+import 'dart:io';
+
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:olaf/app_localization.dart';
 import 'package:olaf/main.dart';
 import 'package:olaf/classes.dart';
+import 'package:olaf/settings/s3.dart';
 
-//--------------------- PLANT STATE ---------------------
+//--------------------- SETTINGS STATE ---------------------
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
@@ -15,7 +21,7 @@ class SettingsPage extends ConsumerStatefulWidget {
   _SettingsState createState() => _SettingsState();
 }
 
-//---------------------- PLANT TAB ----------------------
+//---------------------- SETTINGS TAB ----------------------
 class _SettingsState extends ConsumerState<SettingsPage> {
   final DropDownFlags = [
     'assets/images/uk.png',
@@ -28,6 +34,9 @@ class _SettingsState extends ConsumerState<SettingsPage> {
     const Locale('de'),
   ];
   String currentFlag = "assets/uk.png";
+
+  bool newImage = false;
+  XFile? imageFile;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -244,7 +253,7 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 AutoSizeText(
-                                  "${User.getInstance().email}" + ':',
+                                  "${cacheData.getInstance().user.email}",
                                   style: style.copyWith(),
                                   stepGranularity: 0.1,
                                   maxFontSize: 12,
@@ -253,11 +262,6 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                                 SizedBox(
                                   width: mediaQuery.width * 0.02,
                                 ),
-                                Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                  size: mediaQuery.width * 0.05,
-                                )
                               ],
                             ),
 
@@ -265,41 +269,63 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                             SizedBox(
                               height: mediaQuery.height * 0.02,
                             ),
-
-                            //---------- PASSWORD ---------
                             Text(
                               AppLocalizations.of(context)
-                                  .translate('password'),
+                                  .translate('profile_picture'),
                               style: style.copyWith(
                                   fontSize: mediaQuery.width * 0.05),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                AutoSizeText(
-                                  "${User.getInstance().email.replaceAll(RegExp(r"."), "*")}",
-                                  style: style.copyWith(),
-                                  stepGranularity: 0.1,
-                                  maxFontSize: 12,
-                                  minFontSize: 10,
-                                ),
-                                SizedBox(
-                                  width: mediaQuery.width * 0.02,
-                                ),
-                                Icon(
-                                  Icons.remove_red_eye_rounded,
-                                  color: Colors.white,
-                                  size: mediaQuery.width * 0.05,
-                                ),
-                                SizedBox(
-                                  width: mediaQuery.width * 0.02,
-                                ),
-                                Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                  size: mediaQuery.width * 0.05,
-                                )
-                              ],
+                            //--------- PICTURE ---------
+                            InkWell(
+                              onTap: () async {
+                                try {
+                                  final image = await ImagePicker()
+                                      .pickImage(source: ImageSource.gallery);
+                                  if (image != null) {
+                                    imageFile = image;
+                                    newImage = true;
+                                    changePicture(File(image.path));
+
+                                    final user =
+                                        await Amplify.Auth.getCurrentUser();
+                                    final pictureURL =
+                                        "https://olaf-user14bdc-dev.s3.eu-west-3.amazonaws.com/uploads/${user.userId}/profile-picture/${user.userId}.png";
+
+                                    await Amplify.Auth.updateUserAttribute(
+                                      userAttributeKey:
+                                          AuthUserAttributeKey.picture,
+                                      value: pictureURL,
+                                    );
+                                    await ChangePictureLocal(
+                                        File(image.path), user);
+                                    cacheData
+                                        .getInstance()
+                                        .user
+                                        .profilePicture = imageFile!.path;
+                                  }
+                                  setState(() {});
+                                } on PlatformException catch (e) {
+                                  throw ("Failed to pick image: $e");
+                                }
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                radius: mediaQuery.height * 0.035,
+                                backgroundImage: newImage && imageFile != null
+                                    ? FileImage(File(imageFile!.path))
+                                    : (cacheData
+                                                .getInstance()
+                                                .user
+                                                .profilePicture ==
+                                            "assets/images/no-image.png"
+                                        ? AssetImage(
+                                                "assets/images/no-image.png")
+                                            as ImageProvider
+                                        : FileImage(File(cacheData
+                                            .getInstance()
+                                            .user
+                                            .profilePicture))),
+                              ),
                             ),
 
                             //---------- SPACE ----------

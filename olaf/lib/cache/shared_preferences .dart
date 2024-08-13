@@ -1,38 +1,35 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:olaf/classes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Function to create the JSON structure
-String createJson(
-    String username, List<Plant> savedPlants, List<dynamic> lexica) {
-  final Map<String, dynamic> jsonMap = {
-    'username': username,
+String createJson(User user, List<Plant> savedPlants, Lexica lexica) {
+  // Convert everything to JSON
+  Map<String, dynamic> data = {
+    'user': user.toJson(), // Convert user to JSON
     'savedPlants': savedPlants.map((plant) => plant.toJson()).toList(),
     'lexica': {
-      'plants':
-          (lexica[0] as List<LexPlant>).map((plant) => plant.toJson()).toList(),
-      'diseases': (lexica[1] as List<Disease>)
-          .map((disease) => disease.toJson())
-          .toList(),
+      'plants': lexica.plants.map((plant) => plant.toJson()).toList(),
+      'diseases': lexica.diseases.map((disease) => disease.toJson()).toList(),
     },
   };
 
-  return jsonEncode(jsonMap);
+  // Convert the map to a JSON string
+  return jsonEncode(data);
 }
 
-// Function to save data to SharedPreferences
-Future<void> saveData(
-    String username, List<Plant> savedPlants, List<dynamic> lexica) async {
+Future<void> saveData(User user, List<Plant> savedPlants, Lexica lexica) async {
   try {
     final prefs = await SharedPreferences.getInstance();
-    print('Creating JSON...');
+    debugPrint('Creating JSON...');
 
     String jsonString;
     try {
-      jsonString = createJson(username, savedPlants, lexica);
+      // Updated to pass `user` instead of `username`
+      jsonString = createJson(user, savedPlants, lexica);
     } catch (e) {
-      print('Error creating JSON: $e');
-      rethrow;
+      throw ('Error creating JSON: $e');
     }
 
     try {
@@ -42,9 +39,9 @@ Future<void> saveData(
       rethrow;
     }
 
-    print('Data saved to SharedPreferences');
+    debugPrint('Data saved to SharedPreferences');
   } catch (e) {
-    print('Error in saveData: $e');
+    throw ('Error in saveData: $e');
   }
 }
 
@@ -61,8 +58,9 @@ Future<void> GetCachedData() async {
     // Decode the JSON string into a map
     Map<String, dynamic> jsonMap = jsonDecode(jsonString);
 
-    // Extract username
-    String username = jsonMap['username'] ?? '';
+    // Extract user data and convert it to a User object
+    Map<String, dynamic> userJson = jsonMap['user'] ?? {};
+    User user = User.fromJson(userJson);
 
     // Parse savedPlants
     List<dynamic> savedPlantsJson = jsonMap['savedPlants'] ?? [];
@@ -89,15 +87,16 @@ Future<void> GetCachedData() async {
 
     // Create Lexica object
     Lexica lexica = Lexica(plants: lexPlants, diseases: diseases);
+
     // Initialize cacheData
     cacheData.initialize(
-      username: username,
+      user: user,
       savedPlants: savedPlants,
       lexica: lexica,
     );
 
-    print("Data successfully retrieved and cached.");
+    debugPrint("Data successfully retrieved and cached.");
   } catch (e) {
-    print('Error decoding JSON or initializing cacheData: $e');
+    throw('Error decoding JSON or initializing cacheData: $e');
   }
 }

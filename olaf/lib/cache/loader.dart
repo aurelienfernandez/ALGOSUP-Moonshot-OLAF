@@ -1,20 +1,32 @@
+import 'dart:io';
+
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:aws_dynamodb_api/dynamodb-2012-08-10.dart';
+import 'package:flutter/material.dart';
 import 'package:olaf/cache/shared_preferences%20.dart';
 import 'package:olaf/classes.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
 
 Future<DynamoDB> initializeDynamoDB() async {
+  final userAttributes = await Amplify.Auth.fetchAuthSession();
+  final cognitoSession = userAttributes as CognitoAuthSession;
+
+  final awsCredentials = cognitoSession.credentialsResult;
+
   final dynamoDb = DynamoDB(
     region: 'eu-west-3',
     credentials: AwsClientCredentials(
-      accessKey: 'HIDDEN', // Not recommended for production
-      secretKey:
-          'HIDDEN', // Use Cognito to fetch keys dynamically
+      accessKey: awsCredentials.value.accessKeyId, 
+      secretKey: awsCredentials.value.secretAccessKey, 
+      sessionToken: awsCredentials.value.sessionToken
     ),
   );
   return dynamoDb;
 }
 
-Future<List<dynamic>> getLexica(DynamoDB dynamoDb) async {
+Future<Lexica> getLexica(DynamoDB dynamoDb) async {
   List<LexPlant> plants = [];
   List<Disease> diseases = [];
 
@@ -89,17 +101,71 @@ Future<List<dynamic>> getLexica(DynamoDB dynamoDb) async {
           ));
         }
       }
-    } else {
-      print('No items found.');
     }
   } catch (e) {
-    print('Error while retrieving the lexica: $e');
+    debugPrint('Error while retrieving the lexica: $e');
   }
-  return [plants, diseases];
+  return Lexica(plants: plants, diseases: diseases);
 }
 
-String getUser() {
-  return "admin";
+Future<bool> requestPermission(Permission permission) async {
+  if (await permission.isGranted) {
+    return true;
+  } else {
+    var result = await permission.request();
+    if (result == PermissionStatus.granted) {
+      return true;
+    }
+  }
+  return false;
+}
+
+Future<String> GetProfilePicture(AuthUser user) async {
+  final directory = await getApplicationDocumentsDirectory();
+  final filepath = '${directory.path}/${user.userId}.png';
+
+  final downloadResult = await Amplify.Storage.downloadFile(
+          path: StoragePath.fromString(
+              "uploads/${user.userId}/profile-picture/${user.userId}.png"),
+          localFile: AWSFile.fromPath(filepath))
+      .result;
+
+  if (downloadResult != null && File(filepath).existsSync()) {
+    return "${directory.path}/${user.userId}.png";
+  } else {
+    return "assets/images/no-image.png";
+  }
+}
+
+Future<User> getUser() async {
+  Map<String, String> attributeMap = {};
+
+  try {
+    // Fetch the user's attributes
+    List<AuthUserAttribute> userAttributes =
+        await Amplify.Auth.fetchUserAttributes();
+
+    // Create a map of attributes
+    for (var attribute in userAttributes) {
+      attributeMap[attribute.userAttributeKey.key] = attribute.value;
+    }
+  } catch (e) {
+    throw ('Failed to fetch user attributes: $e');
+  }
+  var permission = requestPermission(Permission.storage);
+  final user = await Amplify.Auth.getCurrentUser();
+  late dynamic picture;
+  if (attributeMap[AuthUserAttributeKey.picture.key] == null ||
+      permission == false) {
+    picture = "assets/images/no-image.png";
+  } else {
+    picture = await GetProfilePicture(user);
+  }
+
+  return User(
+      username: attributeMap[AuthUserAttributeKey.preferredUsername.key]!,
+      profilePicture: picture,
+      email: attributeMap[AuthUserAttributeKey.email.key]!);
 }
 
 List<Plant> getSavedPlants() {
@@ -107,9 +173,9 @@ List<Plant> getSavedPlants() {
 }
 
 Future<void> AWStoCache(DynamoDB dynamoDb) async {
-  String username = getUser();
+  User user = await getUser();
   List<Plant> plants = getSavedPlants();
-  List<dynamic> lexica = await getLexica(dynamoDb);
+  Lexica lexica = await getLexica(dynamoDb);
   // Ensure to await saveData to complete
-  await saveData(username, plants, [lexica[0], lexica[1]]);
+  await saveData(user, plants, lexica);
 }

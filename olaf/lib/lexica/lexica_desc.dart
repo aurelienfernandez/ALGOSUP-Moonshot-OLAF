@@ -18,7 +18,7 @@ class LexicaDescription extends ConsumerWidget {
 
     Widget description;
     switch (ref.read(PlantorDisease).runtimeType) {
-      case const (LexPlant): // If the current element is a plant
+      case LexPlant: // If the current element is a plant
 
         Widget relatedDiseases = SizedBox(
           height: mediaQuery.height *
@@ -31,8 +31,10 @@ class LexicaDescription extends ConsumerWidget {
             itemCount: ref.read(PlantorDisease).diseases.length,
             itemBuilder: (BuildContext context, int index) {
               var diseaseName = ref.read(PlantorDisease).diseases[index].name;
-              var disease =
-                  (cacheData.getInstance().lexica.findDiseaseByName(diseaseName));
+              var disease = (cacheData
+                  .getInstance()
+                  .lexica
+                  .findDiseaseByName(diseaseName));
 
               return DiseaseButton(
                 diseaseName,
@@ -51,8 +53,9 @@ class LexicaDescription extends ConsumerWidget {
             ref.read(PlantorDisease).tips,
             moreTitle: AppLocalizations.of(context).translate('related'),
             moreWidget: relatedDiseases);
+        break;
 
-      case const (Disease): // If the current element is a disease
+      case Disease: // If the current element is a disease
 
         Widget cure = Padding(
             padding: EdgeInsets.all(mediaQuery.height * 0.02),
@@ -71,6 +74,7 @@ class LexicaDescription extends ConsumerWidget {
           moreTitle: AppLocalizations.of(context).translate('cure'),
           moreWidget: cure,
         );
+        break;
 
       default:
         throw ("Error: invalid type");

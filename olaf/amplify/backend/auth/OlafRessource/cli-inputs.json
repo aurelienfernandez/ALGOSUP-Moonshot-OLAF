@@ -1,0 +1,81 @@
+{
+  "version": "1",
+  "cognitoConfig": {
+    "identityPoolName": "OlafIDPool",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "olaf9c9948e3",
+    "userPoolName": "OlafUserPool",
+    "autoVerifiedAttributes": [
+      "email"
+    ],
+    "mfaConfiguration": "OFF",
+    "mfaTypes": [
+      "SMS Text Message"
+    ],
+    "smsAuthenticationMessage": "Your authentication code is {####}",
+    "smsVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Your verification code",
+    "emailVerificationMessage": "Your verification code is {####}",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [],
+    "requiredAttributes": [
+      "email",
+      "preferred_username"
+    ],
+    "aliasAttributes": [],
+    "userpoolClientGenerateSecret": false,
+    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientWriteAttributes": [
+      "picture",
+      "email",
+      "preferred_username"
+    ],
+    "userpoolClientReadAttributes": [
+      "email",
+      "name",
+      "preferred_username",
+      "picture"
+    ],
+    "userpoolClientLambdaRole": "OlafRe9c9948e3_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": true,
+    "sharedId": "9c9948e3",
+    "resourceName": "OlafRessource",
+    "authSelections": "identityPoolAndUserPool",
+    "useDefault": "defaultSocial",
+    "usernameAttributes": [
+      "email"
+    ],
+    "userPoolGroups": false,
+    "adminQueries": true,
+    "triggers": {},
+    "hostedUI": true,
+    "userPoolGroupList": [],
+    "serviceName": "Cognito",
+    "usernameCaseSensitive": false,
+    "useEnabledMfas": true,
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "dependsOn": [],
+    "parentStack": {
+      "Ref": "AWS::StackId"
+    },
+    "permissions": [],
+    "hostedUIDomainName": "olafe5ef2abb-e5ef2abb",
+    "authProvidersUserPool": [],
+    "hostedUIProviderMeta": "[]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:8087/\"],\"LogoutURLs\":[\"http://localhost:8087/\"]}",
+    "authProviders": []
+  }
+}

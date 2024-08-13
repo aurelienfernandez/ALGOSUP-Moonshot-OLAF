@@ -30,5 +30,6 @@
     "sign_out": "sign out",
     "yes": "yes",
     "cancel": "cancel",
-    "confirm": "are you sure you want to delete your account?"
+    "confirm": "are you sure you want to delete your account?",
+    "profile_picture": "profile picture"
 }

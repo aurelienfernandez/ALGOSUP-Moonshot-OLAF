@@ -1,0 +1,25 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-olaf-dev-14bdc-authRole",
+      "UnauthRoleArn": "arn:aws:iam::905418080111:role/amplify-olaf-dev-14bdc-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::905418080111:role/amplify-olaf-dev-14bdc-authRole",
+      "Region": "eu-west-3",
+      "DeploymentBucketName": "amplify-olaf-dev-14bdc-deployment",
+      "UnauthRoleName": "amplify-olaf-dev-14bdc-unauthRole",
+      "StackName": "amplify-olaf-dev-14bdc",
+      "StackId": "arn:aws:cloudformation:eu-west-3:905418080111:stack/amplify-olaf-dev-14bdc/a6f2a510-57bd-11ef-b9ec-06dfdf120cbd",
+      "AmplifyAppId": "d3nxcrqywhf4c5"
+    },
+    "categories": {
+      "auth": {
+        "OlafRessource": {
+          "googleClientId": "834547728992-4ofkuabup27lt0ednrpa6aostkp8frs5.apps.googleusercontent.com"
+        }
+      },
+      "storage": {
+        "UserInfo": {}
+      }
+    }
+  }
+}

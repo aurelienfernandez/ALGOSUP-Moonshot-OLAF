@@ -1,23 +1,23 @@
 //------------------- CUSTOM IMPORTS --------------------
-import 'package:aws_dynamodb_api/dynamodb-2012-08-10.dart';
 import 'package:olaf/amplifyconfiguration.dart';
 import 'package:olaf/app_localization.dart';
 import 'package:olaf/cache/shared_preferences%20.dart';
 import 'package:olaf/home/home_page.dart';
 import 'package:olaf/cache/loader.dart';
-import 'package:olaf/user_loader.dart';
 
 //------------------- FLUTTER IMPORTS -------------------
 import 'dart:async';
-
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_authenticator/amplify_authenticator.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/services.dart';
+
+//------------------- AMPLIFY IMPORTS -------------------
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 
 //---------------------- PROVIDERS ----------------------
 final localeProvider = StateProvider<Locale>((ref) => Locale('en'));
@@ -46,7 +46,6 @@ Future<void> loadAllData() async {
   try {
     // Initialize AWS DynamoDB and login sequentially
     final dynamoDb = await initializeDynamoDB();
-    await login("empty", "empty");
 
     // Fetch data from AWS and save to cache, then retrieve cached data
     await AWStoCache(dynamoDb);
@@ -56,7 +55,7 @@ Future<void> loadAllData() async {
     print("Error: couldn't load data");
     print(error);
   }
-    await GetCachedData();
+  await GetCachedData();
 }
 
 final ThemeData authTheme = ThemeData(
@@ -141,8 +140,8 @@ class _MyAppState extends ConsumerState<MyApp> {
 
 Future<void> _configureAmplify() async {
   try {
-    await Amplify.addPlugin(AmplifyAuthCognito());
-    await Amplify.configure(amplifyConfig);
+    await Amplify.addPlugins([AmplifyAuthCognito(), AmplifyStorageS3()]);
+    await Amplify.configure(amplifyconfig);
     safePrint('Successfully configured');
   } on Exception catch (e) {
     safePrint('Error configuring Amplify: $e');
