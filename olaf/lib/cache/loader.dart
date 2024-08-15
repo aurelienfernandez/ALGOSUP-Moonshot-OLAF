@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:aws_dynamodb_api/dynamodb-2012-08-10.dart';
-import 'package:flutter/material.dart';
 import 'package:olaf/cache/shared_preferences%20.dart';
 import 'package:olaf/classes.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -103,7 +102,7 @@ Future<Lexica> getLexica(DynamoDB dynamoDb) async {
       }
     }
   } catch (e) {
-    debugPrint('Error while retrieving the lexica: $e');
+    throw('Error while retrieving the lexica: $e');
   }
   return Lexica(plants: plants, diseases: diseases);
 }

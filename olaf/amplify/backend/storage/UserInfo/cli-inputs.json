@@ -1,7 +1,7 @@
 {
   "resourceName": "UserInfo",
   "policyUUID": "b9b59c83",
-  "bucketName": "olaf-user14bdc-dev",
+  "bucketName": "olaf-user",
   "storageAccess": "auth",
   "guestAccess": [],
   "authAccess": [
@@ -9,7 +9,6 @@
     "READ",
     "DELETE"
   ],
-  "groupAccess": [
-    "authenticatedUser"
-  ]
+  "triggerFunction": "NONE",
+  "groupAccess": {}
 }

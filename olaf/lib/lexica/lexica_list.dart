@@ -16,23 +16,56 @@ class LexicaList extends ConsumerWidget {
     switch (ref.read(choice)) {
       case 1: // if plants have been selected
         for (var i = 0; i < cacheData.getInstance().lexica.plants.length; i++) {
-          // An image of the plant in a rounded container
+          final String imageUrl =
+              cacheData.getInstance().lexica.plants[i].image;
+
           final Widget plantImage = Positioned(
             left: -mediaQuery.width * 0.2,
             top: -mediaQuery.height * 0.015,
             child: Container(
               width: mediaQuery.width * 0.2,
               height: mediaQuery.width * 0.2,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(cacheData.getInstance().lexica.plants[i].image),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(
-                  color: theme.colorScheme.primary,
-                  width: 4.0,
-                ),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Background container to apply decoration
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      border: Border.all(
+                        color: theme.colorScheme.primary,
+                        width: 4.0,
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            // Image has finished loading
+                            return child;
+                          } else {
+                            // Image is still loading
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: theme.colorScheme.secondary,
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ??
+                                            1)
+                                    : null,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           );
@@ -71,17 +104,20 @@ class LexicaList extends ConsumerWidget {
         }
         break;
       case 2: // if diseases have been selected
-        for (var i = 0; i < cacheData.getInstance().lexica.diseases.length; i++) {
+        for (var i = 0;
+            i < cacheData.getInstance().lexica.diseases.length;
+            i++) {
           // The icon of the disease displayed at the right of the name
           final Widget diseaseIcon = Positioned(
             left: -mediaQuery.width * 0.1,
-            top: -mediaQuery.height * 0.02,
+            top: -mediaQuery.height * 0.017,
             child: Container(
               width: mediaQuery.width * 0.2,
               height: mediaQuery.width * 0.2,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(cacheData.getInstance().lexica.diseases[i].icon),
+                  image: NetworkImage(
+                      cacheData.getInstance().lexica.diseases[i].icon),
                 ),
               ),
             ),
@@ -106,7 +142,8 @@ class LexicaList extends ConsumerWidget {
                   padding:
                       EdgeInsets.symmetric(vertical: mediaQuery.height * 0.012),
                   child: LexiCard(
-                      cacheData.getInstance().lexica.diseases[i].name, diseaseIcon),
+                      cacheData.getInstance().lexica.diseases[i].name,
+                      diseaseIcon),
                 ),
               ),
             ),
