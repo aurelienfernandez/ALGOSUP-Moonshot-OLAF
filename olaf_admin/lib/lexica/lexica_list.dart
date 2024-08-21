@@ -11,12 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final targetID = StateProvider<int>((ref) => 0);
 
 //---------------- NAME ----------------
-final nameController = StateProvider<TextEditingController>(
-    (ref) => TextEditingController(text: null));
-
-//---------- HOWTO/DESCRIPTION ---------
-final bigTextController = StateProvider<TextEditingController>(
-    (ref) => TextEditingController(text: null));
+final nameController =
+    StateProvider<TextEditingController>((ref) => TextEditingController());
 
 //-------------- REBUILD ---------------
 final rebuildTriggerProvider = ChangeNotifierProvider<Notifier>((ref) {
@@ -31,22 +27,6 @@ class Notifier extends ChangeNotifier {
 
 //------------- USER INPUT -------------
 final checkUserInputProvider = StateProvider<bool>((ref) => false);
-
-//------------------- PLANT PROVIDERS -------------------
-//---------------- TIPS ----------------
-final tipsController = StateProvider<List<TextEditingController>>((ref) => []);
-
-//-------------- DISEASES --------------
-final diseasesController =
-    StateProvider<List<TextEditingController>>((ref) => []);
-
-//------------------ DISEASE PROVIDERS ------------------
-//--------------- PREVENT --------------
-final preventController =
-    StateProvider<TextEditingController>((ref) => TextEditingController());
-//---------------- CURE ----------------
-final cureController =
-    StateProvider<TextEditingController>((ref) => TextEditingController());
 
 class LexicaListState extends ConsumerStatefulWidget {
   final String type;
@@ -64,16 +44,20 @@ class LexicaList extends ConsumerState<LexicaListState> {
 
   List<VoidCallback> listeners = [];
 
+  TextEditingController bigTextController = TextEditingController();
+  TextEditingController preventController = TextEditingController();
+  TextEditingController cureController = TextEditingController();
+  List<TextEditingController> tipsController = [];
+  List<TextEditingController> diseasesController = [];
+
   @override
   void initState() {
     super.initState();
+
     createListeners();
   }
 
   void createListeners() {
-    ref.read(tipsController.notifier).state.clear();
-    ref.read(diseasesController.notifier).state.clear();
-
     if (widget.type == "plants") {
       plantOrDisease =
           CacheData.getInstance().lexica.plants[ref.read(targetID)];
@@ -95,34 +79,29 @@ class LexicaList extends ConsumerState<LexicaListState> {
 
       // Create how to listener
       createListener(() {
-        _onChange(ref.read(bigTextController).text, plantOrDisease.howTo,
-            plantOrDisease);
-      }, ref.read(bigTextController));
+        _onChange(bigTextController.text, plantOrDisease.howTo, plantOrDisease);
+      }, bigTextController);
 
       // Create tips listeners
       int tipsLength = plantOrDisease.tips.length;
       for (int index = 0; index < tipsLength; index++) {
-        ref
-            .read(tipsController.notifier)
-            .state
-            .add(TextEditingController(text: plantOrDisease.tips[index]));
+        tipsController.add(TextEditingController(
+            text: "${index + 1}- ${plantOrDisease.tips[index]}"));
         createListener(() {
-          _onChange(ref.read(tipsController)[index].text,
-              plantOrDisease.tips[index], plantOrDisease);
-        }, ref.read(tipsController)[index]);
+          _onChange(tipsController[index].text, plantOrDisease.tips[index],
+              plantOrDisease);
+        }, tipsController[index]);
       }
 
       // Create listeners for diseases
       int diseasesLength = plantOrDisease.diseases.length;
       for (int index = 0; index < diseasesLength; index++) {
-        ref
-            .read(diseasesController.notifier)
-            .state
-            .add(TextEditingController());
+        diseasesController.add(
+            TextEditingController(text: plantOrDisease.diseases[index].name));
         createListener(() {
-          _onChange(ref.read(diseasesController)[index].text,
+          _onChange(diseasesController[index].text,
               plantOrDisease.diseases[index].name, plantOrDisease);
-        }, ref.read(diseasesController)[index]);
+        }, diseasesController[index]);
       }
 
       // If it is a disease, create a listener for: description, prevent, and cure
@@ -132,21 +111,20 @@ class LexicaList extends ConsumerState<LexicaListState> {
 
       // Create listener for description
       createListener(() {
-        _onChange(ref.read(bigTextController).text, plantOrDisease.description,
-            plantOrDisease);
-      }, ref.read(bigTextController));
+        _onChange(
+            bigTextController.text, plantOrDisease.description, plantOrDisease);
+      }, bigTextController);
 
       // Create listener for prevent
       createListener(() {
-        _onChange(ref.read(preventController).text, plantOrDisease.prevent,
-            plantOrDisease);
-      }, ref.read(preventController));
+        _onChange(
+            bigTextController.text, plantOrDisease.prevent, plantOrDisease);
+      }, bigTextController);
 
       // Create listener for cure
       createListener(() {
-        _onChange(
-            ref.read(cureController).text, plantOrDisease.cure, plantOrDisease);
-      }, ref.read(cureController));
+        _onChange(cureController.text, plantOrDisease.cure, plantOrDisease);
+      }, cureController);
     }
   }
 
@@ -157,18 +135,19 @@ class LexicaList extends ConsumerState<LexicaListState> {
 
   void deleteListeners() {
     if (plantOrDisease is Plant) {
-      for (TextEditingController controller in ref.read(diseasesController)) {
+      for (TextEditingController controller in diseasesController) {
         deleteListener(controller);
       }
-
-      for (TextEditingController controller in ref.read(tipsController)) {
+      diseasesController.clear();
+      for (TextEditingController controller in tipsController) {
         deleteListener(controller);
       }
+      tipsController.clear();
     } else if (plantOrDisease is Disease) {
-      deleteListener(ref.read(cureController));
-      deleteListener(ref.read(preventController));
+      deleteListener(cureController);
+      deleteListener(preventController);
     }
-    deleteListener(ref.read(bigTextController));
+    deleteListener(bigTextController);
     deleteListener(ref.read(nameController));
   }
 
@@ -231,7 +210,7 @@ class LexicaList extends ConsumerState<LexicaListState> {
       final plants = lexica.plants;
       final plant = plants[ref.watch(targetID)];
       // Reset how to controller
-      ref.read(bigTextController.notifier).state.text = plant.howTo;
+      bigTextController.text = plant.howTo;
 
       finalWidget = Row(children: [
         //---------- PLANT LIST ----------
@@ -276,7 +255,7 @@ class LexicaList extends ConsumerState<LexicaListState> {
                       TextFormField(
                         decoration:
                             const InputDecoration(border: InputBorder.none),
-                        controller: ref.watch(bigTextController),
+                        controller: bigTextController,
                         textAlign: TextAlign.start,
                         maxLines: null,
                         style: textStyle,
@@ -301,7 +280,7 @@ class LexicaList extends ConsumerState<LexicaListState> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           for (int tipsIndex = 0;
-                              tipsIndex < ref.watch(tipsController).length;
+                              tipsIndex < tipsController.length;
                               tipsIndex++)
                             Wrap(
                               alignment: WrapAlignment.start,
@@ -314,18 +293,16 @@ class LexicaList extends ConsumerState<LexicaListState> {
                                     maxLines: null,
                                     decoration: const InputDecoration(
                                         border: InputBorder.none),
-                                    controller:
-                                        ref.watch(tipsController)[tipsIndex],
+                                    controller: tipsController[tipsIndex],
                                     textAlign: TextAlign.start,
                                     style: textStyle,
                                   ),
                                 ),
                                 IconButton(
                                   onPressed: () {
-                                    ref
-                                        .read(tipsController.notifier)
-                                        .state
-                                        .removeAt(tipsIndex);
+                                    listeners.removeAt(tipsIndex +
+                                        2); // +2 since there is the name and howTo before
+                                    tipsController.removeAt(tipsIndex);
                                     plant.tips.removeAt(tipsIndex);
                                     ref.watch(rebuildTriggerProvider).update();
                                   },
@@ -339,12 +316,17 @@ class LexicaList extends ConsumerState<LexicaListState> {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  ref
-                                      .read(tipsController.notifier)
-                                      .state
-                                      .add(TextEditingController());
-                                  plant.tips.add("new tip");
-                                  ref.watch(rebuildTriggerProvider).update();
+                                  setState(() {
+                                    plant.tips.add("new tip");
+                                    tipsController.add(TextEditingController(
+                                        text:
+                                            "${plant.tips.length}- ${plant.tips.last}"));
+                                    createListener(() {
+                                      _onChange(tipsController.last.text,
+                                          plantOrDisease.name, plantOrDisease);
+                                    }, tipsController.last);
+                                    ref.watch(rebuildTriggerProvider).update();
+                                  });
                                 },
                                 icon: const Icon(Icons.add_circle_outline),
                                 iconSize: mediaQuery.width * 0.02,
@@ -379,10 +361,11 @@ class LexicaList extends ConsumerState<LexicaListState> {
                                   padding: EdgeInsets.only(
                                       top: mediaQuery.width * 0.005),
                                   onPressed: () {
-                                    ref
-                                        .read(diseasesController.notifier)
-                                        .state
-                                        .removeAt(diseaseIndex);
+                                    listeners.removeAt(diseaseIndex +
+                                        2 +
+                                        tipsController
+                                            .length); // +2 and tips's length as it is the last items
+                                    diseasesController.removeAt(diseaseIndex);
                                     plant.diseases.removeAt(diseaseIndex);
                                     ref.watch(rebuildTriggerProvider).update();
                                   },
@@ -396,8 +379,8 @@ class LexicaList extends ConsumerState<LexicaListState> {
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
                                     ),
-                                    controller: ref.watch(
-                                        diseasesController)[diseaseIndex],
+                                    controller:
+                                        diseasesController[diseaseIndex],
                                     textAlign: TextAlign.start,
                                     style: textStyle,
                                   ),
@@ -421,13 +404,17 @@ class LexicaList extends ConsumerState<LexicaListState> {
                         ),
                       IconButton(
                         onPressed: () {
-                          ref
-                              .read(diseasesController.notifier)
-                              .state
-                              .add(TextEditingController());
-                          plant.diseases.add(PlantDisease(
-                              name: "NewDisease", image: "placeholder"));
-                          ref.watch(rebuildTriggerProvider).update();
+                          setState(() {
+                            plant.diseases.add(PlantDisease(
+                                name: "NewDisease", image: "placeholder"));
+                            ref.watch(rebuildTriggerProvider).update();
+                            diseasesController.add(TextEditingController(
+                                text: plant.diseases.last.name));
+                            createListener(() {
+                              _onChange(diseasesController.last.text,
+                                  plantOrDisease.name, plantOrDisease);
+                            }, diseasesController.last);
+                          });
                         },
                         icon: const Icon(Icons.add_circle_outline_rounded),
                         iconSize: mediaQuery.width * 0.05,
@@ -447,13 +434,13 @@ class LexicaList extends ConsumerState<LexicaListState> {
       final disease = diseases[ref.watch(targetID)];
 
       // Reset description controller
-      ref.read(bigTextController.notifier).state.text = disease.description;
+      bigTextController.text = disease.description;
 
       // Reset prevent controller
-      ref.read(preventController.notifier).state.text = disease.prevent;
+      preventController.text = disease.prevent;
 
       // Reset cure controller
-      ref.read(cureController.notifier).state.text = disease.cure;
+      cureController.text = disease.cure;
 
       finalWidget = Row(children: [
         //---------- PLANT LIST ----------
@@ -515,7 +502,7 @@ class LexicaList extends ConsumerState<LexicaListState> {
                     TextFormField(
                       decoration:
                           const InputDecoration(border: InputBorder.none),
-                      controller: ref.watch(bigTextController),
+                      controller: bigTextController,
                       textAlign: TextAlign.start,
                       style: textStyle,
                       maxLines: null,
@@ -536,7 +523,7 @@ class LexicaList extends ConsumerState<LexicaListState> {
                     TextFormField(
                       decoration:
                           const InputDecoration(border: InputBorder.none),
-                      controller: ref.watch(preventController),
+                      controller: preventController,
                       textAlign: TextAlign.start,
                       style: textStyle,
                       maxLines: null,
@@ -557,7 +544,7 @@ class LexicaList extends ConsumerState<LexicaListState> {
                     TextFormField(
                       decoration:
                           const InputDecoration(border: InputBorder.none),
-                      controller: ref.watch(cureController),
+                      controller: cureController,
                       textAlign: TextAlign.start,
                       style: textStyle,
                       maxLines: null,
