@@ -1,0 +1,72 @@
+{
+  "auth": {
+    "OlafAdminResource": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OPTIONAL",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_storage_olafadmin12fc2319_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "olafadmin12fc2319"
+        }
+      ]
+    },
+    "AMPLIFY_storage_olafadmin12fc2319_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "olafadmin12fc2319"
+        }
+      ]
+    },
+    "AMPLIFY_storage_olafadmin4d262422_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "olafadmin4d262422"
+        }
+      ]
+    },
+    "AMPLIFY_storage_olafadmin4d262422_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "olafadmin4d262422"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "olafadmin4d262422": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "serviceType": "imported"
+    }
+  }
+}

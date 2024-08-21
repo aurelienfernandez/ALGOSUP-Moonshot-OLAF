@@ -1,0 +1,30 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-olafadmin-dev-6750c-authRole",
+      "UnauthRoleArn": "arn:aws:iam::905418080111:role/amplify-olafadmin-dev-6750c-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::905418080111:role/amplify-olafadmin-dev-6750c-authRole",
+      "Region": "eu-west-3",
+      "DeploymentBucketName": "amplify-olafadmin-dev-6750c-deployment",
+      "UnauthRoleName": "amplify-olafadmin-dev-6750c-unauthRole",
+      "StackName": "amplify-olafadmin-dev-6750c",
+      "StackId": "arn:aws:cloudformation:eu-west-3:905418080111:stack/amplify-olafadmin-dev-6750c/a5987150-5ba4-11ef-a390-06432e12b469",
+      "AmplifyAppId": "dtjlk5eshtqdw"
+    },
+    "categories": {
+      "storage": {
+        "olafadmin12fc2319": {
+          "bucketName": "lexica-update",
+          "region": "eu-west-3"
+        },
+        "olafadmin4d262422": {
+          "bucketName": "olaf-update",
+          "region": "eu-west-3"
+        }
+      },
+      "auth": {
+        "OlafAdminResource": {}
+      }
+    }
+  }
+}
