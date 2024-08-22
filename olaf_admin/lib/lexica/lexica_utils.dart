@@ -33,7 +33,7 @@ class NameList extends ConsumerWidget {
                 onPressed: () {
                   ref.read(checkUserInputProvider.notifier).state=false;
                   ref.read(targetID.notifier).state = i;
-                  ref.read(nameController.notifier).state.text =
+                  nameController.text =
                       plantOrDisease[i].name;
                   ref.read(checkUserInputProvider.notifier).state=true;
                 },
@@ -58,8 +58,8 @@ class Name extends ConsumerWidget {
   const Name({super.key, required this.plantOrDisease});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (ref.read(nameController).text == "") {
-      ref.read(nameController.notifier).state.text =
+    if (nameController.text == "") {
+      nameController.text =
           plantOrDisease[ref.read(targetID)].name;
     }
     final mediaQuery = MediaQuery.sizeOf(context);
@@ -75,7 +75,7 @@ class Name extends ConsumerWidget {
           ),
           TextFormField(
             decoration: const InputDecoration(border: InputBorder.none),
-            controller: ref.watch(nameController),
+            controller: nameController,
             textAlign: TextAlign.start,
             style: textStyle,
           ),

@@ -10,9 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 //----------------- ID -----------------
 final targetID = StateProvider<int>((ref) => 0);
 
-//---------------- NAME ----------------
-final nameController =
-    StateProvider<TextEditingController>((ref) => TextEditingController());
+final nameController = TextEditingController();
 
 //-------------- REBUILD ---------------
 final rebuildTriggerProvider = ChangeNotifierProvider<Notifier>((ref) {
@@ -69,8 +67,8 @@ class LexicaList extends ConsumerState<LexicaListState> {
     // Create a listener for the name of the plant/disease
     createListener(() {
       _onChange(
-          ref.read(nameController).text, plantOrDisease.name, plantOrDisease);
-    }, ref.read(nameController));
+          nameController.text, plantOrDisease.name, plantOrDisease);
+    }, nameController);
 
     // If it is a plant, create listeners for: how to, tips, and diseases
     if (plantOrDisease is Plant) {
@@ -148,7 +146,7 @@ class LexicaList extends ConsumerState<LexicaListState> {
       deleteListener(preventController);
     }
     deleteListener(bigTextController);
-    deleteListener(ref.read(nameController));
+    deleteListener(nameController);
   }
 
   void deleteListener(TextEditingController controller) {
@@ -159,7 +157,7 @@ class LexicaList extends ConsumerState<LexicaListState> {
   void _onChange(
       String changeString, String originalString, dynamic plantOrDisease) {
     // If the action has not been performed by the user, cancel the changes
-    if (ref.read(checkUserInputProvider) == false) {
+    if ( ref.read(checkUserInputProvider) == false) {
       return;
     }
     if (plantOrDisease is Plant) {
