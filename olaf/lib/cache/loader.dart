@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:aws_dynamodb_api/dynamodb-2012-08-10.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:olaf/cache/shared_preferences%20.dart';
 import 'package:olaf/classes.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -17,10 +19,9 @@ Future<DynamoDB> initializeDynamoDB() async {
   final dynamoDb = DynamoDB(
     region: 'eu-west-3',
     credentials: AwsClientCredentials(
-      accessKey: awsCredentials.value.accessKeyId, 
-      secretKey: awsCredentials.value.secretAccessKey, 
-      sessionToken: awsCredentials.value.sessionToken
-    ),
+        accessKey: awsCredentials.value.accessKeyId,
+        secretKey: awsCredentials.value.secretAccessKey,
+        sessionToken: awsCredentials.value.sessionToken),
   );
   return dynamoDb;
 }
@@ -102,22 +103,12 @@ Future<Lexica> getLexica(DynamoDB dynamoDb) async {
       }
     }
   } catch (e) {
-    throw('Error while retrieving the lexica: $e');
+    throw ('Error while retrieving the lexica: $e');
   }
   return Lexica(plants: plants, diseases: diseases);
 }
 
-Future<bool> requestPermission(Permission permission) async {
-  if (await permission.isGranted) {
-    return true;
-  } else {
-    var result = await permission.request();
-    if (result == PermissionStatus.granted) {
-      return true;
-    }
-  }
-  return false;
-}
+
 
 Future<String> GetProfilePicture(AuthUser user) async {
   final directory = await getApplicationDocumentsDirectory();
@@ -125,7 +116,7 @@ Future<String> GetProfilePicture(AuthUser user) async {
 
   final downloadResult = await Amplify.Storage.downloadFile(
           path: StoragePath.fromString(
-              "uploads/${user.userId}/profile-picture/${user.userId}.png"),
+              "users/${user.userId}/profile-picture/${user.userId}.png"),
           localFile: AWSFile.fromPath(filepath))
       .result;
 
@@ -151,11 +142,9 @@ Future<User> getUser() async {
   } catch (e) {
     throw ('Failed to fetch user attributes: $e');
   }
-  var permission = requestPermission(Permission.storage);
   final user = await Amplify.Auth.getCurrentUser();
   late dynamic picture;
-  if (attributeMap[AuthUserAttributeKey.picture.key] == null ||
-      permission == false) {
+  if (attributeMap[AuthUserAttributeKey.picture.key] == null) {
     picture = "assets/images/no-image.png";
   } else {
     picture = await GetProfilePicture(user);

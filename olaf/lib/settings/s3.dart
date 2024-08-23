@@ -74,7 +74,7 @@ void changePicture(File image) async {
         localFile: AWSFile.fromStream(newFile, size: fileSize),
         options: options,
         path: StoragePath.fromString(
-          'uploads/${user.userId}/profile-picture/${user.userId}.png',
+          'users/${user.userId}/profile-picture/${user.userId}.png',
         ));
   } catch (e) {
     debugPrint('Upload failed: $e');

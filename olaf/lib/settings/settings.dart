@@ -289,7 +289,7 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                                     final user =
                                         await Amplify.Auth.getCurrentUser();
                                     final pictureURL =
-                                        "https://olaf-user14bdc-dev.s3.eu-west-3.amazonaws.com/uploads/${user.userId}/profile-picture/${user.userId}.png";
+                                        "https://olaf-user14bdc-dev.s3.eu-west-3.amazonaws.com/users/${user.userId}/profile-picture/${user.userId}.png";
 
                                     await Amplify.Auth.updateUserAttribute(
                                       userAttributeKey:
