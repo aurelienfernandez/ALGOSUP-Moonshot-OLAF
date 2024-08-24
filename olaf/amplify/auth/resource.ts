@@ -18,12 +18,14 @@ export const auth = defineAuth({
   },
 });
 export const storage = defineStorage({
-  name: 'olaf-user14bdc-dev',
+  name: 'olaf-s3',
   access: (allow) => ({
     '*': [
+      allow.authenticated.to(['get']),
       allow.authenticated.to(['read']),
       allow.authenticated.to(['write']),
-      allow.authenticated.to(['delete']) 
+      allow.authenticated.to(['delete']),
+      allow.authenticated.to(['list']) 
     ]
   })
 });

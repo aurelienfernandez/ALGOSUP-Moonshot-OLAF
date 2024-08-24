@@ -18,9 +18,21 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+import 'package:olaf/settings/save_settings.dart';
 
 //---------------------- PROVIDERS ----------------------
-final localeProvider = StateProvider<Locale>((ref) => Locale('en'));
+final languageProvider = FutureProvider<String>((ref) async {
+  return await getLanguage();
+});
+final localeProvider = StateProvider<Locale>((ref) {
+  final asyncLanguage = ref.watch(languageProvider);
+
+  return asyncLanguage.when(
+    data: (language) => Locale(language),
+    loading: () => Locale('en'),
+    error: (error, stack) => Locale('en'),
+  );
+});
 
 final themeChangerProvider = ChangeNotifierProvider<ThemeChanger>((ref) {
   return ThemeChanger(authTheme);
@@ -55,6 +67,7 @@ Future<void> loadAllData() async {
     print("Error: couldn't load data");
     print(error);
   }
+
   await GetCachedData();
 }
 
@@ -98,7 +111,6 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeProvider);
-
     return FutureBuilder<void>(
       future: loadAllData(),
       builder: (context, snapshot) {

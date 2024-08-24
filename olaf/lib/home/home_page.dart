@@ -1,11 +1,12 @@
 //------------------------- PAGES -------------------------
 import 'dart:io';
 
+import 'package:olaf/camera/analyze_page.dart';
 import 'package:olaf/main.dart';
+import 'package:olaf/settings/save_settings.dart';
 import 'package:olaf/settings/settings.dart';
 import 'package:olaf/plants/plant_page.dart';
 import 'package:olaf/lexica/lexica_page.dart';
-import 'package:olaf/camera/camera.dart';
 //------------------------ FLUTTER ------------------------
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -36,7 +37,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     HomeScreen(),
     PlantPage(),
     LexicaPage(),
+    AnalyzePage()
   ];
+
 
   Timer? _authCheckTimer;
   void _startAuthCheckTimer() {
@@ -61,7 +64,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   void pageAnimation(int index) {
     // Push the setting route when the setting button is pressed
-    if (index == 3) {
+    if (index == 4) {
       Navigator.push(context, SlideToSettings(page: SettingsPage()))
           .then((value) => setState(() {}));
     } else if (index != ref.read(pageIndex)) {
@@ -75,10 +78,14 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.sizeOf(context);
-    if (!cacheData.isInitialized()) {
+    while (!cacheData.isInitialized()) {
       return Center(child: CircularProgressIndicator());
     }
+
     return Scaffold(
+      backgroundColor: ref.read(pageIndex) != 3
+          ? theme.colorScheme.background
+          : Colors.white,
       //---------- TITLE ----------
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -103,7 +110,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             padding: EdgeInsets.only(
                 top: mediaQuery.height * 0.01, right: mediaQuery.height * 0.01),
             onPressed: () {
-              pageAnimation(3);
+              pageAnimation(4);
             },
           ),
         ],
@@ -115,6 +122,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         physics: ScrollPhysics(),
         controller: ref.watch(_pageController),
         children: _tabs,
+        onPageChanged: ((newIndex) =>
+            {ref.read(pageIndex.notifier).state = newIndex}),
       ),
 
       //---------- NAVBAR ----------
@@ -127,6 +136,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: SizedBox(
           height: mediaQuery.height * 0.09,
           child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             //---- STYLE ----
             selectedLabelStyle: TextStyle(fontSize: 0),
             unselectedLabelStyle: TextStyle(fontSize: 0),
@@ -169,6 +179,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
                 label: AppLocalizations.of(context).translate('lexica'),
               ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  "assets/images/analyze.png",
+                  width: ref.watch(pageIndex) == 3
+                      ? mediaQuery.height * 0.07
+                      : mediaQuery.height * 0.05,
+                ),
+                label: "analyse",
+              ),
             ],
           ),
         ),
@@ -190,7 +209,6 @@ class HomeScreen extends ConsumerWidget {
             children: [Status(), Gardens()],
           ),
         ),
-        Analyse()
       ]),
     ));
   }
@@ -455,30 +473,5 @@ class PlantCard extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class Analyse extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final mediaQuery = MediaQuery.sizeOf(context);
-    return Positioned(
-        top: mediaQuery.height * 0.63,
-        left: mediaQuery.width * 0.83,
-        child: IconButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CameraScreen(
-                          cameras: ref.read(CamerasProvider),
-                        )));
-          },
-          icon: Icon(
-            Icons.search,
-            size: mediaQuery.width * 0.15,
-          ),
-          color: Colors.green.shade900,
-        ));
   }
 }

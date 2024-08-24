@@ -1,13 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:aws_dynamodb_api/dynamodb-2012-08-10.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:olaf/cache/shared_preferences%20.dart';
 import 'package:olaf/classes.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<DynamoDB> initializeDynamoDB() async {
@@ -108,12 +106,9 @@ Future<Lexica> getLexica(DynamoDB dynamoDb) async {
   return Lexica(plants: plants, diseases: diseases);
 }
 
-
-
 Future<String> GetProfilePicture(AuthUser user) async {
   final directory = await getApplicationDocumentsDirectory();
   final filepath = '${directory.path}/${user.userId}.png';
-
   final downloadResult = await Amplify.Storage.downloadFile(
           path: StoragePath.fromString(
               "users/${user.userId}/profile-picture/${user.userId}.png"),
@@ -147,7 +142,11 @@ Future<User> getUser() async {
   if (attributeMap[AuthUserAttributeKey.picture.key] == null) {
     picture = "assets/images/no-image.png";
   } else {
-    picture = await GetProfilePicture(user);
+    try {
+      picture = await GetProfilePicture(user);
+    } catch (e) {
+      picture = "assets/images/no-image.png";
+    }
   }
 
   return User(
@@ -156,14 +155,50 @@ Future<User> getUser() async {
       email: attributeMap[AuthUserAttributeKey.email.key]!);
 }
 
+Future<List<analyzedImages>> getImages() async {
+  final user = await Amplify.Auth.getCurrentUser();
+
+  try {
+    var path = StoragePath.fromString("users/${user.userId}/analyzed/");
+    final results = await Amplify.Storage.list(path: path).result;
+
+    List<analyzedImages> images = [];
+    final directory = await getApplicationDocumentsDirectory();
+    for (var item in results.items) {
+      path = StoragePath.fromString(item.path);
+      final itemName = "${item.path.split(RegExp(r'/')).last}";
+      // Step 2: Retrieve the object and its metadata
+      await Amplify.Storage.downloadFile(
+              path: path,
+              localFile: AWSFile.fromPath('${directory.path}/$itemName'))
+          .result;
+
+      final newfile = File('${directory.path}/$itemName');
+
+      final fileString = await newfile.readAsString();
+
+      final Map<String, dynamic> jsonData = jsonDecode(fileString);
+      images.add(analyzedImages.fromJson(jsonData, itemName));
+
+      // Step 5: Delete the file from local storage
+      await File(newfile.path.toString()).delete();
+    }
+    return images;
+  } on StorageException catch (e) {
+    print(e);
+  }
+  return [];
+}
+
 List<Plant> getSavedPlants() {
   return [];
 }
 
 Future<void> AWStoCache(DynamoDB dynamoDb) async {
-  User user = await getUser();
+  Future<User> user = getUser();
+  Future<List<analyzedImages>> images = getImages();
   List<Plant> plants = getSavedPlants();
-  Lexica lexica = await getLexica(dynamoDb);
+  Future<Lexica> lexica = getLexica(dynamoDb);
   // Ensure to await saveData to complete
-  await saveData(user, plants, lexica);
+  await saveData(await user, plants, await images, await lexica);
 }

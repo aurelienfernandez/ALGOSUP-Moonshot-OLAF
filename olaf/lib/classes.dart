@@ -1,4 +1,6 @@
 //---------------------- PLANT DISEASE ---------------------
+import 'package:flutter/material.dart';
+
 class PlantDisease {
   final String name;
   final String image;
@@ -211,13 +213,13 @@ class User {
   }
 }
 
-class cacheData {
+class cacheData with ChangeNotifier{
   final User user;
   final List<Plant> savedPlants;
   final Lexica lexica;
-
+  final List<analyzedImages> images;
   cacheData._(
-      {required this.user, required this.savedPlants, required this.lexica});
+      {required this.user, required this.savedPlants, required this.lexica, required this.images});
   static cacheData? _instance;
 
   static cacheData getInstance() {
@@ -230,7 +232,8 @@ class cacheData {
   static void initialize(
       {required User user,
       required List<Plant> savedPlants,
-      required Lexica lexica}) {
+      required Lexica lexica,
+      required List<analyzedImages> images}) {
     if (_instance != null) {
       throw Exception("User already initialized.");
     }
@@ -238,10 +241,47 @@ class cacheData {
       user: user,
       savedPlants: savedPlants,
       lexica: lexica,
+      images: images
     );
   }
 
   static bool isInitialized() {
     return _instance != null;
+  }
+   void addImages(analyzedImages newImage) {
+    images.add(newImage);
+    notifyListeners();
+  }
+   void removeImage(int imageIndex) {
+    images.removeAt(imageIndex);
+    notifyListeners();
+  }
+   void updateImageStatus(String status) {
+    images.last.result=status;
+    notifyListeners();
+  }
+}
+//-------------------- ANALYZED IMAGES --------------------
+class analyzedImages{
+  final String name;
+  final String image;
+   String result;
+  analyzedImages(
+      {required this.name,required this.image, required this.result});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'image': image,
+      'result': result,
+    };
+  }
+
+  factory analyzedImages.fromJson(Map<String, dynamic> json,name) {
+    return analyzedImages(
+      name: name,
+      image: json['image'] ?? '',
+      result: json['result'] ?? '',
+    );
   }
 }

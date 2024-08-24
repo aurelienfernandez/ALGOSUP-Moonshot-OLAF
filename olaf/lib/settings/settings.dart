@@ -1,7 +1,6 @@
 //------------------- FLUTTER IMPORTS -------------------
 import 'dart:io';
 
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,8 @@ import 'package:olaf/app_localization.dart';
 import 'package:olaf/main.dart';
 import 'package:olaf/classes.dart';
 import 'package:olaf/settings/s3.dart';
+import 'package:olaf/settings/save_settings.dart';
+import 'package:path/path.dart' as p;
 
 //--------------------- SETTINGS STATE ---------------------
 class SettingsPage extends ConsumerStatefulWidget {
@@ -201,11 +202,13 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                                           }).toList();
                                         },
                                         onChanged: (String? newValue) {
+                                          saveUserSettings(
+                                              'language', p.basenameWithoutExtension(newValue!));
                                           ref
                                                   .read(localeProvider.notifier)
                                                   .state =
                                               Languages[DropDownFlags.indexOf(
-                                                  newValue!)];
+                                                  newValue)];
                                           currentFlag = newValue;
                                         },
                                       ),

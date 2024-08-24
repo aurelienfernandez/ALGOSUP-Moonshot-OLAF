@@ -36,13 +36,30 @@
           "resourceName": "OlafRessource"
         }
       ]
+    },
+    "AMPLIFY_storage_olafe39846ae_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "olafe39846ae"
+        }
+      ]
+    },
+    "AMPLIFY_storage_olafe39846ae_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "olafe39846ae"
+        }
+      ]
     }
   },
   "storage": {
-    "UserInfo": {
+    "olafe39846ae": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "service": "S3"
+      "service": "S3",
+      "serviceType": "imported"
     }
   }
 }

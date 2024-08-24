@@ -64,6 +64,7 @@ flutter:
     - assets/images/home.png
     - assets/images/plants.png
     - assets/images/lexica.png
+    - assets/images/analyze.png
     - assets//lang/en.json
     - assets/lang/fr.json
     - assets/lang/de.json

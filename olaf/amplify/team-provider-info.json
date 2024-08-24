@@ -18,7 +18,11 @@
         }
       },
       "storage": {
-        "UserInfo": {}
+        "UserInfo": {},
+        "olafe39846ae": {
+          "bucketName": "olaf-s3",
+          "region": "eu-west-3"
+        }
       }
     }
   }

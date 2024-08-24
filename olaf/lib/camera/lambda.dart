@@ -3,8 +3,9 @@ import 'dart:typed_data';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:aws_lambda_api/lambda-2015-03-31.dart';
+import 'package:olaf/classes.dart';
 
-Future<List<String>> invoke(List<int> payload) async {
+void invoke(List<int> payload) async {
   try {
     // Invoke lambda and wait for a response
     final userAttributes = await Amplify.Auth.fetchAuthSession();
@@ -28,17 +29,20 @@ Future<List<String>> invoke(List<int> payload) async {
     final message = bodyMap['message'];
 
     final String lowercasedMessage = message.toLowerCase();
-
-    // Split the string at the first underscore
-    final int underscoreIndex = lowercasedMessage.indexOf('_');
-
-    final String plant = lowercasedMessage.substring(0, underscoreIndex);
-    final String status =
-        lowercasedMessage.substring(underscoreIndex + 1).replaceAll('_', ' ');
-
-    // Return the result as a list
-    return [plant, status];
+    cacheData.getInstance().updateImageStatus(lowercasedMessage);
+    safePrint("result retrieved");
   } catch (e) {
     throw ("error: ${e}");
+  }
+}
+
+void deleteAnalyzedPicture(String name) async {
+  final user = await Amplify.Auth.getCurrentUser();
+  try {
+    await Amplify.Storage.remove(
+      path: StoragePath.fromString('users/${user.userId}/analyzed/$name'),
+    );
+  } on StorageException catch (e) {
+    safePrint(e.message);
   }
 }
