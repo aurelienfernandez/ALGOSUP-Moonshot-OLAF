@@ -234,9 +234,6 @@ class cacheData with ChangeNotifier{
       required List<Plant> savedPlants,
       required Lexica lexica,
       required List<analyzedImages> images}) {
-    if (_instance != null) {
-      throw Exception("User already initialized.");
-    }
     _instance = cacheData._(
       user: user,
       savedPlants: savedPlants,

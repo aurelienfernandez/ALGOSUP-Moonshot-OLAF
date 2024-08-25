@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:olaf/camera/analyze_page.dart';
 import 'package:olaf/main.dart';
-import 'package:olaf/settings/save_settings.dart';
 import 'package:olaf/settings/settings.dart';
 import 'package:olaf/plants/plant_page.dart';
 import 'package:olaf/lexica/lexica_page.dart';

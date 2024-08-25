@@ -16,6 +16,7 @@ class PictureList extends ConsumerStatefulWidget {
   @override
   _PictureListState createState() => _PictureListState();
 }
+
 class _PictureListState extends ConsumerState<PictureList> {
   void _onChange() {
     setState(() {});
@@ -37,7 +38,6 @@ class _PictureListState extends ConsumerState<PictureList> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.sizeOf(context);
-    print(cacheData.getInstance().images.last.result);
     return Column(
       children: [
         Container(
@@ -96,11 +96,51 @@ class _PictureListState extends ConsumerState<PictureList> {
 List<DataRow> getRows(Size mediaQuery, WidgetRef ref) {
   List<DataRow> rows = [];
   final images = cacheData.getInstance().images;
+
   if (images.length > 0) {
+    int index = 0;
     for (var image in cacheData.getInstance().images) {
-      int index = 0;
+      Widget cells = Padding(
+        padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.2),
+        child: CircularProgressIndicator(),
+      );
       if (image.result != "loading") {
         index = image.result.indexOf(" ");
+      }
+      print(image.result);
+      if (image.result != "loading") {
+        cells = Row(
+          children: [
+            Text(
+              image.result
+                  .substring(0, index)
+                  .trim()
+                  .replaceAll(RegExp(r'-'), ' '),
+              textAlign: TextAlign.center,
+            ),
+            IconButton(
+                onPressed: () {
+                  ref.read(AnalyzePicture.notifier).state = analyzedImages(
+                      name: image.name,
+                      image: image.image,
+                      result: image.result);
+                  ref.read(AnalyzeTab.notifier).state = 1;
+                },
+                icon: Icon(Icons.remove_red_eye_outlined)),
+            IconButton(
+                onPressed: () {
+                  deleteAnalyzedPicture(image.name);
+                  print(cacheData.getInstance().images.first.name);
+                  int index = 0;
+                  if (cacheData.getInstance().images.indexOf(image) != null) {
+                    index = cacheData.getInstance().images.indexOf(image);
+                  }
+                  cacheData.getInstance().images.indexOf(image);
+                  cacheData.getInstance().removeImage(index);
+                },
+                icon: Icon(Icons.close))
+          ],
+        );
       }
       rows.add(
         DataRow(
@@ -114,50 +154,44 @@ List<DataRow> getRows(Size mediaQuery, WidgetRef ref) {
                 image: MemoryImage(base64Decode(image.image)),
               ),
             )),
-            DataCell(Row(
-              children: [
-                image.result != "loading"
-                    ? Text(
-                        image.result
-                            .substring(0, index)
-                            .trim()
-                            .replaceAll(RegExp(r'-'), ' '),
-                        textAlign: TextAlign.center,
-                      )
-                    : CircularProgressIndicator(),
-                IconButton(
-                    onPressed: () {
-                      ref.read(AnalyzePicture.notifier).state = analyzedImages(
-                          name: image.name,
-                          image: image.image,
-                          result: image.result);
-                      ref.read(AnalyzeTab.notifier).state = 1;
-                    },
-                    icon: Icon(Icons.remove_red_eye_outlined)),
-                IconButton(
-                    onPressed: () {
-                      deleteAnalyzedPicture(image.name);
-                      final index =
-                          cacheData.getInstance().images.indexOf(image);
-                      cacheData.getInstance().removeImage(index);
-                    },
-                    icon: Icon(Icons.close))
-              ],
-            ))
+            DataCell(cells)
           ],
         ),
       );
     }
   } else {
+    final String text1 = "No image taken.";
+    final String text2 = "No result.";
     rows.add(
       DataRow(
         cells: [
           DataCell(
-            Text("No images taken."),
+            Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: mediaQuery.width / 3.2 - getTextWidth(text1)),
+                child: Text(
+                  text1,
+                  textAlign: TextAlign.left,
+                )),
+          ),
+          DataCell(
+            Padding(
+                padding: EdgeInsets.only(right: mediaQuery.width * 0.26),
+                child: Text(text2, textAlign: TextAlign.left)),
           )
         ],
       ),
     );
   }
   return rows;
+}
+
+double getTextWidth(String text) {
+  final TextPainter textPainter = TextPainter(
+    text: TextSpan(text: text),
+    maxLines: 1,
+    textDirection: TextDirection.ltr,
+  )..layout(minWidth: 0, maxWidth: double.infinity);
+
+  return textPainter.size.width;
 }
