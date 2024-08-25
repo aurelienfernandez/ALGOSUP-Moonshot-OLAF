@@ -76,13 +76,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   ),
                   child: IconButton(
                     onPressed: () async {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                            "The image is currently being reviewed by an AI.\nThe result will appear in the table in a few moments."),
-                        duration: Duration(seconds: 5),
-                        behavior: SnackBarBehavior
-                            .floating, // Makes the SnackBar float over the content
-                      ));
+                
                       try {
                         // Take the picture and encode it in base64
                         await _initializeControllerFuture;
@@ -100,8 +94,10 @@ class _CameraScreenState extends State<CameraScreen> {
                         cacheData.getInstance().addImages(analyzedImages(
                             name: date, image: toBase64, result: "loading"));
                         invoke(payload);
+                        Navigator.pop(context);
+                        
                       } catch (e) {
-                        debugPrint("${e}");
+                        throw(e);
                       }
                     },
                     icon: Icon(
