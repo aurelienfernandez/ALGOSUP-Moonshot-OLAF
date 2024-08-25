@@ -16,7 +16,8 @@ Last update: 21/03/2024
 
 - [Functional Specifications](#functional-specifications)
   - [1 Overview](#1-overview)
-    - [1.1 Introduction](#11-introduction)
+    - [1.1 Context](#11-context)
+    - [1.2 The idea](#12-the-idea)
     - [1.2 Project definition](#12-project-definition)
       - [1.2.1 Project scopes](#121-project-scopes)
       - [1.2.2 Personas](#122-personas)
@@ -24,7 +25,7 @@ Last update: 21/03/2024
       - [1.3 Design](#13-design)
         - [1.3.1 Colors](#131-colors)
         - [1.3.2 User path](#132-user-path)
-    - [2. Project organisation](#2-project-organisation)
+    - [2. Project organization](#2-project-organization)
       - [2.1 Project representatives](#21-project-representatives)
       - [2.2 Stakeholders](#22-stakeholders)
       - [2.2 Milestones](#22-milestones)
@@ -40,7 +41,11 @@ Last update: 21/03/2024
 
 ## 1 Overview
 
-### 1.1 Introduction
+### 1.1 Context
+
+As time passed and population grew a problem arose in cities, people had less and less time to spare. It may be because of social interactions, spending time with friends or colleagues 
+
+### 1.2 The idea
 
 This Project is OLAF, which stands for OnLine Automated Farm. As the name suggests, it is an automated farm or more precisely an automated plant pot linked to a mobile app to take care of plants automatically. The app will display in real time the multiple data collected by the planter. The main aspect of the project is that both the planter and the app will be able to take images of the plant's leaves to detect if a disease is currently degrading the plant.
 
@@ -72,7 +77,7 @@ This Project is OLAF, which stands for OnLine Automated Farm. As the name sugges
 
 | **Nice to have**                                                                                    |
 | --------------------------------------------------------------------------------------------------- |
-| A solar panel to allow the pot to be placed outside and operate indepentantly                       |
+| A solar panel to allow the pot to be placed outside and operate independently                       |
 | A moving camera, as it would increase the probability to detect an infection if a plant is infected |
 | The app is translated in other languages                                                            |
 
@@ -89,8 +94,8 @@ This Project is OLAF, which stands for OnLine Automated Farm. As the name sugges
 | 1           | Search infection with app         | The mobile app is using the user's camera to search an infection on an healthy plant | The user allowed camera's access to the mobile app and is connected to an account  | The user opens the app and takes a picture of a leaf with it                                                                                                                                               | A text box appears to declare if a disease has been found and if it is the case which one                | The "return" button is pressed         |
 | 2           | Add a plant pot to the account    | The user wants to add a plant pot to their account                                   | The user is connected, physically possess a plant pot  and allowed camera's access | The user opens the app and click on the add button in the home page which opens the camera. Finally the user scans the plant pot's QR code                                                                 | A text box appears to identify which plant is supposed to be planted in it and the name of the pot       | The "ok' button is pressed             |
 | 3           | Remove a plant pot to the account | The user wants to remove a plant pot to their account                                | The user is connected and physically possess a plant pot                           | The user opens the app and opens the "plant status" page, then the user presses the "remove" button. Finally a text box appear to ask the user if they are sure of their choice and the user presses "yes" | The plant pot is removed from the account                                                                | The user is sent back to the home page |
-| 4           | Learn about a plant               | The user wants to learn about a plant                                                | The user is connected to an account                                                | The user opens the app and opens the "lexica" page, then the user searches for which plant they wish to learn about                                                                                        | A text box appears explaining what is the plant, in which environment is should live and other advices   | The "return" button is pressed         |
-| 4           | Learn about a disease             | The user wants to learn about a disease                                              | The user is connected to an account                                                | The user opens the app and opens the "lexica" page, then the user searches for which disease they wish to learn about                                                                                      | A text box appears explaining what is the disease, in which environment is should live and other advices | The "return" button is pressed         |
+| 4           | Learn about a plant               | The user wants to learn about a plant                                                | The user is connected to an account                                                | The user opens the app and opens the "lexicon" page, then the user searches for which plant they wish to learn about                                                                                        | A text box appears explaining what is the plant, in which environment is should live and other advices   | The "return" button is pressed         |
+| 4           | Learn about a disease             | The user wants to learn about a disease                                              | The user is connected to an account                                                | The user opens the app and opens the "lexicon" page, then the user searches for which disease they wish to learn about                                                                                      | A text box appears explaining what is the disease, in which environment is should live and other advices | The "return" button is pressed         |
                                                            
 
 #### 1.3 Design
@@ -152,19 +157,19 @@ Then, there is the "plant's status" page, which displays the status and informat
  <img src="./Images/Plants6.png" width="300px">
 </div>
 
-The third page is the lexica, which allows users to learn about plants and the diseases related to each plant. It shows users images of the disease and how to prevent/cure a disease.
+The third page is the lexicon, which allows users to learn about plants and the diseases related to each plant. It shows users images of the disease and how to prevent/cure a disease.
 
 <div align="center">
 
- <img src="./Images/Lexica1.png" width="300px">
+ <img src="./Images/lexicon1.png" width="300px">
  <br>
- <img src="./Images/Lexica2.png" width="300px">
+ <img src="./Images/lexicon2.png" width="300px">
  <br>
- <img src="./Images/Lexica3.png" width="300px">
+ <img src="./Images/lexicon3.png" width="300px">
  <br>
- <img src="./Images/Lexica4.png" width="300px">
+ <img src="./Images/lexicon4.png" width="300px">
  <br>
- <img src="./Images/Lexica5.png" width="300px">
+ <img src="./Images/lexicon5.png" width="300px">
 </div>
 
 Finally, there is the settings page, with multiple settings such as account management, language, the color themes for blindness and other pages about confidentiality, terms of use and licenses.
@@ -172,7 +177,7 @@ Finally, there is the settings page, with multiple settings such as account mana
  <img src="./Images/Settings.png" width="300px">
 </div>
 
-### 2. Project organisation
+### 2. Project organization
 
 #### 2.1 Project representatives
 
@@ -228,7 +233,7 @@ As the only representative of this project, I do not have any limitations regard
 | The phone of the users are able to download and run mobile apps                                                                                           |
 | Users are able and will react in case of a plant infection                                                                                                |
 | The number of hours on the project is 5 hours per week days in average and 12 hours in weekend in average, giving a total of 17 hours per week in average |
-| The images analysed by the AI are only images of plants which leaves can be analysed by the AI                                                            |
+| The images analyzed by the AI are only images of plants which leaves can be analyzed by the AI                                                            |
 
 | Constraints                                                                                       |
 | ------------------------------------------------------------------------------------------------- |
