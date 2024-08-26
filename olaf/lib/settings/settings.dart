@@ -25,7 +25,7 @@ class SettingsPage extends ConsumerStatefulWidget {
 //---------------------- SETTINGS TAB ----------------------
 class _SettingsState extends ConsumerState<SettingsPage> {
   final DropDownFlags = [
-    'assets/images/uk.png',
+    'assets/images/en.png',
     'assets/images/fr.png',
     'assets/images/de.png',
   ];
@@ -34,7 +34,7 @@ class _SettingsState extends ConsumerState<SettingsPage> {
     const Locale('fr'),
     const Locale('de'),
   ];
-  String currentFlag = "assets/uk.png";
+  String currentFlag = "assets/images/en.png";
 
   bool newImage = false;
   XFile? imageFile;
@@ -43,8 +43,8 @@ class _SettingsState extends ConsumerState<SettingsPage> {
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!
         .copyWith(color: theme.colorScheme.onPrimary, fontSize: 25);
-    // Get current language and apply the corresponding flag to currentFlag
     final mediaQuery = MediaQuery.sizeOf(context);
+    // Get current language and apply the corresponding flag to currentFlag
     currentFlag = DropDownFlags[Languages.indexOf(ref.read(localeProvider))];
 
     return Scaffold(
@@ -203,7 +203,9 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                                         },
                                         onChanged: (String? newValue) {
                                           saveUserSettings(
-                                              'language', p.basenameWithoutExtension(newValue!));
+                                              'language',
+                                              p.basenameWithoutExtension(
+                                                  newValue!));
                                           ref
                                                   .read(localeProvider.notifier)
                                                   .state =

@@ -50,7 +50,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           _authCheckTimer?.cancel();
         }
       } catch (e) {
-        print('Error checking auth status: $e');
+        throw('Error checking auth status: $e');
       }
     });
   }

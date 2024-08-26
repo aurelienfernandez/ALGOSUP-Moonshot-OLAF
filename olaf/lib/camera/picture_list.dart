@@ -107,7 +107,6 @@ List<DataRow> getRows(Size mediaQuery, WidgetRef ref) {
       if (image.result != "loading") {
         index = image.result.indexOf(" ");
       }
-      print(image.result);
       if (image.result != "loading") {
         cells = Row(
           children: [
@@ -130,7 +129,6 @@ List<DataRow> getRows(Size mediaQuery, WidgetRef ref) {
             IconButton(
                 onPressed: () {
                   deleteAnalyzedPicture(image.name);
-                  print(cacheData.getInstance().images.first.name);
                   int index = 0;
                   if (cacheData.getInstance().images.indexOf(image) != null) {
                     index = cacheData.getInstance().images.indexOf(image);

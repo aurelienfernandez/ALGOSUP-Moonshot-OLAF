@@ -62,10 +62,10 @@ Future<void> loadAllData() async {
     // Fetch data from AWS and save to cache, then retrieve cached data
     await AWStoCache(dynamoDb);
 
-    print("Data loaded successfully");
+    debugPrint("Data loaded successfully");
   } catch (error) {
-    print("Error: couldn't load data");
-    print(error);
+    debugPrint("Error: couldn't load data");
+    throw(error);
   }
 
   await GetCachedData();

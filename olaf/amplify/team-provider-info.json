@@ -25,5 +25,18 @@
         }
       }
     }
+  },
+  "olaf": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-olaf-olaf-657f5-authRole",
+      "UnauthRoleArn": "arn:aws:iam::905418080111:role/amplify-olaf-olaf-657f5-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::905418080111:role/amplify-olaf-olaf-657f5-authRole",
+      "Region": "eu-west-3",
+      "DeploymentBucketName": "amplify-olaf-olaf-657f5-deployment",
+      "UnauthRoleName": "amplify-olaf-olaf-657f5-unauthRole",
+      "StackName": "amplify-olaf-olaf-657f5",
+      "StackId": "arn:aws:cloudformation:eu-west-3:905418080111:stack/amplify-olaf-olaf-657f5/3e482290-6390-11ef-9ef2-06c7926fc2bd",
+      "AmplifyAppId": "d3nxcrqywhf4c5"
+    }
   }
 }

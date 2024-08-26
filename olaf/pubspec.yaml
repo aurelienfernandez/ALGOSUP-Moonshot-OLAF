@@ -56,7 +56,7 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   assets: 
-    - assets/images/uk.png
+    - assets/images/en.png
     - assets/images/logo.png
     - assets/images/fr.png
     - assets/images/de.png
