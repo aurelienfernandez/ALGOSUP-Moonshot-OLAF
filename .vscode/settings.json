@@ -1,0 +1,12 @@
+{
+    "grammarly.selectors": [
+        {
+            "language": "markdown",
+            "scheme": "file",
+            "pattern": "Documents/Specs/functional_specifications.md"
+        }
+    ],
+    "cSpell.words": [
+        "Publique"
+    ]
+}
