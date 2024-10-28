@@ -25,7 +25,11 @@ def analyze(model, image):
 
         # Extract the results
         result = predictions[0]
-
+        
+        # If max value is less than 80%, set state to unknown
+        if(np.max(result)<0.8):
+            return "unknown"
+        
         # Find the index of the highest number in the results
         max_index = np.argmax(result)
 

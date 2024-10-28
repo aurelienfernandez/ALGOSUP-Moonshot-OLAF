@@ -8,7 +8,6 @@ table = dynamodb.Table("olaf-lexica")
 
 # Get item based on the name and the version number
 
-
 def getItem(name):
     response = table.query(
         KeyConditionExpression=boto3.dynamodb.conditions.Key('name').eq(name),

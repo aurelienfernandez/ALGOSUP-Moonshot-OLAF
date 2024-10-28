@@ -1,6 +1,7 @@
 //------------------------- PAGES -------------------------
 import 'dart:io';
 
+import 'package:olaf/cache/loader.dart';
 import 'package:olaf/camera/analyze_page.dart';
 import 'package:olaf/main.dart';
 import 'package:olaf/settings/settings.dart';
@@ -26,6 +27,7 @@ final _pageController =
 
 //---------------- HOMEPAGE INITIALIZATION ----------------
 class HomePage extends ConsumerStatefulWidget {
+  
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -77,8 +79,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.sizeOf(context);
-    while (!cacheData.isInitialized()) {
-      return Center(child: CircularProgressIndicator());
+    if (!cacheData.isInitialized()) {
+     ()async { await loadAllData();};
     }
 
     return Scaffold(

@@ -9,6 +9,33 @@ import 'package:olaf/cache/shared_preferences%20.dart';
 import 'package:olaf/classes.dart';
 import 'package:path_provider/path_provider.dart';
 
+
+
+Future<void> loadAllData() async {
+  // Check if user is connected
+  try {
+    await Amplify.Auth.getCurrentUser();
+  } on AuthException {
+    return;
+  }
+  try {
+    // Initialize AWS DynamoDB and login sequentially
+    final dynamoDb = await initializeDynamoDB();
+
+    // Fetch data from AWS and save to cache, then retrieve cached data
+    await AWStoCache(dynamoDb);
+
+    debugPrint("Data loaded successfully");
+  } catch (error) {
+    debugPrint("Error: couldn't load data");
+    throw (error);
+  }
+
+  await GetCachedData();
+  return;
+}
+
+
 Future<DynamoDB> initializeDynamoDB() async {
   final userAttributes = await Amplify.Auth.fetchAuthSession();
   final cognitoSession = userAttributes as CognitoAuthSession;
