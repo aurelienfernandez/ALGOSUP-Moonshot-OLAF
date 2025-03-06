@@ -1,6 +1,6 @@
 //------------------- CUSTOM IMPORTS --------------------
 import 'package:olaf/app_localization.dart';
-import 'package:olaf/home/home_page.dart';
+import 'package:olaf/LayoutManager.dart';
 import 'package:olaf/main.dart';
 
 //------------------- FLUTTER IMPORTS -------------------
@@ -15,6 +15,13 @@ class connectionState extends ConsumerStatefulWidget {
   @override
   _connectionPage createState() => _connectionPage();
 }
+final ThemeData theme = ThemeData(
+  colorScheme: ColorScheme.light(
+    primary: Color.fromRGBO(116,193,79,1.0),
+    background: Color.fromRGBO(247, 247, 247, 1.0),
+    secondary: Color.fromRGBO(83, 205, 66, 0.25),
+  ),
+);
 
 class _connectionPage extends ConsumerState<connectionState> {
   @override
@@ -23,7 +30,6 @@ class _connectionPage extends ConsumerState<connectionState> {
     return Authenticator(
       child: Consumer(
         builder: (context, ref, child) {
-          final theme = ref.watch(themeChangerProvider).getTheme;
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             builder: Authenticator.builder(),
@@ -41,7 +47,7 @@ class _connectionPage extends ConsumerState<connectionState> {
             ],
             title: 'OLAF',
             theme: theme,
-            home: HomePage(),
+            home: LayoutManager(),
           );
         },
       ),

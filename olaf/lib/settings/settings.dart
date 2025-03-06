@@ -369,9 +369,6 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                                 //--------- SIGN OUT --------
                                 ElevatedButton(
                                   onPressed: () {
-                                    ref
-                                        .read(themeChangerProvider.notifier)
-                                        .setTheme(authTheme);
                                     Amplify.Auth.signOut();
                                   },
                                   child: Text(
@@ -470,11 +467,7 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                                                                         Colors
                                                                             .red)),
                                                             onPressed: () {
-                                                              ref
-                                                                  .read(themeChangerProvider
-                                                                      .notifier)
-                                                                  .setTheme(
-                                                                      authTheme);
+                                                              
                                                               Amplify.Auth
                                                                   .deleteUser();
                                                             },

@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:marquee/marquee.dart';
 import 'package:olaf/app_localization.dart';
 import 'package:olaf/classes.dart';
 import 'package:olaf/lexica/lexica_page.dart';
@@ -301,45 +300,19 @@ class DiseaseButton extends ConsumerWidget {
     final textWidth = textPainter.width;
 
     Widget textWidget;
-    if (textWidth > mediaQuery.width * 0.4) {
-      textWidget = Align(
-        alignment:
-            Alignment.centerRight, // Aligns the Marquee widget to the right
-        child: SizedBox(
-          width: mediaQuery.width * 0.4,
-          child:
-              // Use Marquee if text exceeds available width
-              Marquee(
-            text: name,
-            style: style,
-            scrollAxis: Axis.horizontal,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            blankSpace: mediaQuery.width * 0.3,
-            velocity: 30.0,
-            pauseAfterRound: Duration(seconds: 1),
-            startPadding: 5.0,
-            accelerationDuration: Duration(seconds: 1),
-            accelerationCurve: Curves.linear,
-            decelerationDuration: Duration(milliseconds: 500),
-            decelerationCurve: Curves.easeOut,
-          ),
-        ),
-      );
-    } else {
-      // Use AutoSizeText if text fits within available width
-      textWidget = Positioned.fill(
-          child: Align(
-              alignment: Alignment.center,
-              child: AutoSizeText(
-                textAlign: TextAlign.center,
-                name,
-                style: style,
-                maxLines: 1,
-                maxFontSize: 20,
-                minFontSize: 20,
-                overflow: TextOverflow.ellipsis,
-              )));
-    }
+    // Use AutoSizeText if text fits within available width
+    textWidget = Positioned.fill(
+        child: Align(
+            alignment: Alignment.center,
+            child: AutoSizeText(
+              textAlign: TextAlign.center,
+              name,
+              style: style,
+              maxLines: 1,
+              maxFontSize: 20,
+              minFontSize: 20,
+              overflow: TextOverflow.ellipsis,
+            )));
 
     return Card(
       color: theme.colorScheme.secondary,

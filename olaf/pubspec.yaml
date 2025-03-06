@@ -11,7 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
   auto_size_text: ^3.0.0
-  marquee: ^2.0.4
   fading_edge_scrollview: ^3.0.0
   flutter_riverpod: ^2.0.0
   flutter_localizations:
@@ -55,8 +54,8 @@ flutter:
     - assets/images/home.png
     - assets/images/plants.png
     - assets/images/lexica.png
-    - assets/images/analyze.png
     - assets/images/blank_bg.png
+    - assets/images/settings.png
     - assets//lang/en.json
     - assets/lang/fr.json
     - assets/lang/de.json

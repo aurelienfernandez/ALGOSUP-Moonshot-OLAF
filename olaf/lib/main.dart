@@ -1,7 +1,5 @@
 //------------------- CUSTOM IMPORTS --------------------
 import 'package:olaf/amplifyconfiguration.dart';
-import 'package:olaf/cache/shared_preferences%20.dart';
-import 'package:olaf/cache/loader.dart';
 import 'package:olaf/home/connection_page.dart';
 import 'package:olaf/settings/save_settings.dart';
 
@@ -33,9 +31,6 @@ final localeProvider = StateProvider<Locale>((ref) {
   );
 });
 
-final themeChangerProvider = ChangeNotifierProvider<ThemeChanger>((ref) {
-  return ThemeChanger(authTheme);
-});
 
 final CamerasProvider = StateProvider<List<CameraDescription>>(((ref) => []));
 
@@ -50,40 +45,11 @@ Future<void> main() async {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) => runApp(ProviderScope(overrides: [
               CamerasProvider.overrideWith((ref) => cameras),
-            ], child: MaterialApp(home: MyApp()))));
+            ], child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: MyApp()))));
   } on AmplifyException catch (e) {
     runApp(Text("Error configuring Amplify: ${e.message}"));
-  }
-}
-
-final ThemeData authTheme = ThemeData(
-  useMaterial3: true,
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: Color.fromARGB(255, 60, 90, 40),
-    primary: Color.fromARGB(255, 0, 0, 0),
-    background: Color.fromARGB(255, 255, 255, 255),
-    secondary: Color.fromARGB(255, 80, 130, 60),
-  ),
-);
-
-final ThemeData stdTheme = ThemeData(
-  useMaterial3: true,
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: Color.fromARGB(255, 60, 90, 40),
-    primary: Color.fromARGB(255, 60, 90, 45),
-    background: Color.fromARGB(255, 200, 240, 150),
-    secondary: Color.fromARGB(255, 80, 130, 60),
-  ),
-);
-
-class ThemeChanger extends ChangeNotifier {
-  ThemeData _themeData;
-  ThemeChanger(this._themeData);
-
-  ThemeData get getTheme => _themeData;
-  void setTheme(ThemeData theme) {
-    _themeData = theme;
-    notifyListeners();
   }
 }
 
@@ -97,15 +63,14 @@ class _MyAppState extends ConsumerState<MyApp> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
+    
     lottieController = AnimationController(vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: loadAllData(),
-      builder: (context, snapshot) {
+    return Builder(
+      builder: (context) {
         var mediaQuery = MediaQuery.sizeOf(context);
         return Lottie.asset(
           controller: lottieController,
@@ -115,12 +80,14 @@ class _MyAppState extends ConsumerState<MyApp> with TickerProviderStateMixin {
           onLoaded: (composition) {
             lottieController
               ..duration = composition.duration
-              ..forward().whenComplete(() => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => connectionState(),
-                    ),
-                  ));
+              ..forward().whenComplete(
+                () => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => connectionState(), 
+                  ),
+                ),
+              );
           },
         );
       },
