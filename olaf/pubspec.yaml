@@ -53,9 +53,18 @@ flutter:
     - assets/images/no-image.png
     - assets/images/home.png
     - assets/images/plants.png
-    - assets/images/lexica.png
+    - assets/images/lexicon.png
     - assets/images/blank_bg.png
     - assets/images/settings.png
+    - assets/images/lexicon/basil.png
+    - assets/images/lexicon/basil_infected.jpg
+    - assets/images/lexicon/basil.png
+    - assets/images/lexicon/squash.jpg
+    - assets/images/lexicon/squash_infected.jpg
+    - assets/images/lexicon/strawberry.jpg
+    - assets/images/lexicon/strawberry_mildew.jpg
+    - assets/images/lexicon/tomato.jpg
+    - assets/images/lexicon/tomato_late_blight.png
     - assets//lang/en.json
     - assets/lang/fr.json
     - assets/lang/de.json

@@ -16,46 +16,47 @@ class HomeScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.sizeOf(context);
 
-    return Scaffold(
-        body: SizedBox.expand(
-      child: Stack(children: [
-        // Texts
-        SingleChildScrollView(
-          child: Gardens(),
-        ),
-        //Button
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Transform.translate(
-            offset: Offset(
-                0, -mediaQuery.height * 0.02), // Move it UP by 100 pixels
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                color: theme.colorScheme.primary,
-                boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 7)],
-              ),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CameraScreen(
-                        cameras: ref.read(CamerasProvider),
-                      ),
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.camera_alt_outlined,
-                  size: mediaQuery.height * 0.05,
+  return Scaffold(
+      body: Stack(
+        children: [
+          // Scrollable Content
+          SingleChildScrollView(
+            child: Gardens(), 
+          ),
+
+          // Button at Bottom Center
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Transform.translate(
+              offset: Offset(0, -mediaQuery.height * 0.02),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  color: theme.colorScheme.primary,
+                  boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 7)],
                 ),
-                color: Colors.white,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CameraScreen(
+                          cameras: ref.read(CamerasProvider),
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.camera_alt_outlined,
+                    size: mediaQuery.height * 0.05,
+                  ),
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
-        ),
-      ]),
-    ));
+        ],
+      ),
+    );
   }
 }

@@ -1,7 +1,6 @@
 //------------------------- PAGES -------------------------
 import 'package:olaf/home/home_page.dart';
 import 'package:olaf/cache/loader.dart';
-import 'package:olaf/camera/analyze_page.dart';
 import 'package:olaf/settings/settings.dart';
 import 'package:olaf/plants/plant_page.dart';
 import 'package:olaf/lexica/lexica_page.dart';
@@ -32,7 +31,6 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
     HomeScreen(),
     PlantPage(),
     LexicaPage(),
-    AnalyzePage()
   ];
 
   bool _isDataLoaded = false; // Flag to track loading state
@@ -79,8 +77,8 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
         surfaceTintColor: Colors.white,
         shadowColor: Colors.black,
         elevation: 5.0,
-        title: Text("Welcome " + cacheData.getInstance().user.username,
-            style: TextStyle(fontFamily: "Inter")),
+        title: ref.read(pageIndex)==0? Text("Welcome " + cacheData.getInstance().user.username,
+            style: TextStyle(fontFamily: "Inter")):Text(""),
         //------ SETTINGS ------
         actions: <Widget>[
           IconButton(
@@ -152,7 +150,7 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
               ),
               BottomNavigationBarItem(
                 icon: Image.asset(
-                  "assets/images/lexica.png",
+                  "assets/images/lexicon.png",
                   width: ref.watch(pageIndex) == 2
                       ? mediaQuery.height * 0.09
                       : mediaQuery.height * 0.05,
