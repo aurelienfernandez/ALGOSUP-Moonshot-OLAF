@@ -1,6 +1,6 @@
 //------------------- CUSTOM IMPORTS --------------------
 import 'package:olaf/app_localization.dart';
-import 'package:olaf/LayoutManager.dart';
+import 'package:olaf/layout_manager.dart';
 import 'package:olaf/main.dart';
 
 //------------------- FLUTTER IMPORTS -------------------

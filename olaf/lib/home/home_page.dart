@@ -1,7 +1,7 @@
 //------------------------- PAGES -------------------------
 import 'package:olaf/main.dart';
 import 'package:olaf/camera/camera.dart';
-import 'package:olaf/LayoutManager.dart';
+import 'package:olaf/layout_manager.dart';
 //------------------------ FLUTTER ------------------------
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
