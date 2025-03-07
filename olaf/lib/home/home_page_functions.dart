@@ -25,6 +25,7 @@ class _GardensState extends ConsumerState<Gardens>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final mediaQuery = MediaQuery.sizeOf(context);
     return Center(
         child: Stack(

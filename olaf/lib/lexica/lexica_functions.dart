@@ -103,7 +103,7 @@ Widget buildImage(
         border: Border.all(
           color:
               Theme.of(context).colorScheme.primary, // Keep your border color
-          width: mediaQuery.width * 0.005, // Keep your border width
+          width: mediaQuery.width * 0.004, // Keep your border width
         ),
       ),
       child: ClipRRect(

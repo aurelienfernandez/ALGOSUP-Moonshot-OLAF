@@ -134,7 +134,7 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
                 icon: Image.asset(
                   "assets/images/home.png",
                   width: ref.watch(pageIndex) == 0
-                      ? mediaQuery.height * 0.09
+                      ? mediaQuery.height * 0.07
                       : mediaQuery.height * 0.05,
                 ),
                 label: AppLocalizations.of(context).translate('home'),
@@ -143,7 +143,7 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
                 icon: Image.asset(
                   "assets/images/plants.png",
                   width: ref.watch(pageIndex) == 1
-                      ? mediaQuery.height * 0.09
+                      ? mediaQuery.height * 0.06
                       : mediaQuery.height * 0.05,
                 ),
                 label: AppLocalizations.of(context).translate('plants'),
@@ -152,7 +152,7 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
                 icon: Image.asset(
                   "assets/images/lexicon.png",
                   width: ref.watch(pageIndex) == 2
-                      ? mediaQuery.height * 0.09
+                      ? mediaQuery.height * 0.07
                       : mediaQuery.height * 0.05,
                 ),
                 label: AppLocalizations.of(context).translate('lexica'),
