@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   auto_size_text: ^3.0.0
-  fading_edge_scrollview: ^3.0.0
+  fading_edge_scrollview: ^4.1.1
   flutter_riverpod: ^2.0.0
   flutter_localizations:
     sdk: flutter
@@ -21,7 +21,7 @@ dependencies:
   aws_dynamodb_api: ^2.0.0
   shared_preferences: ^2.2.3
   equatable: ^2.0.5
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.3
   image_picker: ^1.1.2
   amazon_cognito_identity_dart_2: ^3.1.1
   amplify_api: ^2.0.0
@@ -41,7 +41,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
@@ -65,6 +65,9 @@ flutter:
     - assets/images/lexicon/strawberry_mildew.jpg
     - assets/images/lexicon/tomato.jpg
     - assets/images/lexicon/tomato_late_blight.png
+    - assets/images/lexicon/temperature.png
+    - assets/images/lexicon/soil_humidity.png
+    - assets/images/lexicon/air_humidity.png
     - assets//lang/en.json
     - assets/lang/fr.json
     - assets/lang/de.json

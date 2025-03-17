@@ -1,4 +1,6 @@
 //------------------------- PAGES -------------------------
+import 'dart:math';
+
 import 'package:olaf/home/home_page.dart';
 import 'package:olaf/cache/loader.dart';
 import 'package:olaf/settings/settings.dart';
@@ -14,7 +16,8 @@ import 'package:olaf/utils.dart';
 import 'package:olaf/classes.dart';
 
 //--------------------- PROVIDERS ----------------------
-final pageIndex = StateProvider<int>((ref) => 0);
+final pageIndex =
+    StateProvider<int>((ref) => 0); // Provider to manage the page index
 
 final _pageController =
     StateProvider<PageController>(((ref) => PageController()));
@@ -68,6 +71,26 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
       return Center(
           child: CircularProgressIndicator()); // Show loading indicator
     }
+    Widget title = SizedBox();
+    int currentTab = ref.watch(tab);
+
+    if (ref.watch(pageIndex) == 0) {
+      title = Text("Welcome " + cacheData.getInstance().user.username,
+          style: TextStyle(fontFamily: "Inter"));
+    } else if (ref.watch(pageIndex) == 2 &&
+        (currentTab == 1 || currentTab == 2)) {
+      title = IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+          size: mediaQuery.width * 0.1,
+        ), // Icon for the back arrow
+        onPressed: () {
+          ref.read(tab.notifier).state--;
+        },
+      );
+    }
+
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       //---------- TITLE ----------
@@ -77,8 +100,7 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
         surfaceTintColor: Colors.white,
         shadowColor: Colors.black,
         elevation: 5.0,
-        title: ref.read(pageIndex)==0? Text("Welcome " + cacheData.getInstance().user.username,
-            style: TextStyle(fontFamily: "Inter")):Text(""),
+        title: title,
         //------ SETTINGS ------
         actions: <Widget>[
           IconButton(
