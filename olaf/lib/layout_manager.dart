@@ -1,6 +1,4 @@
 //------------------------- PAGES -------------------------
-import 'dart:math';
-
 import 'package:olaf/home/home_page.dart';
 import 'package:olaf/cache/loader.dart';
 import 'package:olaf/settings/settings.dart';
@@ -84,9 +82,20 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
           Icons.arrow_back,
           color: Colors.black,
           size: mediaQuery.width * 0.1,
-        ), // Icon for the back arrow
+        ),
         onPressed: () {
           ref.read(tab.notifier).state--;
+        },
+      );
+    } else if (ref.watch(pageIndex) == 1 && ref.watch(plantsIndex) != 0) {
+      title = IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+          size: mediaQuery.width * 0.1,
+        ),
+        onPressed: () {
+          ref.read(plantsIndex.notifier).state = 0;
         },
       );
     }

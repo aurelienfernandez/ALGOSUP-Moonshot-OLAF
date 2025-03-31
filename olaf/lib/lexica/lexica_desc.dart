@@ -18,6 +18,9 @@ class LexicaDescription extends ConsumerWidget {
           ref.read(PlantorDisease).image,
           ref.read(PlantorDisease).howTo,
           ref.read(PlantorDisease).tips,
+          ref.read(PlantorDisease).temperatureRange,
+          ref.read(PlantorDisease).soilHumidityRange,
+          ref.read(PlantorDisease).airHumidityRange,
         );
         break;
 

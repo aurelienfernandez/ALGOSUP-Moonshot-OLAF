@@ -41,7 +41,7 @@ class HomeScreen extends ConsumerWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => CameraScreen(
-                          cameras: ref.read(CamerasProvider),
+                          cameras: ref.read(camerasProvider),
                         ),
                       ),
                     );

@@ -9,224 +9,247 @@ import 'package:olaf/cache/shared_preferences%20.dart';
 import 'package:olaf/classes.dart';
 import 'package:path_provider/path_provider.dart';
 
-
-
+/// Loads all user data from AWS into local cache
 Future<void> loadAllData() async {
-  // Check if user is connected
   try {
+    // Check if user is connected
     await Amplify.Auth.getCurrentUser();
   } on AuthException {
     return;
   }
+
   try {
-    // Initialize AWS DynamoDB and login sequentially
+    // Initialize AWS DynamoDB and fetch + cache data
     final dynamoDb = await initializeDynamoDB();
-
-    // Fetch data from AWS and save to cache, then retrieve cached data
-    await AWStoCache(dynamoDb);
+    await awsToCache(dynamoDb);
     await GetCachedData();
-
     debugPrint("Data loaded successfully");
   } catch (error) {
-    debugPrint("Error: couldn't load data");
-    throw (error);
+    debugPrint("Error loading data: $error");
+    rethrow;
   }
-
-  return;
 }
 
-
+/// Initializes DynamoDB with current user credentials
 Future<DynamoDB> initializeDynamoDB() async {
-  final userAttributes = await Amplify.Auth.fetchAuthSession();
-  final cognitoSession = userAttributes as CognitoAuthSession;
+  try {
+    final userAttributes = await Amplify.Auth.fetchAuthSession();
+    final cognitoSession = userAttributes as CognitoAuthSession;
+    final awsCredentials = cognitoSession.credentialsResult;
 
-  final awsCredentials = cognitoSession.credentialsResult;
-
-  final dynamoDb = DynamoDB(
-    region: 'eu-west-3',
-    credentials: AwsClientCredentials(
+    return DynamoDB(
+      region: 'eu-west-3',
+      credentials: AwsClientCredentials(
         accessKey: awsCredentials.value.accessKeyId,
         secretKey: awsCredentials.value.secretAccessKey,
-        sessionToken: awsCredentials.value.sessionToken),
-  );
-  return dynamoDb;
+        sessionToken: awsCredentials.value.sessionToken,
+      ),
+    );
+  } catch (e) {
+    throw Exception('Failed to initialize DynamoDB: $e');
+  }
 }
 
+/// Fetches lexica data from DynamoDB, filtering for highest version of each item
 Future<Lexica> getLexica(DynamoDB dynamoDb) async {
   List<LexPlant> plants = [];
   List<Disease> diseases = [];
-
-  // Map to keep track of the highest version of each item by name
   Map<String, Map<String, AttributeValue>> highestVersionMap = {};
 
   try {
-    final scanResponse = await dynamoDb.scan(
-      tableName: "olaf-lexica",
-    );
-
-    // Check if items are returned
+    final scanResponse = await dynamoDb.scan(tableName: "olaf-lexica");
+    
+    // Process items and keep only highest version
     if (scanResponse.items != null && scanResponse.items!.isNotEmpty) {
-      for (final item in scanResponse.items!) {
-        // Extract item attributes
-        String itemName = item['name']!.s!;
-        int itemVersion = int.parse(
-            item['version']!.n!); // Ensure your table has a version attribute
-
-        // Check if this item name is already in the map
-        if (highestVersionMap.containsKey(itemName)) {
-          // Get the existing item and its version
-          var existingItem = highestVersionMap[itemName]!;
-          int existingVersion = int.parse(existingItem['version']!.n!);
-
-          // Compare versions and update if the current item has a higher version
-          if (itemVersion > existingVersion) {
-            highestVersionMap[itemName] = item;
-          }
-        } else {
-          // Add new item to the map
-          highestVersionMap[itemName] = item;
-        }
-      }
-
-      // Now process the items with the highest versions
-      for (final item in highestVersionMap.values) {
-        // Access the nested details map (if present)
-        final details = item['details']?.m;
-
-        if (details != null && details['howTo'] != null) {
-          // Handle LexPlant items
-          List<PlantDisease> newDiseases = [];
-          List<AttributeValue> diseasesList = details['diseases']!.l!;
-
-          for (int i = 0; i < diseasesList.length; i++) {
-            var disease = diseasesList[i].m!;
-            String diseaseName = disease['name']!.s!;
-            String diseaseImage = disease['image']!.s!;
-
-            newDiseases
-                .add(PlantDisease(name: diseaseName, image: diseaseImage));
-          }
-          List<String> tips = details['tips']!.l!.map((tip) => tip.s!).toList();
-
-          plants.add(LexPlant(
-            name: item['name']!.s!,
-            image: details['image']!.s!,
-            howTo: details['howTo']!.s!,
-            tips: tips,
-            diseases: newDiseases,
-          ));
-        } else if (details != null && details['prevent'] != null) {
-          // Handle Disease items
-          diseases.add(Disease(
-            name: item['name']!.s!,
-            image: details['image']!.s!,
-            icon: details['icon']!.s!,
-            description: details['description']!.s!,
-            prevent: details['prevent']!.s!,
-            cure: details['cure']!.s!,
-          ));
-        }
-      }
+      _processItems(scanResponse, highestVersionMap);
+      _buildLexica(highestVersionMap, plants, diseases);
     }
   } catch (e) {
-    throw ('Error while retrieving the lexica: $e');
+    throw Exception('Error retrieving lexica: $e');
   }
   return Lexica(plants: plants, diseases: diseases);
 }
 
-Future<String> GetProfilePicture(AuthUser user) async {
-  final directory = await getApplicationDocumentsDirectory();
-  final filepath = '${directory.path}/${user.userId}.png';
-  final downloadResult = await Amplify.Storage.downloadFile(
-          path: StoragePath.fromString(
-              "users/${user.userId}/profile-picture/${user.userId}.png"),
-          localFile: AWSFile.fromPath(filepath))
-      .result;
+/// Processes items and keeps track of highest version for each item
+void _processItems(ScanOutput scanResponse, Map<String, Map<String, AttributeValue>> highestVersionMap) {
+  for (final item in scanResponse.items!) {
+    String itemName = item['name']!.s!;
+    int itemVersion = int.parse(item['version']!.n!);
 
-  if (downloadResult != null && File(filepath).existsSync()) {
-    return "${directory.path}/${user.userId}.png";
-  } else {
-    return "assets/images/no-image.png";
+    if (highestVersionMap.containsKey(itemName)) {
+      int existingVersion = int.parse(highestVersionMap[itemName]!['version']!.n!);
+      if (itemVersion > existingVersion) {
+        highestVersionMap[itemName] = item;
+      }
+    } else {
+      highestVersionMap[itemName] = item;
+    }
   }
 }
 
+/// Builds plants and diseases lists from filtered items
+void _buildLexica(Map<String, Map<String, AttributeValue>> highestVersionMap,
+    List<LexPlant> plants, List<Disease> diseases) {
+  for (final item in highestVersionMap.values) {
+    final details = item['details']?.m;
+
+    if (details != null && details['howTo'] != null) {
+      // Process plant item
+      plants.add(_buildLexPlant(item, details));
+    } else if (details != null && details['prevent'] != null) {
+      // Process disease item
+      diseases.add(_buildDisease(item, details));
+    }
+  }
+}
+
+/// Builds a LexPlant object from DynamoDB item
+LexPlant _buildLexPlant(Map<String, AttributeValue> item, Map<String, AttributeValue> details) {
+  List<String> tips = details['tips']!.l!.map((tip) => tip.s!).toList();
+
+  return LexPlant(
+    name: item['name']!.s!,
+    image: details['image']!.s!,
+    howTo: details['howTo']!.s!,
+    tips: tips,
+    soilHumidityRange: details['soilHumidityRange']!.l!.map((e) => int.parse(e.n!)).toList(),
+    airHumidityRange: details['airHumidityRange']!.l!.map((e) => int.parse(e.n!)).toList(),
+    temperatureRange: details['temperatureRange']!.l!.map((e) => int.parse(e.n!)).toList(),
+  );
+}
+
+/// Builds a Disease object from DynamoDB item
+Disease _buildDisease(Map<String, AttributeValue> item, Map<String, AttributeValue> details) {
+  return Disease(
+    name: item['name']!.s!,
+    image: details['image']!.s!,
+    icon: details['icon']!.s!,
+    description: details['description']!.s!,
+    prevent: details['prevent']!.s!,
+    cure: details['cure']!.s!,
+  );
+}
+
+/// Downloads user profile picture or returns default if not available
+Future<String> getProfilePicture(AuthUser user) async {
+  final directory = await getApplicationDocumentsDirectory();
+  final filepath = '${directory.path}/${user.userId}.png';
+  
+  try {
+    await Amplify.Storage.downloadFile(
+      path: StoragePath.fromString(
+          "users/${user.userId}/profile-picture/${user.userId}.png"),
+      localFile: AWSFile.fromPath(filepath)
+    ).result;
+
+    if (File(filepath).existsSync()) {
+      return filepath;
+    }
+  } catch (e) {
+    debugPrint("Failed to download profile picture: $e");
+  }
+  
+  return "assets/images/no-image.png";
+}
+
+/// Retrieves current user information
 Future<User> getUser() async {
   Map<String, String> attributeMap = {};
 
   try {
     // Fetch the user's attributes
-    List<AuthUserAttribute> userAttributes =
-        await Amplify.Auth.fetchUserAttributes();
-
-    // Create a map of attributes
+    final userAttributes = await Amplify.Auth.fetchUserAttributes();
     for (var attribute in userAttributes) {
       attributeMap[attribute.userAttributeKey.key] = attribute.value;
     }
-  } catch (e) {
-    throw ('Failed to fetch user attributes: $e');
-  }
-  final user = await Amplify.Auth.getCurrentUser();
-  late dynamic picture;
-  if (attributeMap[AuthUserAttributeKey.picture.key] == null) {
-    picture = "assets/images/no-image.png";
-  } else {
-    try {
-      picture = await GetProfilePicture(user);
-    } catch (e) {
-      picture = "assets/images/no-image.png";
-    }
-  }
 
-  return User(
+    final user = await Amplify.Auth.getCurrentUser();
+    String picture;
+    
+    if (attributeMap[AuthUserAttributeKey.picture.key] == null) {
+      picture = "assets/images/no-image.png";
+    } else {
+      try {
+        picture = await getProfilePicture(user);
+      } catch (e) {
+        picture = "assets/images/no-image.png";
+      }
+    }
+
+    return User(
       username: attributeMap[AuthUserAttributeKey.preferredUsername.key]!,
       profilePicture: picture,
-      email: attributeMap[AuthUserAttributeKey.email.key]!);
+      email: attributeMap[AuthUserAttributeKey.email.key]!,
+    );
+  } catch (e) {
+    throw Exception('Failed to fetch user data: $e');
+  }
 }
 
+/// Retrieves analyzed images from AWS storage
 Future<List<analyzedImages>> getImages() async {
-  final user = await Amplify.Auth.getCurrentUser();
-
+  List<analyzedImages> images = [];
+  final directory = await getApplicationDocumentsDirectory();
+  
   try {
+    final user = await Amplify.Auth.getCurrentUser();
     var path = StoragePath.fromString("users/${user.userId}/analyzed/");
     final results = await Amplify.Storage.list(path: path).result;
 
-    List<analyzedImages> images = [];
-    final directory = await getApplicationDocumentsDirectory();
     for (var item in results.items) {
-      path = StoragePath.fromString(item.path);
-      final itemName = "${item.path.split(RegExp(r'/')).last}";
-      // Step 2: Retrieve the object and its metadata
+      final itemPath = StoragePath.fromString(item.path);
+      final itemName = item.path.split(RegExp(r'/')).last;
+      final localPath = '${directory.path}/$itemName';
+      
+      // Download file
       await Amplify.Storage.downloadFile(
-              path: path,
-              localFile: AWSFile.fromPath('${directory.path}/$itemName'))
-          .result;
+        path: itemPath,
+        localFile: AWSFile.fromPath(localPath)
+      ).result;
 
-      final newfile = File('${directory.path}/$itemName');
-
-      final fileString = await newfile.readAsString();
-
-      final Map<String, dynamic> jsonData = jsonDecode(fileString);
+      // Process file
+      final file = File(localPath);
+      final fileContent = await file.readAsString();
+      final jsonData = jsonDecode(fileContent);
+      
       images.add(analyzedImages.fromJson(jsonData, itemName));
-
-      // Step 5: Delete the file from local storage
-      await File(newfile.path.toString()).delete();
+      
+      // Cleanup
+      await file.delete();
     }
-    return images;
-  } on StorageException catch (e) {
-    debugPrint("$e");
+  } catch (e) {
+    debugPrint("Failed to get images: $e");
   }
-  return [];
+  
+  return images;
 }
 
+/// Get user's saved plants (to be implemented)
 List<Plant> getSavedPlants() {
+  // TODO: Implement fetching saved plants
   return [];
 }
 
-Future<void> AWStoCache(DynamoDB dynamoDb) async {
-  Future<User> user = getUser();
-  Future<List<analyzedImages>> images = getImages();
-  List<Plant> plants = getSavedPlants();
-  Future<Lexica> lexica = getLexica(dynamoDb);
-  // Ensure to await saveData to complete
-  await saveData(await user, plants, await images, await lexica);
+/// Fetches all data from AWS and saves to local cache
+Future<void> awsToCache(DynamoDB dynamoDb) async {
+  try {
+    // Fetch all data concurrently
+    final userFuture = getUser();
+    final imagesFuture = getImages();
+    final lexicaFuture = getLexica(dynamoDb);
+    final plants = getSavedPlants();
+    
+    // Wait for all futures to complete
+    final results = await Future.wait([userFuture, lexicaFuture, imagesFuture]);
+    
+    // Save all data to cache
+    await saveData(
+      results[0] as User,
+      plants,
+      results[2] as List<analyzedImages>,
+      results[1] as Lexica,
+    );
+  } catch (e) {
+    throw Exception('Failed to fetch and cache data: $e');
+  }
 }

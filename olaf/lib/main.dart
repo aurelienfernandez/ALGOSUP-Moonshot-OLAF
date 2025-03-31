@@ -32,7 +32,7 @@ final localeProvider = StateProvider<Locale>((ref) {
 });
 
 
-final CamerasProvider = StateProvider<List<CameraDescription>>(((ref) => []));
+final camerasProvider = StateProvider<List<CameraDescription>>(((ref) => []));
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +44,7 @@ Future<void> main() async {
     final cameras = await availableCameras();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) => runApp(ProviderScope(overrides: [
-              CamerasProvider.overrideWith((ref) => cameras),
+              camerasProvider.overrideWith((ref) => cameras),
             ], child: MaterialApp(
               debugShowCheckedModeBanner: false,
               home: MyApp()))));

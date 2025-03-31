@@ -36,6 +36,8 @@ dependencies:
   aws_lambda_api: ^2.0.0
   lottie: ^3.1.2
   flutter_native_splash: ^2.4.0
+  google_fonts: ^6.2.1
+  fl_chart: ^0.70.2
 
 dev_dependencies:
   flutter_test:
@@ -46,32 +48,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets: 
-    - assets/images/en.png
-    - assets/images/logo.png
-    - assets/images/fr.png
-    - assets/images/de.png
-    - assets/images/no-image.png
-    - assets/images/home.png
-    - assets/images/plants.png
-    - assets/images/lexicon.png
-    - assets/images/blank_bg.png
-    - assets/images/settings.png
-    - assets/images/lexicon/basil.png
-    - assets/images/lexicon/basil_infected.jpg
-    - assets/images/lexicon/basil.png
-    - assets/images/lexicon/squash.jpg
-    - assets/images/lexicon/squash_infected.jpg
-    - assets/images/lexicon/strawberry.jpg
-    - assets/images/lexicon/strawberry_mildew.jpg
-    - assets/images/lexicon/tomato.jpg
-    - assets/images/lexicon/tomato_late_blight.png
-    - assets/images/lexicon/temperature.png
-    - assets/images/lexicon/soil_humidity.png
-    - assets/images/lexicon/air_humidity.png
-    - assets//lang/en.json
-    - assets/lang/fr.json
-    - assets/lang/de.json
-    - assets/splash_anim.json
+    - assets/
+    - assets/lang/
+    - assets/images/
+    - assets/images/lexicon/
+    - assets/images/dashboard/
   
 # flutter_native_splash-acceptance.yaml
 flutter_native_splash:

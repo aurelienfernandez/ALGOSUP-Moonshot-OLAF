@@ -78,7 +78,7 @@ class _PictureListState extends ConsumerState<PictureList> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          CameraScreen(cameras: ref.read(CamerasProvider))));
+                          CameraScreen(cameras: ref.read(camerasProvider))));
             },
             icon: Icon(Icons.camera_alt_outlined),
             color: Colors.white,

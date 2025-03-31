@@ -8,12 +8,28 @@ import 'package:flutter/material.dart';
 /// - `image`: The picture of the plant.
 /// - `description`: The description of how to take care of this plant.
 /// - `tips`: Tips dedicated to this plant.
+/// - `temperatureRange`: The ideal temperature range for the plant.
+/// - `soilHumidityRange`: The ideal soil humidity range for the plant.
+/// - `airHumidityRange`: The ideal air humidity range for the plant.
 class PlantDescription extends StatelessWidget {
   final String name;
   final String image;
   final String description;
   final List<String> tips;
-  PlantDescription(this.name, this.image, this.description, this.tips);
+  final List<int> temperatureRange;
+  final List<int> soilHumidityRange;
+  final List<int> airHumidityRange;
+
+  PlantDescription(
+    this.name,
+    this.image,
+    this.description,
+    this.tips,
+    this.temperatureRange,
+    this.soilHumidityRange,
+    this.airHumidityRange,
+  );
+
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.sizeOf(context);
@@ -94,8 +110,16 @@ class PlantDescription extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                dataCard("Ideal temperatures", "17°C - 20°C", "temperature"),
-                dataCard("Ideal\nsoil humidity", "50% - 70%", "soil_humidity")
+                dataCard(
+                  "Ideal temperatures",
+                  "${temperatureRange[0]}°C - ${temperatureRange[1]}°C",
+                  "temperature",
+                ),
+                dataCard(
+                  "Ideal\nsoil humidity",
+                  "${soilHumidityRange[0]}% - ${soilHumidityRange[1]}%",
+                  "soil_humidity",
+                ),
               ],
             ),
             //========== SPACE ===========
@@ -103,7 +127,11 @@ class PlantDescription extends StatelessWidget {
               height: mediaQuery.height * 0.015,
             ),
             //========= AIR HUM ==========
-            dataCard("Ideal\nair humidity", "70% - 90%", "air_humidity"),
+            dataCard(
+              "Ideal\nair humidity",
+              "${airHumidityRange[0]}% - ${airHumidityRange[1]}%",
+              "air_humidity",
+            ),
             //========== SPACE ===========
             SizedBox(
               height: mediaQuery.height * 0.03,
