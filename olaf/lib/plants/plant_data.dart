@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:olaf/classes.dart';
 import 'package:olaf/plants/plant_data_widgets.dart';
+import 'package:olaf/app_localization.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
 //--------------------- PLANT STATUS --------------------
 
 class PlantStatus extends StatelessWidget {
@@ -20,11 +23,11 @@ class PlantStatus extends StatelessWidget {
     final Color lowHumidityColor = Color.fromRGBO(222, 125, 7, 1);
     final Color highHumidityColor = Color.fromRGBO(92, 69, 246, 1);
     
-    Text createStatusText(String message, Color color) {
+    Text createStatusText(String translationKey, Color color) {
       return Text(
-      message,
+      AppLocalizations.of(context).translate(translationKey),
       style: GoogleFonts.itim(
-        fontSize: mediaQuery.width * 0.1,
+        fontSize: mediaQuery.width * 0.11,
         color: color,
       ),
       textAlign: TextAlign.center,
@@ -32,13 +35,13 @@ class PlantStatus extends StatelessWidget {
     }
     
     final Set<Text> titleList = {
-      createStatusText("Everything is fine", goodColor),
-      createStatusText("The temperature is too high", highTempColor),
-      createStatusText("The temperature is too low", lowTempColor),
-      createStatusText("Low soil humidity", lowHumidityColor),
-      createStatusText("High soil humidity", highHumidityColor),
-      createStatusText("Low air humidity", lowHumidityColor),
-      createStatusText("High air humidity", highHumidityColor),
+      createStatusText("everything_fine", goodColor),
+      createStatusText("temperature_too_high", highTempColor),
+      createStatusText("temperature_too_low", lowTempColor),
+      createStatusText("soil_humidity_low", lowHumidityColor),
+      createStatusText("soil_humidity_high", highHumidityColor),
+      createStatusText("air_humidity_low", lowHumidityColor),
+      createStatusText("air_humidity_high", highHumidityColor),
     };
     Widget title;
     final lexicaPlant = cacheData.getInstance().lexica.plants.firstWhere(
@@ -73,6 +76,22 @@ class PlantStatus extends StatelessWidget {
         //========== SPACE ===========
         SizedBox(
           height: mediaQuery.height * 0.03,
+        ),
+        //========== DATA ===========
+        Column(
+          children: [
+            // Plant name
+            AutoSizeText(
+              plant.name,
+              style: GoogleFonts.itim(
+                fontSize: mediaQuery.width * 0.11,
+                color: Colors.black,
+              ),
+              minFontSize: 16,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

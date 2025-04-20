@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olaf/app_localization.dart';
 
 /// This class creates the page displaying all information related to a plant
 /// from the lexicon.
@@ -106,44 +107,63 @@ class PlantDescription extends StatelessWidget {
             SizedBox(
               height: mediaQuery.height * 0.03,
             ),
-            //======= TEMP & HUM =========
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                dataCard(
-                  "Ideal temperatures",
-                  "${temperatureRange[0]}°C - ${temperatureRange[1]}°C",
-                  "temperature",
+                //======= TEMP & AIR =========
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    dataCard(
+                      AppLocalizations.of(context)
+                          .translate("ideal_temperature"),
+                      "${temperatureRange[0]}°C - ${temperatureRange[1]}°C",
+                      "temperature",
+                    ),
+                    //========== SPACE ===========
+                    SizedBox(
+                      height: mediaQuery.height * 0.03,
+                    ),
+                    dataCard(
+                      AppLocalizations.of(context).translate("ideal_air"),
+                      "${airHumidityRange[0]}% - ${airHumidityRange[1]}%",
+                      "air_humidity",
+                    ),
+                  ],
                 ),
-                dataCard(
-                  "Ideal\nsoil humidity",
-                  "${soilHumidityRange[0]}% - ${soilHumidityRange[1]}%",
-                  "soil_humidity",
-                ),
+                //====== SOIL & SEASON =======
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    dataCard(
+                      AppLocalizations.of(context).translate("ideal_soil"),
+                      "${soilHumidityRange[0]}% - ${soilHumidityRange[1]}%",
+                      "soil_humidity",
+                    ),
+                    //========== SPACE ===========
+                    SizedBox(
+                      height: mediaQuery.height * 0.03,
+                    ),
+                    SeasonCard("autumn"),
+                  ],
+                )
               ],
-            ),
-            //========== SPACE ===========
-            SizedBox(
-              height: mediaQuery.height * 0.015,
-            ),
-            //========= AIR HUM ==========
-            dataCard(
-              "Ideal\nair humidity",
-              "${airHumidityRange[0]}% - ${airHumidityRange[1]}%",
-              "air_humidity",
             ),
             //========== SPACE ===========
             SizedBox(
               height: mediaQuery.height * 0.03,
             ),
             //======= DESCRIPTION ========
-            DescriptionAndTipsCard("Proper plant care", descriptionWidget),
+            DescriptionAndTipsCard(
+                AppLocalizations.of(context).translate("how_to"),
+                descriptionWidget),
             //========== SPACE ===========
             SizedBox(
               height: mediaQuery.height * 0.03,
             ),
             //========== TIPS ============
-            DescriptionAndTipsCard("Tips", tipWidget),
+            DescriptionAndTipsCard(
+                AppLocalizations.of(context).translate("tips"), tipWidget),
             //========== SPACE ===========
             SizedBox(
               height: mediaQuery.height * 0.03,
@@ -156,7 +176,7 @@ class PlantDescription extends StatelessWidget {
 }
 
 /// This class creates a card containing a title and a text following it.
-/// 
+///
 /// Parameters:
 /// - `title`: A string containing the title.
 /// - `bodyWidget`: A text widget containing the text and its formatting.
@@ -187,6 +207,7 @@ class DescriptionAndTipsCard extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 child: Text(
                   title,
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: mediaQuery.width * 0.06),
                 ),
               );
@@ -218,9 +239,9 @@ class DescriptionAndTipsCard extends StatelessWidget {
   }
 }
 
-/// This class creates a card containing a type representing either the temperature or humidity, a value assigned to the title and an 
+/// This class creates a card containing a type representing either the temperature or humidity, a value assigned to the title and an
 /// icon displayed on the top left corner of the card.
-/// 
+///
 /// Parameters:
 /// - `type`: The type of value the card should contain.
 /// - `value`: A range of either temperature (in °C) or the percentage (%) of humidity
@@ -237,49 +258,140 @@ class dataCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       width: mediaQuery.width * 0.4,
-      height: mediaQuery.width * 0.4,
+      constraints: BoxConstraints(
+        minHeight: mediaQuery.width * 0.4,
+      ),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: theme.colorScheme.secondary),
-      child: Center(
-        child: Stack(
-          children: [
-            //============= ICON =============
-            Positioned(
-              left: mediaQuery.width * 0.01,
-              top: mediaQuery.height * 0.005,
-              child: Image.asset(
-                "./assets/images/lexicon/" + icon + ".png",
-                width: mediaQuery.width * 0.1,
-                height: mediaQuery.width * 0.1,
-              ),
+      child: Stack(
+        children: [
+          //============= ICON =============
+          Positioned(
+            left: mediaQuery.width * 0.01,
+            top: mediaQuery.height * 0.005,
+            child: Image.asset(
+              "./assets/images/lexicon/" + icon + ".png",
+              width: mediaQuery.width * 0.1,
+              height: mediaQuery.width * 0.1,
             ),
-            Center(
+          ),
+          //============= CONTENT =============
+          Padding(
+            padding: EdgeInsets.only(
+              top: mediaQuery.height * 0.05,
+              bottom: mediaQuery.height * 0.02,
+              left: mediaQuery.width * 0.02,
+              right: mediaQuery.width * 0.02,
+            ),
+            child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   //========= TYPE OF DATA =========
-                  Text(type,
+                  Flexible(
+                    child: Text(
+                      type,
                       style: TextStyle(fontSize: mediaQuery.width * 0.05),
-                      textAlign: TextAlign.center),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.visible,
+                    ),
+                  ),
+                  SizedBox(height: mediaQuery.height * 0.01),
                   //============ VALUE =============
                   Container(
                     width: mediaQuery.width * 0.35,
-                    height: mediaQuery.height * 0.07,
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 255, 255, 0.55),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Center(
-                      child: Text(value,
-                          style: TextStyle(fontSize: mediaQuery.width * 0.05),
-                          textAlign: TextAlign.center),
+                    constraints: BoxConstraints(
+                      minHeight: mediaQuery.height * 0.07,
                     ),
-                  )
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 255, 255, 0.55),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(mediaQuery.width * 0.02),
+                      child: Center(
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: mediaQuery.width * 0.05),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.visible,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// This class creates a card with a centered icon and text below it.
+///
+/// Parameters:
+/// - `title`: The title to be displayed below the icon (will be translated).
+/// - `icon`: The name of the icon asset to be displayed.
+class SeasonCard extends StatelessWidget {
+  final String title;
+
+  SeasonCard(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.sizeOf(context);
+    final theme = Theme.of(context);
+
+    return Container(
+      width: mediaQuery.width * 0.4,
+      constraints: BoxConstraints(
+        minHeight: mediaQuery.width * 0.5,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: theme.colorScheme.secondary,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //========== TITLE ===========
+          Text(
+            AppLocalizations.of(context).translate("when_to_grow"),
+            style: TextStyle(fontSize: mediaQuery.width * 0.06),
+            textAlign: TextAlign.center,
+          ),
+
+          //=========== ICON ===========
+          // Centered icon
+          Image.asset(
+            "assets/images/lexicon/" + title + ".png",
+            width: mediaQuery.width * 0.2,
+            height: mediaQuery.width * 0.2,
+          ),
+          SizedBox(height: mediaQuery.height * 0.02),
+          // Text below icon
+          Container(
+            width: mediaQuery.width * 0.35,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 255, 255, 0.55),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: mediaQuery.height * 0.01,
+              horizontal: mediaQuery.width * 0.02,
+            ),
+            child: Text(
+              AppLocalizations.of(context).translate(title),
+              style: TextStyle(fontSize: mediaQuery.width * 0.05),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.visible,
+            ),
+          ),
+        ],
       ),
     );
   }

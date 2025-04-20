@@ -1,0 +1,16 @@
+{
+  "app_name": "Plant Disease Identifier",
+  "home_title": "Welcome to Plant Disease Identifier",
+  "home_description": "Identify diseases in your plants using image analysis.",
+  "select_image": "Select Image",
+  "analyze_image": "Analyze Image",
+  "supported_plants": "Supported Plants",
+  "only_tomato_supported": "Currently, only tomato plants are supported for image analysis.",
+  "ok": "OK",
+  "results_title": "Analysis Results",
+  "results_description": "Here are the results of the analysis:",
+  "disease_detected": "Disease Detected",
+  "no_disease_detected": "No Disease Detected",
+  "try_again": "Try Again",
+  "error_occurred": "An error occurred. Please try again."
+}

@@ -18,7 +18,7 @@ class connectionState extends ConsumerStatefulWidget {
 final ThemeData theme = ThemeData(
   colorScheme: ColorScheme.light(
     primary: Color.fromRGBO(116,193,79,1.0),
-    background: Color.fromRGBO(247, 247, 247, 1.0),
+    surface: Color.fromRGBO(247, 247, 247, 1.0),
     secondary: Color.fromRGBO(83, 205, 66, 0.25),
   ),
 );

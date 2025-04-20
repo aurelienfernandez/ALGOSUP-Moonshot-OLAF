@@ -2,10 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math';
+import 'package:auto_size_text/auto_size_text.dart';
 
 //-------------------- CUSTOM IMPORTS -------------------
 import 'package:olaf/classes.dart';
 import 'package:olaf/plants/plant_data.dart';
+import 'package:olaf/app_localization.dart';
 
 //--------------------- PROVIDERS ----------------------
 final plantsIndex = StateProvider<int>((ref) => 0);
@@ -65,6 +67,7 @@ class _PlantTabState extends ConsumerState<PlantPage> {
                 ),
                 child: InkWell(
                   onTap: () {
+                    ref.read(GraphChoice.notifier).state = 0;
                     ref.read(plantsIndex.notifier).state = index+1;
                   },
                   child: Row(
@@ -101,12 +104,15 @@ class _PlantTabState extends ConsumerState<PlantPage> {
                         width: MediaQuery.of(context).size.width * 0.05,
                       ),
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           plant.name,
                           style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.06,
                             color: Colors.black,
                           ),
+                          minFontSize: 12,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -122,7 +128,7 @@ class _PlantTabState extends ConsumerState<PlantPage> {
             ),
             onPressed: () {
               setState(() {
-                String name = "new plant";
+                String name = AppLocalizations.of(context).translate('new_plant');
                 String image =
                     "https://www.southernliving.com/thmb/8sJLpOMVrdM3RO6GeyuSVAJa9G8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1365178498-81dd069cd1514e288e68516bc96df8d4.jpg";
                 cacheData.getInstance().savedPlants.add(Plant(
@@ -143,7 +149,12 @@ class _PlantTabState extends ConsumerState<PlantPage> {
               });
             },
             icon: Icon(Icons.add),
-            label: Text("Add a plant"),
+            label: AutoSizeText(
+              AppLocalizations.of(context).translate('add_plant'),
+              minFontSize: 12,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       );

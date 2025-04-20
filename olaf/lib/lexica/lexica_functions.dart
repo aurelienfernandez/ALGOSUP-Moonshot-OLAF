@@ -18,10 +18,24 @@ class LexicaChoice extends StatelessWidget {
         height: mediaQuery.height * 0.25,
         child: Padding(
           padding: EdgeInsets.only(top: mediaQuery.height * 0.02),
-          child: DecoratedBox(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 5.0,
+                  offset: Offset(0, 3),
+                  spreadRadius: 1.0,
+                )
+              ],
+            ),
+            child: Container(
               decoration: BoxDecoration(
-                  color: theme.colorScheme.secondary,
-                  borderRadius: BorderRadius.circular(15)),
+                color: theme.colorScheme.secondary,
+                borderRadius: BorderRadius.circular(15),
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -84,7 +98,9 @@ class LexicaChoice extends StatelessWidget {
                     ),
                   ),
                 ],
-              )),
+              ),
+            ),
+          ),
         ),
       ),
     );

@@ -73,7 +73,7 @@ class _LayoutManagerState extends ConsumerState<LayoutManager> {
     int currentTab = ref.watch(tab);
 
     if (ref.watch(pageIndex) == 0) {
-      title = Text("Welcome " + cacheData.getInstance().user.username,
+      title = Text(AppLocalizations.of(context).translate("welcome")+" "+ cacheData.getInstance().user.username,
           style: TextStyle(fontFamily: "Inter"));
     } else if (ref.watch(pageIndex) == 2 &&
         (currentTab == 1 || currentTab == 2)) {

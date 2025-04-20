@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olaf/classes.dart';
 import 'package:olaf/plants/plant_page.dart';
+import 'package:olaf/app_localization.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
-/// Plant data visualization widgets for the OLAF application.
-/// 
 /// This file contains various widgets and utilities used to display and 
 /// interact with plant monitoring data. These components are designed to 
 /// visualize sensor readings for plants, including temperature, soil humidity,
@@ -51,13 +51,16 @@ class disconnectButton extends ConsumerWidget {
         width: mediaQuery.width * 0.5,
         height: mediaQuery.height * 0.06,
         child: Center(
-          child: Text(
-            "Disconnect plant pot",
+          child: AutoSizeText(
+            AppLocalizations.of(context).translate('disconnect_plant_pot'),
             style: TextStyle(
               fontSize: mediaQuery.width * 0.05,
               color: Colors.white,
             ),
             textAlign: TextAlign.center,
+            minFontSize: 12,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),
@@ -89,6 +92,8 @@ class DashboardDataCard extends ConsumerWidget {
 
     Image image;
     String valueWithUnit;
+    String translationKey = title.replaceAll(' ', '_');
+    
     if (title == "temperature") {
       image = Image.asset(
         "./assets/images/dashboard/good_temp.png",
@@ -110,6 +115,7 @@ class DashboardDataCard extends ConsumerWidget {
     } else {
       throw "Unknown data type for dashboard data";
     }
+    
     return InkWell(
       onTap: () {
         ref.read(GraphChoice.notifier).state = choice;
@@ -118,21 +124,40 @@ class DashboardDataCard extends ConsumerWidget {
         width: mediaQuery.width * 0.4,
         height: mediaQuery.width * 0.4,
         decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15), 
+            // Add a white background layer to prevent shadow showing through
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 5.0,
+                offset: Offset(0, 3),
+                spreadRadius: 1.0,
+              )
+            ]),
+        // Add a child container with the semi-transparent background
+        child: Container(
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: theme.colorScheme.secondary),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            image,
-            Text(
-              title,
-              style: TextStyle(fontSize: mediaQuery.width * 0.05),
-            ),
-            Text(
-              valueWithUnit,
-              style: TextStyle(fontSize: mediaQuery.width * 0.05),
-            ),
-          ],
+            color: theme.colorScheme.secondary,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              image,
+              AutoSizeText(
+                AppLocalizations.of(context).translate(translationKey),
+                style: TextStyle(fontSize: mediaQuery.width * 0.05),
+                minFontSize: 12,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                valueWithUnit,
+                style: TextStyle(fontSize: mediaQuery.width * 0.06),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -212,6 +237,166 @@ class DataGraph extends ConsumerWidget {
       }
     }
 
+    // Find the corresponding plant in lexica for thresholds
+    final lexicaPlant = cacheData.getInstance().lexica.plants.firstWhere(
+      (p) => p.name == plant.name,
+      orElse: () => cacheData.getInstance().lexica.plants.first,
+    );
+
+    // Check if value exceeds thresholds based on current graph type
+    Color isOutsideRange(double value, Color baseColor) {
+      switch (ref.watch(GraphChoice)) {
+        case 0: // Temperature
+          if (value < lexicaPlant.temperatureRange[0]) return Colors.blue;
+          if (value > lexicaPlant.temperatureRange[1]) return Colors.red;
+          return baseColor;
+        case 1: // Soil humidity
+          if (value < lexicaPlant.soilHumidityRange[0]) return Colors.blue;
+          if (value > lexicaPlant.soilHumidityRange[1]) return Colors.red;
+          return baseColor;
+        case 2: // Air humidity
+          if (value < lexicaPlant.airHumidityRange[0]) return Colors.blue;
+          if (value > lexicaPlant.airHumidityRange[1]) return Colors.red;
+          return baseColor;
+        default:
+          return baseColor;
+      }
+    }
+
+    // Get threshold lines based on the selected data type
+    List<HorizontalLine> getThresholdLines() {
+      List<HorizontalLine> lines = [];
+      switch (ref.watch(GraphChoice)) {
+        case 0: // Temperature
+          lines.add(
+            HorizontalLine(
+              y: lexicaPlant.temperatureRange[0].toDouble(),
+              color: Colors.blue,
+              strokeWidth: 1,
+              dashArray: [5, 5],
+              label: HorizontalLineLabel(
+                show: true,
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.only(right: 5, top: 5),
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.blue.withAlpha(170),
+                ),
+                labelResolver: (line) => '  ${AppLocalizations.of(context).translate('min')}: ${line.y.toStringAsFixed(1)}°C  ',
+              ),
+            ),
+          );
+          lines.add(
+            HorizontalLine(
+              y: lexicaPlant.temperatureRange[1].toDouble(),
+              color: Colors.red,
+              strokeWidth: 1,
+              dashArray: [5, 5],
+              label: HorizontalLineLabel(
+                show: true,
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.only(right: 5, bottom: 5),
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.red.withAlpha(170),
+                ),
+                labelResolver: (line) => '  ${AppLocalizations.of(context).translate('max')}: ${line.y.toStringAsFixed(1)}°C  ',
+              ),
+            ),
+          );
+          break;
+        case 1: // Soil humidity
+          lines.add(
+            HorizontalLine(
+              y: lexicaPlant.soilHumidityRange[0].toDouble(),
+              color: Colors.blue,
+              strokeWidth: 1,
+              dashArray: [5, 5],
+              label: HorizontalLineLabel(
+                show: true,
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.only(right: 5, top: 5),
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.blue.withAlpha(170),
+                ),
+                labelResolver: (line) => '  ${AppLocalizations.of(context).translate('min')}: ${line.y.toStringAsFixed(1)}%  ',
+              ),
+            ),
+          );
+          lines.add(
+            HorizontalLine(
+              y: lexicaPlant.soilHumidityRange[1].toDouble(),
+              color: Colors.red,
+              strokeWidth: 1,
+              dashArray: [5, 5],
+              label: HorizontalLineLabel(
+                show: true,
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.only(right: 5, bottom: 5),
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.red.withAlpha(170),
+                ),
+                labelResolver: (line) => '  ${AppLocalizations.of(context).translate('max')}: ${line.y.toStringAsFixed(1)}%  ',
+              ),
+            ),
+          );
+          break;
+        case 2: // Air humidity
+          lines.add(
+            HorizontalLine(
+              y: lexicaPlant.airHumidityRange[0].toDouble(),
+              color: Colors.blue,
+              strokeWidth: 1,
+              dashArray: [5, 5],
+              label: HorizontalLineLabel(
+                show: true,
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.only(right: 5, top: 5),
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.blue.withAlpha(170),
+                ),
+                labelResolver: (line) => '  ${AppLocalizations.of(context).translate('min')}: ${line.y.toStringAsFixed(1)}%  ',
+              ),
+            ),
+          );
+          lines.add(
+            HorizontalLine(
+              y: lexicaPlant.airHumidityRange[1].toDouble(),
+              color: Colors.red,
+              strokeWidth: 1,
+              dashArray: [5, 5],
+              label: HorizontalLineLabel(
+                show: true,
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.only(right: 5, bottom: 5),
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.red.withAlpha(170),
+                ),
+                labelResolver: (line) => '  ${AppLocalizations.of(context).translate('max')}: ${line.y.toStringAsFixed(1)}%  ',
+              ),
+            ),
+          );
+          break;
+      }
+      return lines;
+    }
+
     final mediaQuery = MediaQuery.sizeOf(context);
     final data = _getDataByChoice();
     final yAxisTitle = _getYAxisTitle();
@@ -232,7 +417,7 @@ class DataGraph extends ConsumerWidget {
         lineColor = Colors.green;
         break;
       case 1:
-        lineColor = Colors.brown;
+        lineColor = Colors.amber;
         break;
       case 2:
         lineColor = Colors.blue;
@@ -258,12 +443,32 @@ class DataGraph extends ConsumerWidget {
                 isCurved: true,
                 barWidth: 3,
                 color: lineColor,
-                dotData: FlDotData(show: true),
+                dotData: FlDotData(
+                  show: true,
+                  getDotPainter: (spot, percent, barData, index) {
+                    // Use red for values outside the acceptable range
+                    Color dotColor = isOutsideRange(spot.y,lineColor);
+                    
+                    return FlDotCirclePainter(
+                      radius: 5,
+                      color: dotColor,
+                      strokeWidth: 1,
+                      strokeColor: Colors.white,
+                    );
+                  },
+                ),
               ),
             ],
+            extraLinesData: ExtraLinesData(
+              horizontalLines: getThresholdLines(),
+            ),
             titlesData: FlTitlesData(
               bottomTitles: AxisTitles(
-                axisNameWidget: Text("Time"),
+                axisNameWidget: AutoSizeText(
+                  AppLocalizations.of(context).translate("time"),
+                  style: TextStyle(fontSize: 12),
+                  maxLines: 1,
+                ),
                 sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (double value, TitleMeta meta) {
@@ -285,7 +490,11 @@ class DataGraph extends ConsumerWidget {
                 ),
               ),
               leftTitles: AxisTitles(
-                axisNameWidget: Text(yAxisTitle),
+                axisNameWidget: AutoSizeText(
+                  yAxisTitle,
+                  style: TextStyle(fontSize: 12),
+                  maxLines: 1,
+                ),
                 sideTitles: SideTitles(showTitles: true, reservedSize: 35),
               ),
               topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

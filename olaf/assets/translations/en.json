@@ -1,0 +1,8 @@
+{
+  "welcome": "Welcome to our application",
+  "login": "Please log in",
+  "logout": "You have been logged out",
+  "error": "An error occurred",
+  "reloading": "Reloading data...",
+  "reload_complete": "Data refreshed successfully"
+}

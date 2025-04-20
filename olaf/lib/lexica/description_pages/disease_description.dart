@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olaf/app_localization.dart';
 import 'package:olaf/lexica/description_pages/plant_description.dart';
 
 /// This class creates the page displaying all information related to a plant
@@ -99,19 +100,23 @@ class DiseaseDescription extends StatelessWidget {
             height: mediaQuery.height * 0.03,
           ),
           //======= DESCRIPTION ========
-          DescriptionAndTipsCard("Description", descriptionWidget),
+          DescriptionAndTipsCard(
+              AppLocalizations.of(context).translate("description"),
+              descriptionWidget),
           //========== SPACE ===========
           SizedBox(
             height: mediaQuery.height * 0.03,
           ),
           //======= DESCRIPTION ========
-          DescriptionAndTipsCard("Prevent", preventWidget),
+          DescriptionAndTipsCard(
+              AppLocalizations.of(context).translate("prevent"), preventWidget),
           //========== SPACE ===========
           SizedBox(
             height: mediaQuery.height * 0.03,
           ),
           //======= DESCRIPTION ========
-          DescriptionAndTipsCard("Cure", cureWidget),
+          DescriptionAndTipsCard(
+              AppLocalizations.of(context).translate("cure"), cureWidget),
           //========== SPACE ===========
           SizedBox(
             height: mediaQuery.height * 0.03,

@@ -68,7 +68,8 @@ class LexPlant {
       image: json['image'] ?? '',
       howTo: json['howTo'] ?? '',
       tips: tips,
-      soilHumidityRange: (json['soilHumidityRange'] as List<dynamic>).cast<int>(),
+      soilHumidityRange:
+          (json['soilHumidityRange'] as List<dynamic>).cast<int>(),
       airHumidityRange: (json['airHumidityRange'] as List<dynamic>).cast<int>(),
       temperatureRange: (json['temperatureRange'] as List<dynamic>).cast<int>(),
     );
@@ -186,9 +187,9 @@ class Plant {
 
 //------------------------- USER -------------------------
 class User {
-  final String username;
+  String username;
   String profilePicture;
-  final String email;
+  String email;
 
   User({
     required this.username,
@@ -215,13 +216,16 @@ class User {
   }
 }
 
-class cacheData with ChangeNotifier{
+class cacheData with ChangeNotifier {
   final User user;
   final List<Plant> savedPlants;
   final Lexica lexica;
   final List<analyzedImages> images;
   cacheData._(
-      {required this.user, required this.savedPlants, required this.lexica, required this.images});
+      {required this.user,
+      required this.savedPlants,
+      required this.lexica,
+      required this.images});
   static cacheData? _instance;
 
   static cacheData getInstance() {
@@ -237,36 +241,36 @@ class cacheData with ChangeNotifier{
       required Lexica lexica,
       required List<analyzedImages> images}) {
     _instance = cacheData._(
-      user: user,
-      savedPlants: savedPlants,
-      lexica: lexica,
-      images: images
-    );
+        user: user, savedPlants: savedPlants, lexica: lexica, images: images);
   }
 
   static bool isInitialized() {
     return _instance != null;
   }
-   void addImages(analyzedImages newImage) {
+
+  void addImages(analyzedImages newImage) {
     images.add(newImage);
     notifyListeners();
   }
-   void removeImage(int imageIndex) {
+
+  void removeImage(int imageIndex) {
     images.removeAt(imageIndex);
     notifyListeners();
   }
-   void updateImageStatus(String status) {
-    images.last.result=status;
+
+  void updateImageStatus(String status) {
+    images.last.result = status;
     notifyListeners();
   }
 }
+
 //-------------------- ANALYZED IMAGES --------------------
-class analyzedImages{
+class analyzedImages {
   final String name;
   final String image;
-   String result;
+  String result;
   analyzedImages(
-      {required this.name,required this.image, required this.result});
+      {required this.name, required this.image, required this.result});
 
   Map<String, dynamic> toJson() {
     return {
@@ -276,7 +280,7 @@ class analyzedImages{
     };
   }
 
-  factory analyzedImages.fromJson(Map<String, dynamic> json,name) {
+  factory analyzedImages.fromJson(Map<String, dynamic> json, name) {
     return analyzedImages(
       name: name,
       image: json['image'] ?? '',
