@@ -36,6 +36,7 @@ class LexPlant {
   final List<int> temperatureRange;
   final List<int> soilHumidityRange;
   final List<int> airHumidityRange;
+  final String? season;
 
   LexPlant({
     required this.name,
@@ -45,6 +46,7 @@ class LexPlant {
     required this.temperatureRange,
     required this.soilHumidityRange,
     required this.airHumidityRange,
+    this.season,
   });
 
   // Convert a lexPlant object into a map
@@ -57,6 +59,7 @@ class LexPlant {
       'temperatureRange': temperatureRange,
       'soilHumidityRange': soilHumidityRange,
       'airHumidityRange': airHumidityRange,
+      'season': season,
     };
   }
 
@@ -72,6 +75,7 @@ class LexPlant {
           (json['soilHumidityRange'] as List<dynamic>).cast<int>(),
       airHumidityRange: (json['airHumidityRange'] as List<dynamic>).cast<int>(),
       temperatureRange: (json['temperatureRange'] as List<dynamic>).cast<int>(),
+      season: json['season'],
     );
   }
 }

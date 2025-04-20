@@ -115,6 +115,7 @@ LexPlant _buildLexPlant(Map<String, AttributeValue> item, Map<String, AttributeV
     soilHumidityRange: details['soilHumidityRange']!.l!.map((e) => int.parse(e.n!)).toList(),
     airHumidityRange: details['airHumidityRange']!.l!.map((e) => int.parse(e.n!)).toList(),
     temperatureRange: details['temperatureRange']!.l!.map((e) => int.parse(e.n!)).toList(),
+    season: details['season']?.s,
   );
 }
 

@@ -21,6 +21,7 @@ class LexicaDescription extends ConsumerWidget {
           ref.read(PlantorDisease).temperatureRange,
           ref.read(PlantorDisease).soilHumidityRange,
           ref.read(PlantorDisease).airHumidityRange,
+          ref.read(PlantorDisease).season,
         );
         break;
 
