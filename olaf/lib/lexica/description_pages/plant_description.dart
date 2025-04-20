@@ -365,7 +365,7 @@ class SeasonCard extends StatelessWidget {
           //========== TITLE ===========
           Text(
             AppLocalizations.of(context).translate("when_to_grow"),
-            style: TextStyle(fontSize: mediaQuery.width * 0.06),
+            style: TextStyle(fontSize: mediaQuery.width * 0.05),
             textAlign: TextAlign.center,
           ),
 
