@@ -353,7 +353,7 @@ class SeasonCard extends StatelessWidget {
     return Container(
       width: mediaQuery.width * 0.4,
       constraints: BoxConstraints(
-        minHeight: mediaQuery.width * 0.5,
+        minHeight: mediaQuery.width * 0.48,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
@@ -371,12 +371,16 @@ class SeasonCard extends StatelessWidget {
 
           //=========== ICON ===========
           // Centered icon
-            Image.asset(
-            "assets/images/lexicon/" + (title.contains(RegExp(r'[ -]')) ? title.split(RegExp(r'[ -]'))[1] : title) + ".png",
-            width: mediaQuery.width * 0.2,
-            height: mediaQuery.width * 0.2,
+          Image.asset(
+            "assets/images/lexicon/" +
+                (title.contains(RegExp(r'[ -]'))
+                    ? title.split(RegExp(r'[ -]'))[1]
+                    : title) +
+                ".png",
+            width: mediaQuery.width * 0.15,
+            height: mediaQuery.width * 0.15,
           ),
-          SizedBox(height: mediaQuery.height * 0.02),
+          SizedBox(height: mediaQuery.height * 0.005),
           // Text below icon
           Container(
             width: mediaQuery.width * 0.35,
@@ -385,7 +389,7 @@ class SeasonCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: mediaQuery.height * 0.01,
+              vertical: mediaQuery.height * 0.001,
               horizontal: mediaQuery.width * 0.02,
             ),
             child: Text(
