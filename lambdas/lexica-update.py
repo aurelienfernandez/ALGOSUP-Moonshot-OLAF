@@ -36,14 +36,14 @@ def hash_item(details):
     return hashlib.sha256(json.dumps(details, sort_keys=True).encode('utf-8')).hexdigest()
 
 # Push a plant into the lexica
-
-
 def pushPlant(newPlant):
+    # Get existing plant data, if any
     item = getItem(newPlant['name'])
 
+    # Format the new item with proper structure
     newItem = {
         'name': newPlant['name'],
-        'version': item.get('version', 0) + 1 if item else 0,
+        'version': item.get('version', 0) + 1 if item else 0,  # Increment version or start at 0
         'details': {
             "diseases": [
                 {
@@ -52,16 +52,18 @@ def pushPlant(newPlant):
                 }
                 for disease in newPlant['diseases']
             ],
-            "howTo": newPlant['howTo'],  # Use directly as a string
-            "image": newPlant['image'],  # Use directly as a string
-            # This should be a list, so leave as is
-            "tips": newPlant['tips']
+            "howTo": newPlant['howTo'],
+            "image": newPlant['image'],
+            "tips": newPlant['tips'],
+            "temperatureRange":newPlant['TemperatureRange'],
+            "soilHumidityRange":newPlant['SoilHumidityRange'],
+            "airHumidityRange":newPlant['AirHumidityRange'],
         }
     }
 
+    # Only save if it's a new item or if the details have changed
     if item is None or hash_item(item['details']) != hash_item(newItem['details']):
         table.put_item(Item=newItem)
-
 
 # Push a disease into the lexica
 def pushDisease(newDisease):
