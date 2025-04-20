@@ -86,6 +86,14 @@ class LexiCard extends StatelessWidget {
           Image.network(
             element.image,
             fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: Colors.grey[300],
+                child: Center(
+                  child: Icon(Icons.image_not_supported, color: Colors.grey[600]),
+                ),
+              );
+            },
           ),
           fontSize),
     );

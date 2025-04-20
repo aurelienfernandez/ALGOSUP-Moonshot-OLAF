@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:olaf/app_localization.dart';
+import 'package:olaf/lexica/lexica_page.dart';
 
 /// This class creates the page displaying all information related to a plant
 /// from the lexicon.
@@ -12,6 +13,7 @@ import 'package:olaf/app_localization.dart';
 /// - `temperatureRange`: The ideal temperature range for the plant.
 /// - `soilHumidityRange`: The ideal soil humidity range for the plant.
 /// - `airHumidityRange`: The ideal air humidity range for the plant.
+/// - `season`: The season when the plant grows best.
 class PlantDescription extends StatelessWidget {
   final String name;
   final String image;
@@ -20,6 +22,7 @@ class PlantDescription extends StatelessWidget {
   final List<int> temperatureRange;
   final List<int> soilHumidityRange;
   final List<int> airHumidityRange;
+  final String? season;
 
   PlantDescription(
     this.name,
@@ -29,6 +32,7 @@ class PlantDescription extends StatelessWidget {
     this.temperatureRange,
     this.soilHumidityRange,
     this.airHumidityRange,
+    this.season,
   );
 
   @override
@@ -144,7 +148,7 @@ class PlantDescription extends StatelessWidget {
                     SizedBox(
                       height: mediaQuery.height * 0.03,
                     ),
-                    SeasonCard("autumn"),
+                    SeasonCard(season!),
                   ],
                 )
               ],
@@ -367,8 +371,8 @@ class SeasonCard extends StatelessWidget {
 
           //=========== ICON ===========
           // Centered icon
-          Image.asset(
-            "assets/images/lexicon/" + title + ".png",
+            Image.asset(
+            "assets/images/lexicon/" + (title.contains(RegExp(r'[ -]')) ? title.split(RegExp(r'[ -]'))[1] : title) + ".png",
             width: mediaQuery.width * 0.2,
             height: mediaQuery.width * 0.2,
           ),

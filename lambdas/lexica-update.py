@@ -2,12 +2,13 @@ import json
 import boto3
 import hashlib
 from botocore.exceptions import ClientError
+from decimal import Decimal
+
 # Setup the table
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table("olaf-lexica")
 
 # Get item based on the name and the version number
-
 def getItem(name):
     response = table.query(
         KeyConditionExpression=boto3.dynamodb.conditions.Key('name').eq(name),
@@ -29,6 +30,8 @@ def convert_sets(obj):
         return {k: convert_sets(v) for k, v in obj.items()}
     if isinstance(obj, list):
         return [convert_sets(i) for i in obj]
+    if isinstance(obj, Decimal):
+        return int(obj)
     return obj
         
 def hash_item(details):
@@ -45,25 +48,20 @@ def pushPlant(newPlant):
         'name': newPlant['name'],
         'version': item.get('version', 0) + 1 if item else 0,  # Increment version or start at 0
         'details': {
-            "diseases": [
-                {
-                    "name": disease['name'],
-                    "image": disease['image']
-                }
-                for disease in newPlant['diseases']
-            ],
             "howTo": newPlant['howTo'],
             "image": newPlant['image'],
             "tips": newPlant['tips'],
             "temperatureRange":newPlant['TemperatureRange'],
             "soilHumidityRange":newPlant['SoilHumidityRange'],
             "airHumidityRange":newPlant['AirHumidityRange'],
+            "season": newPlant.get("season"),
         }
     }
 
     # Only save if it's a new item or if the details have changed
     if item is None or hash_item(item['details']) != hash_item(newItem['details']):
         table.put_item(Item=newItem)
+
 
 # Push a disease into the lexica
 def pushDisease(newDisease):
@@ -106,8 +104,8 @@ def lambda_handler(context, event):
             print(f"An error occurred: {e}")
 
     if 'plants' in json_content:
-        for plant, plant_details in json_content['plants'].items():
-            pushDisease(plant_details)
+        for plant_name, plant_details in json_content['plants'].items():
+            pushPlant(plant_details)
     if 'diseases' in json_content:
         for disease_name, disease_details in json_content['diseases'].items():
             pushDisease(disease_details)
