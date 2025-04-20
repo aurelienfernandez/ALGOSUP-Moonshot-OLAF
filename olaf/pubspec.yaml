@@ -11,8 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   auto_size_text: ^3.0.0
-  marquee: ^2.0.4
-  fading_edge_scrollview: ^3.0.0
+  fading_edge_scrollview: ^4.1.1
   flutter_riverpod: ^2.0.0
   flutter_localizations:
     sdk: flutter
@@ -22,7 +21,7 @@ dependencies:
   aws_dynamodb_api: ^2.0.0
   shared_preferences: ^2.2.3
   equatable: ^2.0.5
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.3
   image_picker: ^1.1.2
   amazon_cognito_identity_dart_2: ^3.1.1
   amplify_api: ^2.0.0
@@ -35,36 +34,37 @@ dependencies:
   dio: ^5.5.0+1
   http: ^1.2.2
   aws_lambda_api: ^2.0.0
-
-  
+  lottie: ^3.1.2
+  flutter_native_splash: ^2.4.0
+  google_fonts: ^6.2.1
+  fl_chart: ^0.70.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
-
-
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/images/logo.png"
-  min_sdk_android: 21
-
-
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
   assets: 
-    - assets/images/en.png
-    - assets/images/logo.png
-    - assets/images/fr.png
-    - assets/images/de.png
-    - assets/images/no-image.png
-    - assets/images/home.png
-    - assets/images/plants.png
-    - assets/images/lexica.png
-    - assets/images/analyze.png
-    - assets//lang/en.json
-    - assets/lang/fr.json
-    - assets/lang/de.json
+    - assets/
+    - assets/lang/
+    - assets/images/
+    - assets/images/lexicon/
+    - assets/images/dashboard/
+  
+# flutter_native_splash-acceptance.yaml
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/blank_bg.png
+  branding: assets/images/blank_bg.png
+  color_dark: "#121212"
+  image_dark: assets/images/blank_bg.png
+  branding_dark: assets/images/blank_bg.png
+  android_12:
+    image: assets/images/blank_bg.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/images/blank_bg.png
+    icon_background_color_dark: "#121212"
+  web: false

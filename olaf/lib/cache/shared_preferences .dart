@@ -51,7 +51,6 @@ Future<void> saveData(User user, List<Plant> savedPlants,
 
 Future<void> GetCachedData() async {
   try {
-    // Retrieve the JSON string from SharedPreferences using the key 'olaf'
     final prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString('olaf');
 
@@ -59,10 +58,9 @@ Future<void> GetCachedData() async {
       throw Exception("No data found in cache.");
     }
 
-    // Decode the JSON string into a map
     Map<String, dynamic> jsonMap = jsonDecode(jsonString);
 
-    // Extract user data and convert it to a User object
+    // Extract user data
     Map<String, dynamic> userJson = jsonMap['user'] ?? {};
     User user = User.fromJson(userJson);
 
@@ -75,8 +73,9 @@ Future<void> GetCachedData() async {
     // Parse analyzedImages
     List<dynamic> analyzedImagesJson = jsonMap['analyzedImages'] ?? [];
     List<analyzedImages> analyzed = analyzedImagesJson
-        .map((json) => analyzedImages.fromJson(json as Map<String, dynamic>, json['name']??''))
+        .map((json) => analyzedImages.fromJson(json as Map<String, dynamic>, json['name'] ?? ''))
         .toList();
+
     // Parse lexica
     Map<String, dynamic> lexicaMap = jsonMap['lexica'] ?? {};
 
@@ -107,7 +106,7 @@ Future<void> GetCachedData() async {
 
     debugPrint("Data successfully retrieved and cached.");
   } catch (e) {
-    debugPrint("$e");
+    debugPrint("Error: $e");
     throw ('Error decoding JSON or initializing cacheData: $e');
   }
 }

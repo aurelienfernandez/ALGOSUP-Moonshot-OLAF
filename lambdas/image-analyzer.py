@@ -1,4 +1,3 @@
-import hashlib
 import os
 import tempfile
 from PIL import Image
@@ -14,10 +13,14 @@ from botocore.exceptions import ClientError
 
 def analyze(model, image):
     try:
+        # Convert RGBA to RGB if needed
+        if image.mode == 'RGBA':
+            image = image.convert('RGB')
+            
         # Resize and normalize the image
         image = image.resize((224, 224))
-        image_array = np.array(image)
-        image_array = image_array / 255.0
+        image = np.array(image, dtype=np.float32)  # Convert to NumPy and set type to float
+        image_array = image / 255.0
         image_array = np.expand_dims(image_array, axis=0)
 
         # Perform predictions
@@ -30,25 +33,19 @@ def analyze(model, image):
         max_index = np.argmax(result)
 
         state = {
-            0: 'Pepper-bell Bacterial spot',
-            1: 'Pepper-bell healthy',
-            2: 'Potato Early blight',
-            3: 'Potato healthy',
-            4: 'Potato Late blight',
-            5: 'Raspberry healthy',
-            6: 'Strawberry healthy',
-            7: 'Strawberry Leaf scorch',
-            8: 'Tomato Bacterial spot',
-            9: 'Tomato Early blight',
-            10: 'Tomato healthy',
-            11: 'Tomato Late blight',
-            12: 'Tomato Leaf Mold',
-            13: 'Tomato Septoria leaf spot',
-            14: 'Tomato Spider mites Two-spotted spider mite',
-            15: 'Tomato Target Spot',
-            16: 'Tomato Tomato mosaic virus',
-            17: 'Tomato Tomato Yellow Leaf Curl Virus'
+            0: 'Tomato Bacterial spot',
+            1: 'Tomato Early blight',
+            2: 'Tomato healthy',
+            3: 'Tomato Late blight',
+            4: 'Tomato Leaf Mold',
+            5: 'Tomato mosaic virus',
+            6: 'Tomato Septoria leaf spot',
+            7: 'Tomato Spider mites',
+            8: 'Tomato Target Spot',
+            9: 'Tomato Yellow Leaf Curl Virus'
         }
+
+        return state, result, max_index
 
     except ClientError as e:
         print(f"An error occurred: {e}")
@@ -59,8 +56,6 @@ def analyze(model, image):
                 'Content-Type': 'application/json'
             }
         }
-    return state[max_index]
-
 
 def lambda_handler(event, context):
     try:
@@ -71,7 +66,6 @@ def lambda_handler(event, context):
         # Get model
         content_object = s3Resource.Object('olaf-s3', 'model/CropAI.keras')
         model_object = content_object.get()['Body'].read()
-        model_file_io = io.BytesIO(model_object)
         temp_model_file_path = None
 
         with tempfile.NamedTemporaryFile(suffix='.keras', delete=False) as temp_model_file:

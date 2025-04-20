@@ -33,14 +33,18 @@ class LexPlant {
   final String image;
   final String howTo;
   final List<String> tips;
-  final List<PlantDisease> diseases;
+  final List<int> temperatureRange;
+  final List<int> soilHumidityRange;
+  final List<int> airHumidityRange;
 
   LexPlant({
     required this.name,
     required this.image,
     required this.howTo,
     required this.tips,
-    required this.diseases,
+    required this.temperatureRange,
+    required this.soilHumidityRange,
+    required this.airHumidityRange,
   });
 
   // Convert a lexPlant object into a map
@@ -50,25 +54,24 @@ class LexPlant {
       'image': image,
       'howTo': howTo,
       'tips': tips,
-      'diseases': diseases.map((disease) => disease.toJson()).toList(),
+      'temperatureRange': temperatureRange,
+      'soilHumidityRange': soilHumidityRange,
+      'airHumidityRange': airHumidityRange,
     };
   }
 
   factory LexPlant.fromJson(Map<String, dynamic> json) {
     List<String> tips = (json['tips'] as List<dynamic>).cast<String>().toList();
 
-    List<PlantDisease> diseases = [];
-    List<dynamic> diseasesJson = json['diseases'];
-    for (var diseaseData in diseasesJson) {
-      diseases.add(PlantDisease.fromJson(diseaseData as Map<String, dynamic>));
-    }
-
     return LexPlant(
       name: json['name'] ?? '',
       image: json['image'] ?? '',
       howTo: json['howTo'] ?? '',
       tips: tips,
-      diseases: diseases,
+      soilHumidityRange:
+          (json['soilHumidityRange'] as List<dynamic>).cast<int>(),
+      airHumidityRange: (json['airHumidityRange'] as List<dynamic>).cast<int>(),
+      temperatureRange: (json['temperatureRange'] as List<dynamic>).cast<int>(),
     );
   }
 }
@@ -138,18 +141,18 @@ class Lexica {
 //------------------------- PLANT -------------------------
 class Plant {
   final String name;
+  final String type;
   final String image;
   final String disease;
-  final String maturation;
-  final String soilHumidity;
-  final String airHumidity;
-  final String temperature;
+  final List<int> soilHumidity;
+  final List<int> airHumidity;
+  final List<double> temperature;
 
   Plant({
     required this.name,
+    required this.type,
     required this.image,
     required this.disease,
-    required this.maturation,
     required this.soilHumidity,
     required this.airHumidity,
     required this.temperature,
@@ -159,9 +162,9 @@ class Plant {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'type': type,
       'image': image,
       'disease': disease,
-      'maturatiomaturation': maturation,
       'soilHumidity': soilHumidity,
       'airHumidity': airHumidity,
       'temperature': temperature,
@@ -172,9 +175,9 @@ class Plant {
   factory Plant.fromJson(Map<String, dynamic> json) {
     return Plant(
       name: json['name'] ?? '',
+      type: json['type'] ?? '',
       image: json['image'] ?? '',
       disease: json['disease'] ?? '',
-      maturation: json['maturation'] ?? '',
       soilHumidity: json['soilHumidity'] ?? '',
       airHumidity: json['airHumidity'] ?? '',
       temperature: json['temperature'] ?? '',
@@ -184,9 +187,9 @@ class Plant {
 
 //------------------------- USER -------------------------
 class User {
-  final String username;
+  String username;
   String profilePicture;
-  final String email;
+  String email;
 
   User({
     required this.username,
@@ -213,13 +216,16 @@ class User {
   }
 }
 
-class cacheData with ChangeNotifier{
+class cacheData with ChangeNotifier {
   final User user;
   final List<Plant> savedPlants;
   final Lexica lexica;
   final List<analyzedImages> images;
   cacheData._(
-      {required this.user, required this.savedPlants, required this.lexica, required this.images});
+      {required this.user,
+      required this.savedPlants,
+      required this.lexica,
+      required this.images});
   static cacheData? _instance;
 
   static cacheData getInstance() {
@@ -235,36 +241,36 @@ class cacheData with ChangeNotifier{
       required Lexica lexica,
       required List<analyzedImages> images}) {
     _instance = cacheData._(
-      user: user,
-      savedPlants: savedPlants,
-      lexica: lexica,
-      images: images
-    );
+        user: user, savedPlants: savedPlants, lexica: lexica, images: images);
   }
 
   static bool isInitialized() {
     return _instance != null;
   }
-   void addImages(analyzedImages newImage) {
+
+  void addImages(analyzedImages newImage) {
     images.add(newImage);
     notifyListeners();
   }
-   void removeImage(int imageIndex) {
+
+  void removeImage(int imageIndex) {
     images.removeAt(imageIndex);
     notifyListeners();
   }
-   void updateImageStatus(String status) {
-    images.last.result=status;
+
+  void updateImageStatus(String status) {
+    images.last.result = status;
     notifyListeners();
   }
 }
+
 //-------------------- ANALYZED IMAGES --------------------
-class analyzedImages{
+class analyzedImages {
   final String name;
   final String image;
-   String result;
+  String result;
   analyzedImages(
-      {required this.name,required this.image, required this.result});
+      {required this.name, required this.image, required this.result});
 
   Map<String, dynamic> toJson() {
     return {
@@ -274,7 +280,7 @@ class analyzedImages{
     };
   }
 
-  factory analyzedImages.fromJson(Map<String, dynamic> json,name) {
+  factory analyzedImages.fromJson(Map<String, dynamic> json, name) {
     return analyzedImages(
       name: name,
       image: json['image'] ?? '',
