@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:olaf/app_localization.dart';
-import 'package:olaf/lexica/lexica_page.dart';
 
 /// This class creates the page displaying all information related to a plant
 /// from the lexicon.

@@ -15,7 +15,7 @@ class LexicaChoice extends StatelessWidget {
       onTap: onPressed,
       child: SizedBox(
         width: mediaQuery.width * 0.45,
-        height: mediaQuery.height * 0.25,
+        height: mediaQuery.height * 0.3,
         child: Padding(
           padding: EdgeInsets.only(top: mediaQuery.height * 0.02),
           child: Container(

@@ -376,6 +376,7 @@ class _SettingsState extends ConsumerState<SettingsPage> {
                           TextButton(
                             onPressed: () {
                               signOutCurrentUser();
+                              Navigator.of(dialogContext).pop(); // Close dialog
                             },
                             child: Text(
                               yesText,

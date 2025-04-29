@@ -5,46 +5,62 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.0.1+1
 
 environment:
-  sdk: '>=2.18.5 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'  # Updated to a more recent SDK version
 
 dependencies:
   flutter:
     sdk: flutter
-  auto_size_text: ^3.0.0
-  fading_edge_scrollview: ^4.1.1
-  flutter_riverpod: ^2.0.0
   flutter_localizations:
     sdk: flutter
+    
+  # UI components
+  auto_size_text: ^3.0.0
+  fading_edge_scrollview: ^4.1.1
   horizontal_blocked_scroll_physics: ^4.0.1
-  camera: ^0.11.0+1
-  path_provider: ^2.1.4
-  aws_dynamodb_api: ^2.0.0
-  shared_preferences: ^2.2.3
-  equatable: ^2.0.5
-  flutter_launcher_icons: ^0.14.3
-  image_picker: ^1.1.2
-  amazon_cognito_identity_dart_2: ^3.1.1
-  amplify_api: ^2.0.0
-  amplify_auth_cognito: ^2.0.0
-  amplify_authenticator: ^2.0.0
-  amplify_flutter: ^2.3.0
-  amplify_storage_s3: ^2.3.0
-  tuple: ^2.0.2
-  permission_handler: ^11.3.1
-  dio: ^5.5.0+1
-  http: ^1.2.2
-  aws_lambda_api: ^2.0.0
-  lottie: ^3.1.2
-  flutter_native_splash: ^2.4.0
   google_fonts: ^6.2.1
   fl_chart: ^0.71.0
+  lottie: ^3.1.2
+  
+  # State management
+  flutter_riverpod: ^2.0.0
+  equatable: ^2.0.5
+  
+  # Device features
+  camera: ^0.11.0+1
+  path_provider: ^2.1.4
+  image_picker: ^1.1.2
+  permission_handler: ^11.3.1
+  
+  # Storage & Preferences
+  shared_preferences: ^2.2.3
+  
+  # AWS & Amplify (consolidated section)
+  amplify_flutter: ^2.3.0
+  amplify_auth_cognito: ^2.0.0
+  amplify_authenticator: ^2.0.0
+  amplify_api: ^2.0.0
+  amplify_storage_s3: ^2.3.0
+  amazon_cognito_identity_dart_2: ^3.1.1
+  
+  # AWS Services
+  aws_dynamodb_api: ^2.0.0
+  aws_lambda_api: ^2.0.0
+  
+  # Networking
+  dio: ^5.5.0+1
+  http: ^1.2.2
+  
+  # Utils
+  tuple: ^2.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.3  # Moved to dev_dependencies as it's a build-time tool
+  flutter_native_splash: ^2.4.0    # Moved to dev_dependencies as it's a build-time tool
 
+# Flutter config
 flutter:
   uses-material-design: true
   assets: 
@@ -54,7 +70,6 @@ flutter:
     - assets/images/lexicon/
     - assets/images/dashboard/
   
-# flutter_native_splash-acceptance.yaml
 flutter_native_splash:
   color: "#ffffff"
   image: assets/images/blank_bg.png
