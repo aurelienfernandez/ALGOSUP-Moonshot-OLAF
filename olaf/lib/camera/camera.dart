@@ -90,7 +90,6 @@ class _CameraScreenState extends State<CameraScreen> {
                                 .codeUnits;
 
                         final date = DateTime.now().toString();
-
                         cacheData.getInstance().addImages(analyzedImages(
                             name: date, image: toBase64, result: "loading"));
                         invoke(payload);

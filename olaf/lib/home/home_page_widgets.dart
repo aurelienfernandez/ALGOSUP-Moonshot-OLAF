@@ -46,44 +46,45 @@ class _GardensState extends ConsumerState<Gardens>
         Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start, // Align columns at the top
             children: [
               Column(children: [
-                for (int i = 0; i < allImages.length; i += 2)
-                  PictureCards(
-                      allImages[i].name.substring(0, 10) +
-                          "\n" +
-                          allImages[i].result.split(" ").first +
-                          "\n" +
-                          allImages[i].result.split(" ").sublist(1).join(" "),
-                      Image(
-                        image: MemoryImage(
-                          base64Decode(allImages[i].image),
-                        ),
-                        fit: BoxFit.fill,
-                      ),
-                      mediaQuery.width * 0.025,
-                      allImages[i].name), 
+          for (int i = 0; i < allImages.length; i += 2)
+            PictureCards(
+                allImages[i].name.substring(0, 10) +
+              "\n" +
+              allImages[i].result.split(" ").first +
+              "\n" +
+              allImages[i].result.split(" ").sublist(1).join(" "),
+                Image(
+            image: MemoryImage(
+              base64Decode(allImages[i].image),
+            ),
+            fit: BoxFit.fill,
+                ),
+                mediaQuery.width * 0.025,
+                allImages[i].name), 
               ]),
               if (allImages.length > 1)
-                Column(
-                  children: [
-                    for (int i = 1; i < allImages.length; i += 2)
-                      PictureCards(
-                          allImages[i].name.substring(0, 10) +
-                              "\n" +
-                              allImages[i].result.split(" ").first +
-                              "\n" +
-                              allImages[i].result.split(" ").sublist(1).join(" "),
-                          Image(
-                            image: MemoryImage(
-                              base64Decode(allImages[i].image),
-                            ),
-                            fit: BoxFit.fill,
-                          ),
-                          mediaQuery.width * 0.025,
-                          allImages[i].name) 
-                  ],
-                )
+          Column(
+            children: [
+              for (int i = 1; i < allImages.length; i += 2)
+                PictureCards(
+              allImages[i].name.substring(0, 10) +
+                  "\n" +
+                  allImages[i].result.split(" ").first +
+                  "\n" +
+                  allImages[i].result.split(" ").sublist(1).join(" "),
+              Image(
+                image: MemoryImage(
+                  base64Decode(allImages[i].image),
+                ),
+                fit: BoxFit.fill,
+              ),
+              mediaQuery.width * 0.025,
+              allImages[i].name) 
+            ],
+          )
             ],
           )
         ),
@@ -118,14 +119,7 @@ class PictureCards extends StatelessWidget {
               decoration: BoxDecoration(
                 color: theme.colorScheme.secondary,
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 5.0,
-                    offset: Offset(0, 3),
-                    spreadRadius: 1.0,
-                  )
-                ],
+                
               ),
               child: Column(
                 children: [

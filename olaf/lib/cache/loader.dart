@@ -195,6 +195,7 @@ Future<List<analyzedImages>> getImages() async {
   try {
     final user = await Amplify.Auth.getCurrentUser();
     var path = StoragePath.fromString("users/${user.userId}/analyzed/");
+    
     final results = await Amplify.Storage.list(path: path).result;
 
     for (var item in results.items) {
@@ -202,21 +203,45 @@ Future<List<analyzedImages>> getImages() async {
       final itemName = item.path.split(RegExp(r'/')).last;
       final localPath = '${directory.path}/$itemName';
       
-      // Download file
-      await Amplify.Storage.downloadFile(
-        path: itemPath,
-        localFile: AWSFile.fromPath(localPath)
-      ).result;
+      try {
+        // Download file
+        await Amplify.Storage.downloadFile(
+          path: itemPath,
+          localFile: AWSFile.fromPath(localPath)
+        ).result;
 
-      // Process file
-      final file = File(localPath);
-      final fileContent = await file.readAsString();
-      final jsonData = jsonDecode(fileContent);
-      
-      images.add(analyzedImages.fromJson(jsonData, itemName));
-      
-      // Cleanup
-      await file.delete();
+        // Process file
+        final file = File(localPath);
+        final fileContent = await file.readAsString();
+        final jsonData = jsonDecode(fileContent) as Map<String, dynamic>;
+        
+       
+        // Extract the image and result from the JSON, safely
+        String? image;
+        String? result;
+        
+        image = jsonData['image'] as String;
+        
+        
+        result = jsonData['result'] as String;
+        
+        
+        // Only create the object if both values are valid strings
+        if (image != null && result != null) {
+          images.add(analyzedImages(
+            name: itemName,
+            image: image,
+            result: result
+          ));
+        } else {
+          debugPrint("Skipping $itemName due to invalid data");
+        }
+        
+        // Cleanup
+        await file.delete();
+      } catch (e) {
+        debugPrint("Error processing file $itemName: $e");
+      }
     }
   } catch (e) {
     debugPrint("Failed to get images: $e");

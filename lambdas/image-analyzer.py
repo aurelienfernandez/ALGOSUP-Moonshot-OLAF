@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 from PIL import Image
 import tensorflow as tf
@@ -10,28 +11,17 @@ import datetime
 import json
 from botocore.exceptions import ClientError
 
-
 def analyze(model, image):
     try:
-        # Convert RGBA to RGB if needed
         if image.mode == 'RGBA':
             image = image.convert('RGB')
-            
-        # Resize and normalize the image
         image = image.resize((224, 224))
-        image = np.array(image, dtype=np.float32)  # Convert to NumPy and set type to float
+        image = np.array(image, dtype=np.float32)
         image_array = image / 255.0
         image_array = np.expand_dims(image_array, axis=0)
-
-        # Perform predictions
         predictions = model.predict(image_array)
-
-        # Extract the results
         result = predictions[0]
-
-        # Find the index of the highest number in the results
         max_index = np.argmax(result)
-
         state = {
             0: 'Tomato Bacterial spot',
             1: 'Tomato Early blight',
@@ -44,20 +34,25 @@ def analyze(model, image):
             8: 'Tomato Target Spot',
             9: 'Tomato Yellow Leaf Curl Virus'
         }
-
-        return state, result, max_index
-
+         # If max value is less than 80%, set state to unknown
+        if(np.max(result)<0.8):
+            return "unknown"
+        return state[max_index]
     except ClientError as e:
         print(f"An error occurred: {e}")
         return {
             'statusCode': 500,
             'body': json.dumps({'message': 'An error occurred while analyzing the image.'}),
-            'headers': {
-                'Content-Type': 'application/json'
-            }
+            'headers': {'Content-Type': 'application/json'}
         }
 
 def lambda_handler(event, context):
+    temp_model_file_path = None
+
+    # Clean /tmp at the start of the handler
+    shutil.rmtree('/tmp', ignore_errors=True)
+    os.makedirs('/tmp', exist_ok=True)
+
     try:
         # S3 initializations
         s3Client = boto3.client("s3")
@@ -66,12 +61,11 @@ def lambda_handler(event, context):
         # Get model
         content_object = s3Resource.Object('olaf-s3', 'model/CropAI.keras')
         model_object = content_object.get()['Body'].read()
-        temp_model_file_path = None
 
-        with tempfile.NamedTemporaryFile(suffix='.keras', delete=False) as temp_model_file:
+        with tempfile.NamedTemporaryFile(suffix='.keras', dir='/tmp', delete=False) as temp_model_file:
             temp_model_file_path = temp_model_file.name
             temp_model_file.write(model_object)
-            temp_model_file.flush()  # Ensure data is written to disk
+            temp_model_file.flush()
             model = tf.keras.models.load_model(temp_model_file.name)
 
         imageBase64 = event.get('image')
