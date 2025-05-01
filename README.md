@@ -1,15 +1,37 @@
-# OLAF
+# OLAF – OnLine Automated Farm
 
-## Context:
+## Overview
 
-This project is called a "Moonshot project", this kind of project is a end of study project set up by ALGOSUP, the objective for students is to find a project which is innovative, creative, difficult and of course we need to code to create it.
+OLAF is a "Moonshot Project" developed as part of ALGOSUP's end-of-study curriculum. These projects are designed to be ambitious, innovative, and technically challenging, encouraging students to create something meaningful and original through coding.
 
-## What is OLAF
+## What is OLAF?
 
-My project is named OLAF, it stands for "OnLine Automated Farm", as the name suggests it is an automated farm, but not for professional uses, It is provided along with a mobile app of the same name. The app possess some capabilities, add a plant pot, read a lexicon containing information about plants and diseases and finally the ability to detect diseases on some plants leaves. More details can be found in the written reports of the document folder.
+OLAF stands for **OnLine Automated Farm**. It’s a smart farming concept aimed at personal, non-commercial use. The project includes a companion mobile app that allows users to:
 
-## How to use
+- Add and manage plant pots
+- Access a plant and disease lexicon
+- Detect diseases on plant leaves using image analysis
 
-It is fairly simple to use, for now, only the mobile app is available. To install it you just have to plug your phone to your computer and download the APK present in the latest release. Once downloaded add it to your phone's files, into the "download" folder.
+## How It Works
 
-Finally your phone should ask you if you want to download the app, once the download is finished you can use it.
+At the core of OLAF’s disease detection system is an AI-based image classification pipeline. Here's a breakdown:
+
+- **Model**: The app uses the **ConvNeXt Tiny** architecture, a modern convolutional neural network known for its accuracy and efficiency.
+- **Dataset**: The model was trained using data from [PlantPAD](https://plantpad.samlab.cn/index.html), a comprehensive plant disease image dataset.
+- **Frontend**: The mobile application is built with **Flutter**, ensuring a smooth and responsive user experience.
+- **Backend**: All server-side operations, such as model inference and data handling, are powered by **AWS (Amazon Web Services)**.
+
+## Getting Started
+
+Currently, the mobile app is available exclusively on Android.
+
+OLAF will soon be released on the Google Play Store. If you cannot find it on the Play Store, you can alternatively follow these steps to install and use the app:
+
+1. Connect your Android phone to your computer.
+2. Download the APK file from the latest release.
+3. Move the APK to your phone’s **Download** folder.
+4. On your phone, locate the APK file and tap it to begin installation.
+5. Follow the prompts to complete the installation.
+
+Once installed, you’re ready to explore OLAF!
+
