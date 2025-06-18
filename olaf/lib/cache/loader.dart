@@ -226,9 +226,40 @@ Future<List<analyzedImages>> getImages() async {
 }
 
 /// Get user's saved plants (to be implemented)
-List<Plant> getSavedPlants() {
-  // TODO: Implement fetching saved plants
-  return [];
+Future<List<SavedPlant>> getSavedPlants() async {
+  List<SavedPlant> savedPlants = [];
+  try {
+    final directory = await getApplicationDocumentsDirectory();
+    final user = await Amplify.Auth.getCurrentUser();
+    final filePath = StoragePath.fromString("users/${user.userId}/plant-pots.json");
+    final localPath = '${directory.path}/plant-pots.json';
+
+    // Download plant-pots file
+    await Amplify.Storage.downloadFile(
+      path: filePath,
+      localFile: AWSFile.fromPath(localPath)
+    ).result;
+
+    // Read and parse the file
+    final file = File(localPath);
+    if (await file.exists()) {
+      final fileContent = await file.readAsString();
+      final jsonData = jsonDecode(fileContent);
+
+      // Parse the "pots" list
+      List<dynamic> potsJson = jsonData['pots'] ?? [];
+      savedPlants = potsJson
+          .map((potJson) => SavedPlant.fromJson(potJson as Map<String, dynamic>))
+          .toList();
+
+      // Cleanup
+      await file.delete();
+    }
+  } catch (e) {
+    debugPrint("Failed to get saved plants: $e");
+  }
+
+  return savedPlants;
 }
 
 /// Fetches all data from AWS and saves to local cache
@@ -246,7 +277,7 @@ Future<void> awsToCache(DynamoDB dynamoDb) async {
     // Save all data to cache
     await saveData(
       results[0] as User,
-      plants,
+      await plants,
       results[2] as List<analyzedImages>,
       results[1] as Lexica,
     );

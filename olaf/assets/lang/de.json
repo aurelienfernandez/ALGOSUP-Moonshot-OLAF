@@ -54,5 +54,6 @@
     "ideal_air": "Ideale Luftfeuchtigkeit",
     "when_to_grow": "Wann zu wachsen",
     "currently_supported": "Derzeit werden nur Tomatenpflanzen für die Bildanalyse unterstützt. Weitere Pflanzen werden in Kürze hinzugefügt.",
-    "supported_plants": "Unterstützte Pflanzen"
+    "supported_plants": "Unterstützte Pflanzen",
+    "no_plant_pots_saved": "Keine Pflanzentöpfe auf diesem Konto gespeichert"
 }

@@ -49,5 +49,6 @@
     "ideal_air": "Ideal Air Humidity",
     "when_to_grow": "When to grow",
     "supported_plants": "Supported plants",
-    "currently_supported": " Currently, only tomato plants are supported for image analysis.\nPlease check back later for updates on supported plants."
+    "currently_supported": " Currently, only tomato plants are supported for image analysis.\nPlease check back later for updates on supported plants.",
+    "no_plant_pots_saved": "No plant pots saved on this account"
 }

@@ -4,26 +4,21 @@ import 'package:olaf/classes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Function to create the JSON structure
-String createJson(User user, List<Plant> savedPlants,
+String createJson(User user, List<SavedPlant> savedPlants,
     List<analyzedImages> analyzedImages, Lexica lexica) {
-  // Convert everything to JSON
   Map<String, dynamic> data = {
-    'user': user.toJson(), // Convert user to JSON
+    'user': user.toJson(),
     'savedPlants': savedPlants.map((plant) => plant.toJson()).toList(),
-    'analyzedImages': analyzedImages
-        .map((image) => image.toJson())
-        .toList(), // Convert each image to JSON and then to a List
+    'analyzedImages': analyzedImages.map((image) => image.toJson()).toList(),
     'lexica': {
       'plants': lexica.plants.map((plant) => plant.toJson()).toList(),
       'diseases': lexica.diseases.map((disease) => disease.toJson()).toList(),
     },
   };
-
-  // Convert the map to a JSON string
   return jsonEncode(data);
 }
 
-Future<void> saveData(User user, List<Plant> savedPlants,
+Future<void> saveData(User user, List<SavedPlant> savedPlants,
     List<analyzedImages> analyzedImages, Lexica lexica) async {
   try {
     final prefs = await SharedPreferences.getInstance();
@@ -66,8 +61,8 @@ Future<void> GetCachedData() async {
 
     // Parse savedPlants
     List<dynamic> savedPlantsJson = jsonMap['savedPlants'] ?? [];
-    List<Plant> savedPlants = savedPlantsJson
-        .map((plantJson) => Plant.fromJson(plantJson as Map<String, dynamic>))
+    List<SavedPlant> savedPlants = savedPlantsJson
+        .map((plantJson) => SavedPlant.fromJson(plantJson as Map<String, dynamic>))
         .toList();
 
     // Parse analyzedImages

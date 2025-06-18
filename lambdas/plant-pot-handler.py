@@ -183,16 +183,6 @@ def lambda_handler(event, context):
             }
 
         # Prepare the data to save (overwrite plant_name with English translation)
-        output_data = {
-            "email": email,
-            "plant_name": plant_name_en,
-            "pot_name": pot_name,
-            "temperature_c": temperature_c,
-            "humidity": humidity,
-            "soil_moisture": moisture,
-            "image_base64": image_base64
-        }
-
         # Save or update the data in S3 as a list of pots
         s3_client = boto3.client('s3')
         bucket_name = 'olaf-s3'
@@ -211,12 +201,40 @@ def lambda_handler(event, context):
                 raise
 
         # Check if the pot already exists (by plant_name and pot_name)
-        exists = any(
-            pot.get('plant_name') == plant_name_en and pot.get('pot_name') == pot_name
-            for pot in pots_data['pots']
-        )
-        if not exists:
-            pots_data['pots'].append(output_data)
+        pot_found = None
+        for pot in pots_data['pots']:
+            if pot.get('plant_name') == plant_name_en and pot.get('pot_name') == pot_name:
+                pot_found = pot
+                break
+
+        def update_list(old_list, new_value):
+            # Ensure list is length 8, append new_value, drop oldest if needed
+            if not isinstance(old_list, list):
+                old_list = []
+            old_list.append(new_value)
+            while len(old_list) < 8:
+                old_list.insert(0, 0)
+            if len(old_list) > 8:
+                old_list = old_list[-8:]
+            return old_list
+
+        if pot_found:
+            # Update existing pot's lists
+            pot_found['temperature_c'] = update_list(pot_found.get('temperature_c', []), temperature_c)
+            pot_found['humidity'] = update_list(pot_found.get('humidity', []), humidity)
+            pot_found['soil_moisture'] = update_list(pot_found.get('soil_moisture', []), moisture)
+            pot_found['image_base64'] = image_base64  # Always update image
+        else:
+            # Create new pot with lists initialized
+            new_pot = {
+                "plant_name": plant_name_en,
+                "pot_name": pot_name,
+                "temperature_c": update_list([], temperature_c),
+                "humidity": update_list([], humidity),
+                "soil_moisture": update_list([], moisture),
+                "image_base64": image_base64
+            }
+            pots_data['pots'].append(new_pot)
 
         # Save back to S3
         s3_client.put_object(

@@ -8,7 +8,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 //--------------------- PLANT STATUS --------------------
 
 class PlantStatus extends StatelessWidget {
-  final Plant plant;
+  final SavedPlant plant;
 
   PlantStatus(this.plant);
 
@@ -45,7 +45,7 @@ class PlantStatus extends StatelessWidget {
     };
     Widget title;
     final lexicaPlant = cacheData.getInstance().lexica.plants.firstWhere(
-      (p) => p.name == plant.name,
+      (p) => p.name == plant.plantName,
       orElse: () => cacheData.getInstance().lexica.plants.first,
     );
     if (plant.temperature.first > lexicaPlant.temperatureRange[1]) {
@@ -63,7 +63,6 @@ class PlantStatus extends StatelessWidget {
     } else {
       title = titleList.elementAt(0);
     }
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -82,7 +81,7 @@ class PlantStatus extends StatelessWidget {
           children: [
             // Plant name
             AutoSizeText(
-              plant.name,
+              plant.plantName,
               style: GoogleFonts.itim(
                 fontSize: mediaQuery.width * 0.11,
                 color: Colors.black,
@@ -97,18 +96,28 @@ class PlantStatus extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             DashboardDataCard(
-                "temperature", plant.temperature.first.toString(), 0),
+                "temperature", plant.temperature.last.toString(), 0),
             DashboardDataCard(
-                "soil humidity", plant.soilHumidity.first.toString(), 1),
+                "soil humidity", plant.soilHumidity.last.toString(), 1),
           ],
         ),
         //========== SPACE ===========
         SizedBox(
           height: mediaQuery.height * 0.03,
         ),
-        //============ AIR ===========
-        DashboardDataCard(
-            "air humidity", plant.airHumidity.first.toString(), 2),
+        //============ AIR & IMAGE ROW ===========
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            DashboardDataCard(
+              "air humidity",
+              plant.airHumidity.last.toString(),
+              2,
+            ),
+            // Use the new overlay-enabled image card
+            ImageDataCard(base64Image: plant.imageBase64),
+          ],
+        ),
         //========== SPACE ===========
         SizedBox(
           height: mediaQuery.height * 0.03,

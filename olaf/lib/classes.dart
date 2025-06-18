@@ -188,6 +188,50 @@ class Plant {
     );
   }
 }
+//------------------------- SAVED PLANT -------------------------
+class SavedPlant {
+  final String potName;
+  final String plantName;
+  final List<double> soilHumidity;
+  final List<double> airHumidity;
+  final List<double> temperature;
+  final String imageBase64;
+
+  SavedPlant({
+    required this.potName,
+    required this.plantName,
+    required this.soilHumidity,
+    required this.airHumidity,
+    required this.temperature,
+    required this.imageBase64,
+  });
+
+  // Convert a plant object into a map
+  Map<String, dynamic> toJson() {
+    return {
+      'pot_name': potName,
+      'plant_name': plantName,
+      'soil_moisture': soilHumidity,
+      'humidity': airHumidity, // <-- changed from 'air_humidity' to 'humidity'
+      'temperature_c': temperature,
+      'image_base64': imageBase64,
+    };
+  }
+
+  // Convert a json map into a plant
+  factory SavedPlant.fromJson(Map<String, dynamic> json) {
+    print("air humidity: ${json['humidity']}");
+    print((json['humidity'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList());
+    return SavedPlant(
+      potName: json['pot_name'] ?? '',
+      plantName: json['plant_name'] ?? '',
+      soilHumidity: (json['soil_moisture'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [],
+      airHumidity: (json['humidity'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [],
+      temperature: (json['temperature_c'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [],
+      imageBase64: json['image_base64'] ?? '',
+    );
+  }
+}
 
 //------------------------- USER -------------------------
 class User {
@@ -222,7 +266,7 @@ class User {
 
 class cacheData with ChangeNotifier {
   final User user;
-  final List<Plant> savedPlants;
+  final List<SavedPlant> savedPlants;
   final Lexica lexica;
   final List<analyzedImages> images;
   cacheData._(
@@ -241,7 +285,7 @@ class cacheData with ChangeNotifier {
 
   static void initialize(
       {required User user,
-      required List<Plant> savedPlants,
+      required List<SavedPlant> savedPlants,
       required Lexica lexica,
       required List<analyzedImages> images}) {
     _instance = cacheData._(

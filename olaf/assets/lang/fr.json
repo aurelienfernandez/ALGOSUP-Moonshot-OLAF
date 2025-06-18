@@ -44,5 +44,6 @@
     "welcome": "Bienvenue",
     "when_to_grow": "Quand cultiver",
     "supported_plants": "Plantes prises en charge",
-    "currently_supported": "Actuellement, seules les plantes de tomate sont prises en charge pour l'analyse d'image. D'autres plantes seront ajoutées prochainement."
+    "currently_supported": "Actuellement, seules les plantes de tomate sont prises en charge pour l'analyse d'image. D'autres plantes seront ajoutées prochainement.",
+    "no_plant_pots_saved": "Aucun pot de plante enregistré sur ce compte"
 }
