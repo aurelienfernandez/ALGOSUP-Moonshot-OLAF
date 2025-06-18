@@ -27,7 +27,7 @@ Set-Acl -Path (Join-Path $sshDir "id_rsa") -AclObject $acl
 
 Write-Host "SSH keys have been copied to $sshDir"
 $piUser = "aurelienfernandez"
-$piHost = "192.168.1.198"
+$piHost = "plant-pot"
 
 # Language selection
 function Get-LanguageChoice {
@@ -97,7 +97,7 @@ Write-Host $prompts.copying
 
 # Test SSH connection first to see if Pi is reachable
 try {
-    $testOutput = & ssh -o ConnectTimeout=10 "$piUser@$piHost" "echo CONNECTION_OK" 2>&1
+    $testOutput = & ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 "$piUser@$piHost.local" "echo CONNECTION_OK" 2>&1
     
     if ($LASTEXITCODE -ne 0) {
         throw "Test de connexion SSH échoué: $testOutput"
@@ -105,10 +105,7 @@ try {
 } catch {
     Write-Host "Erreur lors du test de connexion SSH: $_" -ForegroundColor Red
     Write-Host "Vérifiez que:" -ForegroundColor Yellow
-    Write-Host " - Le Raspberry Pi est allumé et connecté au réseau" -ForegroundColor Yellow
-    Write-Host " - L'adresse IP (${piHost}) est correcte" -ForegroundColor Yellow
-    Write-Host " - La clé SSH est correctement installée" -ForegroundColor Yellow
-    Write-Host " - Le nom d'utilisateur ($piUser) est correct" -ForegroundColor Yellow
+    Write-Host " - Le Raspberry Pi est allume et connecté au réseau par un cable Ethernet" -ForegroundColor Yellow
     Remove-Item $tempFile.FullName
     
     # Add prompt to press Enter before closing
@@ -119,7 +116,7 @@ try {
 
 # Copy the file to the Pi's /tmp directory
 try {
-    & scp $tempFile.FullName "$piUser@${piHost}:/tmp/wpa_supplicant.conf" | Out-Null
+    & scp -o StrictHostKeyChecking=no $tempFile.FullName "$piUser@${piHost}:/tmp/wpa_supplicant.conf" | Out-Null
     
     if ($LASTEXITCODE -ne 0) {
         throw "Échec de copie du fichier de configuration WiFi"
@@ -147,7 +144,7 @@ $userInfo | ConvertTo-Json | Set-Content $userInfoFile.FullName
 
 # Copy the user info JSON file to the Pi
 try {
-    & scp $userInfoFile.FullName "$piUser@${piHost}:/tmp/user_info.json" | Out-Null
+    & scp -o StrictHostKeyChecking=no $userInfoFile.FullName "$piUser@${piHost}:/tmp/user_info.json" | Out-Null
     
     if ($LASTEXITCODE -ne 0) {
         throw "Échec de copie des informations utilisateur"
@@ -166,7 +163,7 @@ try {
 # Move the files into place and reconfigure Wi-Fi 
 try {
     $sshCommand = "sudo mv /tmp/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf && sudo wpa_cli -i wlan0 reconfigure && sudo mv /tmp/user_info.json /home/$piUser/user_info.json"
-    ssh "$piUser@$piHost" $sshCommand | Out-Null
+    ssh -o StrictHostKeyChecking=no "$piUser@$piHost" $sshCommand | Out-Null
     
     if ($LASTEXITCODE -ne 0) {
         throw "SSH command failed with exit code $LASTEXITCODE"
