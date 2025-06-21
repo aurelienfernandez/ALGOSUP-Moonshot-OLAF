@@ -251,7 +251,6 @@ Future<List<SavedPlant>> getSavedPlants() async {
       savedPlants = potsJson
           .map((potJson) => SavedPlant.fromJson(potJson as Map<String, dynamic>))
           .toList();
-
       // Cleanup
       await file.delete();
     }

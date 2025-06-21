@@ -13,6 +13,7 @@ from adafruit_ads1x15.analog_in import AnalogIn
 import json
 import base64
 import os
+import requests
 
 # Setup GPIO
 GPIO.setmode(GPIO.BCM)
@@ -35,30 +36,39 @@ def read_moisture():
     try:
         # Get raw ADC value
         raw_value = moisture_channel.value
-        
-        
+
         raw_dry = 28000    # value when dry
         raw_wet = 10000    # value when wet
 
         moisture_percent = 100 * (raw_dry - raw_value) / (raw_dry - raw_wet)
         moisture_percent = max(0, min(100, moisture_percent))  # Clamp between 0 and 100
 
-        
+        # Limit to 3 decimal places
+        moisture_percent = round(moisture_percent, 2)
+
         return moisture_percent
     except Exception as e:
         return 0
 
 def read_user_info():
     user_info_path = "./user_info.json"
-    print(f"Reading user info from: {user_info_path}")
-    
     try:
         with open(user_info_path, "r") as f:
-            print("User info file found, reading data.")
-            print(f"User info content: {f.read()}")
-            return json.load(f)
+            content = f.read()
+            return json.loads(content)
     except Exception:
         return {}
+
+# Read soilHumidityRange from file or set default
+soil_humidity_range_file = "soilHumidityRange.json"
+default_soil_humidity_range = [50, 80]
+soilHumidityRange = default_soil_humidity_range
+if os.path.exists(soil_humidity_range_file):
+    try:
+        with open(soil_humidity_range_file, "r") as f:
+            soilHumidityRange = json.load(f)
+    except Exception:
+        soilHumidityRange = default_soil_humidity_range
 
 try:
     user_info = read_user_info()
@@ -66,19 +76,17 @@ try:
     plant_name = user_info.get("plant_name", "")
     pot_name = user_info.get("pot_name", "")
     while True:
+        loop_start = time.time()
         try:
             # Read temperature and humidity
             temperature_c = dhtDevice.temperature
+            if temperature_c is None:
+                temperature_c = 0
             humidity = dhtDevice.humidity
-            
+            if humidity is None:
+                humidity = 0
             # Read soil moisture
             moisture = read_moisture()
-            moisture_outuput="<50%"
-            if(moisture ==1):
-                moisture_outuput=">50%"
-            else:
-                moisture_outuput="<50%"
-                
         except RuntimeError as error:
             time.sleep(2.0)
             continue
@@ -87,7 +95,6 @@ try:
             GPIO.cleanup()  # Clean up GPIO on exit
             raise error
 
-        time.sleep(2.0)
         # Take a picture with the OKdo 5MP camera
         image_base64 = None
         try:
@@ -103,15 +110,41 @@ try:
             image_base64 = None
 
         output_data = {
-            "email": email,
-            "plant_name": plant_name,
-            "pot_name": pot_name,
-            "temperature_c": temperature_c,
-            "humidity": humidity,
-            "soil_moisture": moisture,
-            "image_base64": image_base64
+            "email": email if email else "unknown",
+            "plant_name": plant_name if plant_name else "unknown",
+            "pot_name": pot_name if pot_name else "unknown",
+            "temperature_c": temperature_c if temperature_c is not None else 0,
+            "humidity": humidity if humidity is not None else 0,
+            "soil_moisture": moisture if moisture is not None else 0,
+            "image_base64": image_base64 if image_base64 else "",
+            "soilHumidityRange": soilHumidityRange
         }
         with open("output.json", "w") as f:
             json.dump(output_data, f)
+        # Send JSON to AWS Lambda
+        try:
+            lambda_url = "https://ebaopnsvzapbk5eqbnc2iw7b6e0pljsh.lambda-url.eu-west-3.on.aws/"
+            headers = {"Content-Type": "application/json"}
+            response = requests.post(lambda_url, json=output_data, headers=headers)
+            print(f"Lambda response: {response.status_code} - {response.text}")
+            # Parse and save soilHumidityRange from Lambda response
+            if response.status_code == 200:
+                try:
+                    resp_json = response.json()
+                    if "body" in resp_json:
+                        body = json.loads(resp_json["body"])
+                        if "soilHumidityRange" in body:
+                            soilHumidityRange = body["soilHumidityRange"]
+                            with open(soil_humidity_range_file, "w") as f:
+                                json.dump(soilHumidityRange, f)
+                except Exception as e:
+                    print(f"Failed to parse or save soilHumidityRange: {e}")
+        except Exception as e:
+            print(f"Failed to send data to Lambda: {e}")
+
+        # Ensure exactly 15 seconds between requests
+        elapsed = time.time() - loop_start
+        if elapsed < 15:
+            time.sleep(15 - elapsed)
 except:
     GPIO.cleanup()

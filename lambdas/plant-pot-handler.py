@@ -1,6 +1,7 @@
 import json
 import boto3
 from botocore.exceptions import ClientError
+import datetime
 
 def translate_plant_name(french_name):
     """
@@ -218,12 +219,25 @@ def lambda_handler(event, context):
                 old_list = old_list[-8:]
             return old_list
 
+        def update_timestamps(old_list):
+            now = datetime.datetime.now()
+            formatted = now.strftime("%d:%m %H:%M")
+            if not isinstance(old_list, list):
+                old_list = []
+            old_list.append(formatted)
+            while len(old_list) < 8:
+                old_list.insert(0, formatted)
+            if len(old_list) > 8:
+                old_list = old_list[-8:]
+            return old_list
+
         if pot_found:
             # Update existing pot's lists
             pot_found['temperature_c'] = update_list(pot_found.get('temperature_c', []), temperature_c)
             pot_found['humidity'] = update_list(pot_found.get('humidity', []), humidity)
             pot_found['soil_moisture'] = update_list(pot_found.get('soil_moisture', []), moisture)
             pot_found['image_base64'] = image_base64  # Always update image
+            pot_found['timestamps'] = update_timestamps(pot_found.get('timestamps', []))
         else:
             # Create new pot with lists initialized
             new_pot = {
@@ -232,7 +246,8 @@ def lambda_handler(event, context):
                 "temperature_c": update_list([], temperature_c),
                 "humidity": update_list([], humidity),
                 "soil_moisture": update_list([], moisture),
-                "image_base64": image_base64
+                "image_base64": image_base64,
+                "timestamps": update_timestamps([])
             }
             pots_data['pots'].append(new_pot)
 
@@ -244,17 +259,16 @@ def lambda_handler(event, context):
             ContentType='application/json'
         )
 
-        # Optionally, get plant details from DynamoDB
+        # Get plant details from DynamoDB
         plant_details = get_plant_from_dynamodb(plant_name_en)
+        soil_humidity_range = [50, 80]
+        if plant_details and 'details' in plant_details and 'soilHumidityRange' in plant_details['details']:
+            soil_humidity_range = plant_details['details']['soilHumidityRange']
 
         response_body = {
-            'message': 'Plant pot data saved successfully'
+            'message': 'Plant pot data saved successfully',
+            'soilHumidityRange': soil_humidity_range
         }
-
-        if plant_details and 'details' in plant_details and 'soilHumidityRange' in plant_details['details']:
-            response_body['details'] = {
-                'soilHumidityRange': plant_details['details']['soilHumidityRange']
-            }
 
         return {
             'statusCode': 200,

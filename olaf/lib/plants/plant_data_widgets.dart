@@ -229,16 +229,20 @@ class DataGraph extends ConsumerWidget {
       }
     }
 
+    // Get appropriate Y-axis minimum
+    double _getMinY() {
+      return 0.0;
+    }
     // Get appropriate Y-axis maximum
     double _getMaxY() {
       switch (ref.watch(GraphChoice)) {
         case 0:
-          return 40.0; // Temperature max
+          return 35.0; // Temperature max
         case 1:
         case 2:
           return 100.0; // Humidity percentage
         default:
-          return 40.0;
+          return 35.0;
       }
     }
 
@@ -405,6 +409,7 @@ class DataGraph extends ConsumerWidget {
     final mediaQuery = MediaQuery.sizeOf(context);
     final data = _getDataByChoice();
     final yAxisTitle = _getYAxisTitle();
+    final minY = _getMinY();
     final maxY = _getMaxY();
 
     DateTime timeFrame = roundToLowestHalfHour(DateTime.now());
@@ -432,13 +437,8 @@ class DataGraph extends ConsumerWidget {
     }
 
     // Ensure minY is always at least 0, and add a margin to avoid curve going under the graph
-    double minY = 0;
-    if (spots.isNotEmpty) {
-      double minDataY = spots.map((e) => e.y).reduce((a, b) => a < b ? a : b);
-      double maxDataY = spots.map((e) => e.y).reduce((a, b) => a > b ? a : b);
-      double margin = ((maxDataY - minDataY).abs() * 0.05).clamp(1, 10); // 5% of range, at least 1, max 10
-      minY = (minDataY - margin).clamp(0, double.infinity);
-    }
+    double margin = ((maxY - minY).abs() * 0.05).clamp(1, 10); // 5% of range, at least 1, max 10
+    double adjustedMinY = (minY - margin).clamp(0, double.infinity);
 
     // Handle empty data gracefully
     if (spots.isEmpty) {
@@ -463,7 +463,7 @@ class DataGraph extends ConsumerWidget {
           LineChartData(
             minX: spots.first.x,
             maxX: spots.last.x,
-            minY: minY,
+            minY: adjustedMinY,
             maxY: maxY,
             clipData: FlClipData(
               top: true,
@@ -506,21 +506,22 @@ class DataGraph extends ConsumerWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (double value, TitleMeta meta) {
-                    DateTime time = timeFrame.subtract(Duration(
-                        minutes: ((spots.last.x - value) * 60).toInt()));
-                    if (time.hour < 0 || time.minute < 0) {
+                    // Map x value to index in the reversed data (oldest to newest)
+                    int index = (spots.length - 1) - ((spots.last.x - value).round());
+                    if (index < 0 || index >= plant.timestamps.length) {
                       return Container();
                     }
-
+                    String label = plant.timestamps[index];
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                        style: TextStyle(fontSize: 10, color: Colors.black),
+                        textAlign: TextAlign.center,
+                        label,
+                        style: TextStyle(fontSize: 7, color: Colors.black),
                       ),
                     );
                   },
-                  reservedSize: 25,
+                  reservedSize: 40,
                 ),
               ),
               leftTitles: AxisTitles(
@@ -598,11 +599,19 @@ class _ImageDataCardState extends State<ImageDataCard> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.sizeOf(context);
-    final imageBytes = base64Decode(widget.base64Image);
+    final isAsset = widget.base64Image == "assets/images/no-image.png";
+    Uint8List? imageBytes;
+    if (!isAsset) {
+      try {
+        imageBytes = base64Decode(widget.base64Image);
+      } catch (e) {
+        imageBytes = null;
+      }
+    }
 
     return InkWell(
       onTap: () {
-        if (!_dialogOpen) {
+        if (!_dialogOpen && !isAsset && imageBytes != null) {
           _showImageDialog(context, imageBytes);
         }
       },
@@ -632,15 +641,25 @@ class _ImageDataCardState extends State<ImageDataCard> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.memory(
-              imageBytes,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-            ),
+            child: isAsset
+                ? Image.asset(
+                    "assets/images/no-image.png",
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  )
+                : (imageBytes != null
+                    ? Image.memory(
+                        imageBytes,
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                      )
+                    : const Icon(Icons.error)),
           ),
         ),
       ),
     );
-  }
+  } 
 }

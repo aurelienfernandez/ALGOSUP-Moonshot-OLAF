@@ -196,6 +196,7 @@ class SavedPlant {
   final List<double> airHumidity;
   final List<double> temperature;
   final String imageBase64;
+  final List<String> timestamps;
 
   SavedPlant({
     required this.potName,
@@ -204,6 +205,7 @@ class SavedPlant {
     required this.airHumidity,
     required this.temperature,
     required this.imageBase64,
+    required this.timestamps,
   });
 
   // Convert a plant object into a map
@@ -215,20 +217,20 @@ class SavedPlant {
       'humidity': airHumidity, // <-- changed from 'air_humidity' to 'humidity'
       'temperature_c': temperature,
       'image_base64': imageBase64,
+      'timestamps': timestamps,
     };
   }
 
   // Convert a json map into a plant
   factory SavedPlant.fromJson(Map<String, dynamic> json) {
-    print("air humidity: ${json['humidity']}");
-    print((json['humidity'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList());
-    return SavedPlant(
+   return SavedPlant(
       potName: json['pot_name'] ?? '',
       plantName: json['plant_name'] ?? '',
       soilHumidity: (json['soil_moisture'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [],
       airHumidity: (json['humidity'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [],
       temperature: (json['temperature_c'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? [],
-      imageBase64: json['image_base64'] ?? '',
+      imageBase64: json['image_base64'] ?? 'assets/images/no-images.png',
+      timestamps: (json['timestamps'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
     );
   }
 }
