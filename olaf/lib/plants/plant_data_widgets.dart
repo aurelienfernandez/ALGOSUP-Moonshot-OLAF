@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,8 @@ import 'package:olaf/classes.dart';
 import 'package:olaf/plants/plant_page.dart';
 import 'package:olaf/app_localization.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:olaf/plants/remove_plant.dart';
+import 'dart:convert';
 
 /// This file contains various widgets and utilities used to display and 
 /// interact with plant monitoring data. These components are designed to 
@@ -30,13 +34,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 /// 
 /// Returns a styled TextButton with "Disconnect plant pot" text.
 class disconnectButton extends ConsumerWidget {
-  final Plant plant;
+  final SavedPlant plant;
   disconnectButton({required this.plant});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mediaQuery = MediaQuery.sizeOf(context);
     return TextButton(
       onPressed: () {
+        removePlantFromS3(plant.potName);
         cacheData.getInstance().savedPlants.remove(plant);
         ref.read(plantsIndex.notifier).state = 0;
       },
@@ -190,7 +195,7 @@ DateTime roundToLowestHalfHour(DateTime time) {
 /// Returns a LineChart visualization with appropriate styling and labeling based
 /// on the selected data type from GraphChoice provider.
 class DataGraph extends ConsumerWidget {
-  final Plant plant;
+  final SavedPlant plant;
 
   const DataGraph({super.key, required this.plant});
 
@@ -200,13 +205,13 @@ class DataGraph extends ConsumerWidget {
     List<num> _getDataByChoice() {
       switch (ref.watch(GraphChoice)) {
         case 0:
-          return plant.temperature;
+          return plant.temperature.reversed.toList();
         case 1:
-          return plant.soilHumidity;
+          return plant.soilHumidity.reversed.toList();
         case 2:
-          return plant.airHumidity;
+          return plant.airHumidity.reversed.toList();
         default:
-          return plant.temperature;
+          return plant.temperature.reversed.toList();
       }
     }
 
@@ -224,22 +229,26 @@ class DataGraph extends ConsumerWidget {
       }
     }
 
+    // Get appropriate Y-axis minimum
+    double _getMinY() {
+      return 0.0;
+    }
     // Get appropriate Y-axis maximum
     double _getMaxY() {
       switch (ref.watch(GraphChoice)) {
         case 0:
-          return 40.0; // Temperature max
+          return 35.0; // Temperature max
         case 1:
         case 2:
           return 100.0; // Humidity percentage
         default:
-          return 40.0;
+          return 35.0;
       }
     }
 
     // Find the corresponding plant in lexica for thresholds
     final lexicaPlant = cacheData.getInstance().lexica.plants.firstWhere(
-      (p) => p.name == plant.name,
+      (p) => p.name == plant.plantName,
       orElse: () => cacheData.getInstance().lexica.plants.first,
     );
 
@@ -400,6 +409,7 @@ class DataGraph extends ConsumerWidget {
     final mediaQuery = MediaQuery.sizeOf(context);
     final data = _getDataByChoice();
     final yAxisTitle = _getYAxisTitle();
+    final minY = _getMinY();
     final maxY = _getMaxY();
 
     DateTime timeFrame = roundToLowestHalfHour(DateTime.now());
@@ -426,6 +436,24 @@ class DataGraph extends ConsumerWidget {
         lineColor = Colors.blue;
     }
 
+    // Ensure minY is always at least 0, and add a margin to avoid curve going under the graph
+    double margin = ((maxY - minY).abs() * 0.05).clamp(1, 10); // 5% of range, at least 1, max 10
+    double adjustedMinY = (minY - margin).clamp(0, double.infinity);
+
+    // Handle empty data gracefully
+    if (spots.isEmpty) {
+      return Container(
+        width: mediaQuery.width * 1,
+        height: mediaQuery.height * 0.4,
+        alignment: Alignment.center,
+        child: AutoSizeText(
+          AppLocalizations.of(context).translate("no_data_available"),
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+          maxLines: 1,
+        ),
+      );
+    }
+
     return Container(
       width: mediaQuery.width * 1,
       height: mediaQuery.height * 0.4,
@@ -435,8 +463,14 @@ class DataGraph extends ConsumerWidget {
           LineChartData(
             minX: spots.first.x,
             maxX: spots.last.x,
-            minY: 0,
+            minY: adjustedMinY,
             maxY: maxY,
+            clipData: FlClipData(
+              top: true,
+              bottom: false, 
+              left: true,
+              right: true,
+            ),
             lineBarsData: [
               LineChartBarData(
                 spots: spots,
@@ -472,21 +506,22 @@ class DataGraph extends ConsumerWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (double value, TitleMeta meta) {
-                    DateTime time = timeFrame.subtract(Duration(
-                        minutes: ((spots.last.x - value) * 60).toInt()));
-                    if (time.hour < 0 || time.minute < 0) {
+                    // Map x value to index in the reversed data (oldest to newest)
+                    int index = (spots.length - 1) - ((spots.last.x - value).round());
+                    if (index < 0 || index >= plant.timestamps.length) {
                       return Container();
                     }
-
+                    String label = plant.timestamps[index];
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                        style: TextStyle(fontSize: 10, color: Colors.black),
+                        textAlign: TextAlign.center,
+                        label,
+                        style: TextStyle(fontSize: 7, color: Colors.black),
                       ),
                     );
                   },
-                  reservedSize: 25,
+                  reservedSize: 40,
                 ),
               ),
               leftTitles: AxisTitles(
@@ -506,4 +541,125 @@ class DataGraph extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// A widget that displays a plant metric image in a dialog overlay when tapped.
+/// The image is provided as a base64 encoded string.
+/// 
+/// This widget is useful for showing plant-related images or icons in a dynamic
+/// and interactive way, with the image occupying the full screen in a dialog.
+/// 
+/// Parameters:
+///   - [base64Image]: A base64 encoded string representing the image to be displayed.
+/// 
+/// Returns a GestureDetector wrapping a Container that shows the image in a dialog
+/// overlay when tapped.
+class ImageDataCard extends StatefulWidget {
+  final String base64Image;
+  const ImageDataCard({super.key, required this.base64Image});
+
+  @override
+  State<ImageDataCard> createState() => _ImageDataCardState();
+}
+
+class _ImageDataCardState extends State<ImageDataCard> {
+  bool _dialogOpen = false;
+
+  void _showImageDialog(BuildContext context, Uint8List imageBytes) async {
+    setState(() {
+      _dialogOpen = true;
+    });
+    await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        final mediaQuery = MediaQuery.of(context).size;
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            color: Colors.black.withOpacity(0.85),
+            alignment: Alignment.center,
+            child: Image.memory(
+              imageBytes,
+              width: mediaQuery.width * 0.9,
+              height: mediaQuery.height * 0.8,
+              fit: BoxFit.contain
+            ),
+          ),
+        );
+      },
+    );
+    setState(() {
+      _dialogOpen = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.sizeOf(context);
+    final isAsset = widget.base64Image == "assets/images/no-image.png";
+    Uint8List? imageBytes;
+    if (!isAsset) {
+      try {
+        imageBytes = base64Decode(widget.base64Image);
+      } catch (e) {
+        imageBytes = null;
+      }
+    }
+
+    return InkWell(
+      onTap: () {
+        if (!_dialogOpen && !isAsset && imageBytes != null) {
+          _showImageDialog(context, imageBytes);
+        }
+      },
+      child: Container(
+        width: mediaQuery.width * 0.4,
+        height: mediaQuery.width * 0.4,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 5.0,
+              offset: Offset(0, 3),
+              spreadRadius: 1.0,
+            )
+          ],
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Theme.of(context).colorScheme.secondary,
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary,
+              width: 3,
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: isAsset
+                ? Image.asset(
+                    "assets/images/no-image.png",
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  )
+                : (imageBytes != null
+                    ? Image.memory(
+                        imageBytes,
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                      )
+                    : const Icon(Icons.error)),
+          ),
+        ),
+      ),
+    );
+  } 
 }

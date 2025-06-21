@@ -69,6 +69,7 @@ flutter:
     - assets/images/
     - assets/images/lexicon/
     - assets/images/dashboard/
+    - assets/images/no-image.png
   
 flutter_native_splash:
   color: "#ffffff"

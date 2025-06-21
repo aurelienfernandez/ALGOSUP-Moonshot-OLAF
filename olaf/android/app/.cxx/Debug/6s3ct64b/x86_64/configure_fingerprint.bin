@@ -2,6 +2,7 @@ C/C++ Structured Logñ
 ì
 êC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\additional_project_files.txtC
 A
+<<<<<<< HEAD
 ?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	Íë›‚Ë2 ™•Õ†Â2ì
 ê
 çC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\android_gradle_build.json	Íë›‚Ë2”	 ¨•Õ†Â2ò
@@ -27,3 +28,30 @@ A
 ãC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\symbol_folder_index.txt	Îë›‚Ë2Ç ≥•Õ†Â2g
 e
 cC:\Users\AurelienFERNANDEZ\dev\flutter\packages\flutter_tools\gradle\src\main\groovy\CMakeLists.txt	Îë›‚Ë2ß ˝Û÷ùŸ2
+=======
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	®Ÿ±ã˘2 ™•Õ†Â2ì
+ê
+çC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\android_gradle_build.json	®Ÿ±ã˘2”	 ¨•Õ†Â2ò
+ï
+íC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\android_gradle_build_mini.json	®Ÿ±ã˘2ñ Ø•Õ†Â2Ñ
+Å
+C:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\build.ninja	®Ÿ±ã˘2ªÈ Ì£Õ†Â2â
+Ü
+ÉC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\build.ninja.txt	®Ÿ±ã˘2é
+ã
+àC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\build_file_index.txt	®Ÿ±ã˘2c µ•Õ†Â2è
+å
+âC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\compile_commands.json	®Ÿ±ã˘2ì
+ê
+çC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\compile_commands.json.bin	®Ÿ±ã˘2	ô
+ñ
+ìC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\metadata_generation_command.txt	®Ÿ±ã˘2
+Ä
+ ∞•Õ†Â2å
+â
+ÜC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\prefab_config.json	®Ÿ±ã˘2( ≤•Õ†Â2ë
+é
+ãC:\Users\AurelienFERNANDEZ\Documents\Projets\OLAF\ALGOSUP-Moonshot-OLAF\olaf\android\app\.cxx\Debug\6s3ct64b\x86_64\symbol_folder_index.txt	®Ÿ±ã˘2Ç ≥•Õ†Â2g
+e
+cC:\Users\AurelienFERNANDEZ\dev\flutter\packages\flutter_tools\gradle\src\main\groovy\CMakeLists.txt	®Ÿ±ã˘2ß ˝Û÷ùŸ2
+>>>>>>> dev

@@ -19,7 +19,7 @@ class Gardens extends ConsumerStatefulWidget {
 //--------------------- GARDENS STATE ---------------------
 class _GardensState extends ConsumerState<Gardens>
     with AutomaticKeepAliveClientMixin {
-  List<Plant> plantsList = cacheData.getInstance().savedPlants;
+  List<SavedPlant> plantsList = cacheData.getInstance().savedPlants;
   late User user;
   final allImages = cacheData.getInstance().images;
 
